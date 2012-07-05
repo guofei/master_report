@@ -9,7 +9,12 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="xpcom JavaScriptからXPCOMの関数を呼び出す時、obj = Components.classes[cid].createInstance()；で呼び出すことができるが、自分が書いた関数を呼び出すとTypeError: Components.classes[cid] &hellip;">
+  <meta name="description" content="OpenSSL暗号PKI SSL/TLSライブラリの詳細 読んでいる ctypes javascriptから.soファイルを読んでみたが、ずっと問題になっている 1
+2
+3
+4
+5
+Components.utils.import('resource://gre/modules/ctypes.jsm &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -62,6 +67,93 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/master_report/blog/2012/07/06/ctypesderaiburariwohu-bichu-su/">Ctypesでライブラリを呼び出す</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-06T03:10:00+09:00" pubdate data-updated="true">Jul 6<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>OpenSSL暗号PKI SSL/TLSライブラリの詳細</h3>
+
+<p>読んでいる</p>
+
+<h3>ctypes</h3>
+
+<p>javascriptから.soファイルを読んでみたが、ずっと問題になっている</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Components.utils.import('resource://gre/modules/ctypes.jsm');
+</span><span class='line'>var m = ctypes.open('/usr/lib/libc.dylib');
+</span><span class='line'>alert(m);
+</span><span class='line'>``
+</span><span class='line'>で呼び出すと、[object Library]が出たが、</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Components.utils.import(&#8216;resource://gre/modules/ctypes.jsm&#8217;);
+var r = ctypes.open(&#8216;/Users/kaku/ctypesrsa/components/libjsrsa.so&#8217;);
+alert(r);</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>で何も出なかった。.soファイルを.dylibにしても同じ
+</span><span class='line'>
+</span><span class='line'>しかし、firefox９でやってみると、うまく出た。xmpp拡張のほうはfirefox4以下しか動けない。
+</span><span class='line'>
+</span><span class='line'>firefox9で暗号化と復号化をやったら、暗号化したものはうまく復号化できなかった。javascriptで出力した暗号文をCで復号化すると、うまく復号化できたので、自分が書いたライブラリの問題だと思う。</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Components.utils.import(&#8216;resource://gre/modules/ctypes.jsm&#8217;);
+var r = ctypes.open(&#8216;/Users/kaku/ctypesrsa/components/libjsrsa.dylib&#8217;);
+var encrypt = r.declare(&#8216;public_encrypt&#8217;, ctypes.default_abi, ctypes.unsigned_char.ptr, ctypes.unsigned_char.ptr, ctypes.unsigned_char.ptr);
+var ciphertext = encrypt(&#8216;&#8212;&#8211;BEGIN RSA PUBLIC KEY&#8212;-&#8230;&#8212;&#8211;END RSA PUBLIC KEY&#8212;&#8211;\n&#8217;, &#8216;abc&#8217;).readString();
+alert(ciphertext);
+var decrypt = r.declare(&#8216;private_decrypt&#8217;, ctypes.default_abi, ctypes.unsigned_char.ptr, ctypes.unsigned_char.ptr, ctypes.unsigned_char.ptr);
+var text = decrype(&#8216;&#8212;&#8211;BEGIN RSA PRIVATE KEY&#8212;&#8211;&#8230;&#8212;&#8211;\n&#8217;, ciphertext).readString();
+alert(text);
+r.close();
+&#8220;`</p>
+
+<h3>来週</h3>
+
+<p>OpenSSLの本を読み続く。
+問題になる部分を修正。
+firefox３で動けない原因を探す。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -2061,43 +2153,9 @@ xmppのend to endでsslの通信路を利用するのはどうすればいいか
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/master_report/blog/2012/04/16/first-blog/">First Blog</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-16T13:26:00+09:00" pubdate data-updated="true">Apr 16<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/master_report/blog/page/2/">&larr; Older</a>
     
     <a href="/master_report/blog/archives">Blog Archives</a>
     
@@ -2108,6 +2166,10 @@ xmppのend to endでsslの通信路を利用するのはどうすればいいか
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/07/06/ctypesderaiburariwohu-bichu-su/">Ctypesでライブラリを呼び出す</a>
+      </li>
     
       <li class="post">
         <a href="/master_report/blog/2012/06/28/javascriptkaraxpcomfalseguan-shu-wohu-bichu-su/">javascriptからXPCOMの関数を呼び出す</a>
@@ -2123,10 +2185,6 @@ xmppのend to endでsslの通信路を利用するのはどうすればいいか
     
       <li class="post">
         <a href="/master_report/blog/2012/05/31/6-dot-1fen-san-zemi-kaku/">6.1分散ゼミ　カク</a>
-      </li>
-    
-      <li class="post">
-        <a href="/master_report/blog/2012/05/24/5-dot-25fen-san-zemi/">5.25分散ゼミ</a>
       </li>
     
   </ul>
