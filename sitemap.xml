@@ -1,11 +1,59 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
+        <loc>http://guofei.github.com/master_report/blog/2012/04/16/first-blog/</loc>
+        <lastmod>2012-07-06T03:06:27+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://guofei.github.com/master_report/blog/2012/04/17/11-dot-4-20zemi/</loc>
+        <lastmod>2012-07-06T03:06:27+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://guofei.github.com/master_report/blog/2012/04/24/11-dot-4-27zemi/</loc>
+        <lastmod>2012-07-06T03:06:27+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://guofei.github.com/master_report/blog/2012/05/09/5-dot-11fen-san-zemi/</loc>
+        <lastmod>2012-07-06T03:06:27+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://guofei.github.com/master_report/blog/2012/05/17/5-dot-18fen-san-zemi/</loc>
+        <lastmod>2012-07-06T03:06:27+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://guofei.github.com/master_report/blog/2012/05/24/5-dot-25fen-san-zemi/</loc>
+        <lastmod>2012-07-06T03:06:27+09:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://guofei.github.com/master_report/blog/2012/05/31/6-dot-1fen-san-zemi-kaku/
+        </loc>
+        <lastmod>2012-07-06T03:06:27+09:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://guofei.github.com/master_report/blog/2012/06/14/6-dot-15fen-san-zemi-guo/
+        </loc>
+        <lastmod>2012-07-06T03:06:27+09:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://guofei.github.com/master_report/blog/2012/06/21/skypekit-to-xpcomdefalsean-hao-hua-kuo-zhang-ji-neng/
+        </loc>
+        <lastmod>2012-07-06T03:06:27+09:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://guofei.github.com/master_report/blog/2012/06/28/javascriptkaraxpcomfalseguan-shu-wohu-bichu-su/
+        </loc>
+        <lastmod>2012-07-06T03:06:27+09:00</lastmod>
+    </url>
+    <url>
         <loc>http://guofei.github.com/master_report/blog/archives/</loc>
-        <lastmod>2012-07-06T03:03:45+09:00</lastmod>
+        <lastmod>2012-07-06T03:06:27+09:00</lastmod>
     </url>
     <url>
         <loc>http://guofei.github.com/master_report/</loc>
-        <lastmod>2012-07-06T03:03:45+09:00</lastmod>
+        <lastmod>2012-07-06T03:06:27+09:00</lastmod>
     </url>
 </urlset>

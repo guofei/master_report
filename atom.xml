@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-07-06T03:04:50+09:00</updated>
+  <updated>2012-07-06T03:06:50+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -12,5 +12,1769 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[javascriptからXPCOMの関数を呼び出す]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/06/28/javascriptkaraxpcomfalseguan-shu-wohu-bichu-su/"/>
+    <updated>2012-06-28T22:41:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/06/28/javascriptkaraxpcomfalseguan-shu-wohu-bichu-su</id>
+    <content type="html"><![CDATA[<h3>xpcom</h3>
+
+<p>JavaScriptからXPCOMの関数を呼び出す時、obj = Components.classes[cid].createInstance()；で呼び出すことができるが、自分が書いた関数を呼び出すとTypeError: Components.classes[cid] isundefinedというエラが出た。</p>
+
+<p>/Users/kaku/Library/Application Support/Firefox/Profiles/7sbio35o.defaultディレクトリのcompreg.datの中で登録できるかどうかを調べられる。</p>
+
+<p>grep rsa compreg.datで調べたら、正しい時は以下のようになるはずだが</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>abs:/.../xpcom-sample@cozmixng.org/components/myCalc.so,1173322260000
+</span><span class='line'>{8931dfd3-edf3-4b7d-bd44-1da72064f0dc},,,,abs:/.../myCalc.so</span></code></pre></td></tr></table></div></figure>
+
+
+<p>何も出てこなかった。</p>
+
+<p>結構firefoxのバージョンとSDKのバージョンと自分の所のライブラリのバージョンと関わるらしいので、FireFox3.6 Firefox9などを色々試して、linux上も試したが、結局、ずっとエラのままだった。</p>
+
+<h3>Ctypes</h3>
+
+<p>調べた途中で、Ctypesというものを見つけて、複数のバージョンの Firefox で利用できるもの</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Components.utils.import('resource://gre/modules/ctypes.jsm');
+</span><span class='line'>var m = ctypes.open('/usr/lib/libc.dylib');
+</span><span class='line'>
+</span><span class='line'>var c = m.declare('cabs',
+</span><span class='line'>                ctypes.default_abi,
+</span><span class='line'>                ctypes.double,
+</span><span class='line'>                ctypes.double);
+</span><span class='line'>alert(c(-1));
+</span><span class='line'>m.close();</span></code></pre></td></tr></table></div></figure>
+
+
+<p>普通のhtmlで利用できないが、拡張機能でうまく実行できた</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[skypekit と xpcomでの暗号化拡張機能]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/06/21/skypekit-to-xpcomdefalsean-hao-hua-kuo-zhang-ji-neng/"/>
+    <updated>2012-06-21T22:35:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/06/21/skypekit-to-xpcomdefalsean-hao-hua-kuo-zhang-ji-neng</id>
+    <content type="html"><![CDATA[<h3>SkypeKit</h3>
+
+<p>xpcomをコンパイルするとき、色々なところで詰まったので、skypekitについて調べた</p>
+
+<p>SkypeKitは、Skypeデスクトップアプリケーションがなくても機能する。 SkypeKitは、ユーザに何も表示せず実行される、Skypeの「ヘッドレス」バージョンと考えられる。前のSkype Public APIは今後改善されることはないが、維持管理は行われている。</p>
+
+<p>現在ではC++,Java,.net,Pythonのライブラリを提供している。ライブラリをダウンロードするとき、お金の支払う要求が来たので、やめた。検索すると、C,Ruby版のものが公開している。</p>
+
+<p>ruby https://github.com/railsware/skypekit<br/>
+C https://github.com/railsware/libskypekit</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>require "skypekit"
+</span><span class='line'>$skype = Skypekit::Skype.new(:keyfile =&gt; ENV['SK_KEY'])
+</span><span class='line'>$skype.start
+</span><span class='line'>$skype.login(ENV['SK_USER'], ENV['SK_PASS'])
+</span><span class='line'>loop do
+</span><span class='line'>  event = $skype.get_event
+</span><span class='line'>  unless event
+</span><span class='line'>    sleep 5
+</span><span class='line'>    next
+</span><span class='line'>  end
+</span><span class='line'>  case event.type
+</span><span class='line'>  when :account_status
+</span><span class='line'>    if event.data.logged_in?
+</span><span class='line'>      puts "Congrats! We are Logged in!"
+</span><span class='line'>    end
+</span><span class='line'>    if event.data.logged_out?
+</span><span class='line'>      puts "Authentication failed: #{event.data.reason}"
+</span><span class='line'>    end
+</span><span class='line'>  when :chat_message
+</span><span class='line'>    message = event.data
+</span><span class='line'>    p message
+</span><span class='line'>    if message.body == "ping"
+</span><span class='line'>      $skype.send_chat_message(message.convo_id, "pong")
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>app2appなどの機能もあるが、ruby版は実装していない。C++のサンプルコードをネットで見つけた</p>
+
+<figure class='code'><figcaption><span>write</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="kt">bool</span>      <span class="n">cmdResult</span><span class="p">;</span>
+</span><span class='line'><span class="n">SEString</span>  <span class="n">appName</span> <span class="o">=</span> <span class="s">&quot;TestApp1&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="n">SEString</span>  <span class="n">streamName</span><span class="p">;</span>
+</span><span class='line'><span class="kt">char</span>      <span class="n">buffer</span><span class="p">[</span><span class="mi">32</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">];</span>
+</span><span class='line'><span class="n">uint</span>      <span class="n">bufSize</span> <span class="o">=</span> <span class="mi">32</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">;</span>
+</span><span class='line'><span class="n">SEBinary</span> <span class="n">writeBuffer</span><span class="p">;</span>
+</span><span class='line'><span class="n">writeBuffer</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">,</span> <span class="n">bufSize</span><span class="p">);</span>
+</span><span class='line'><span class="n">skype</span><span class="o">-&gt;</span><span class="n">App2AppWrite</span><span class="p">(</span><span class="n">appName</span><span class="p">,</span> <span class="n">streamName</span><span class="p">,</span> <span class="n">writeBuffer</span><span class="p">,</span> <span class="n">cmdResult</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>read</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="kt">void</span> <span class="n">MySkype</span><span class="o">::</span><span class="n">OnApp2AppStreamListChange</span> <span class="p">(</span>
+</span><span class='line'>        <span class="k">const</span> <span class="n">Sid</span><span class="o">::</span><span class="n">String</span> <span class="o">&amp;</span><span class="n">appname</span><span class="p">,</span>
+</span><span class='line'>        <span class="k">const</span> <span class="n">APP2APP_STREAMS</span> <span class="o">&amp;</span><span class="n">listType</span><span class="p">,</span>
+</span><span class='line'>        <span class="k">const</span> <span class="n">Sid</span><span class="o">::</span><span class="n">List_String</span> <span class="o">&amp;</span><span class="n">streams</span><span class="p">,</span>
+</span><span class='line'>        <span class="k">const</span> <span class="n">Sid</span><span class="o">::</span><span class="n">List_uint</span> <span class="o">&amp;</span><span class="n">receivedSizes</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">streams</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>                <span class="k">for</span> <span class="p">(</span><span class="n">uint</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">I</span> <span class="o">&lt;</span> <span class="n">streams</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">{</span>
+</span><span class='line'>                        <span class="k">if</span> <span class="p">(</span><span class="n">listType</span> <span class="o">==</span> <span class="n">Skype</span><span class="o">::</span><span class="n">RECEIVED_STREAMS</span><span class="p">)</span>
+</span><span class='line'>                        <span class="p">{</span>
+</span><span class='line'>                                <span class="kt">bool</span>      <span class="n">readOk</span><span class="p">;</span>
+</span><span class='line'>                                <span class="n">SEBinary</span>  <span class="n">buffer</span><span class="p">;</span>
+</span><span class='line'>                                <span class="n">App2AppRead</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span> <span class="n">streams</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">readOk</span><span class="p">,</span> <span class="n">buffer</span><span class="p">);</span>
+</span><span class='line'>                        <span class="p">};</span>
+</span><span class='line'>                <span class="p">};</span>
+</span><span class='line'>        <span class="p">};</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>XPCOM</h3>
+
+<p>前回はコンパイルするとき、ld: symbol(s) not found for architecture x86_64のところで詰まった。ar x libxpcomglue.aでやって、file *.oで.oファイルを調べた</p>
+
+<figure class='code'><figcaption><span>read</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="err">$</span> <span class="n">file</span> <span class="o">*</span><span class="p">.</span><span class="n">o</span>
+</span><span class='line'><span class="n">nsArrayEnumerator</span><span class="p">.</span><span class="nl">o:</span>            <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsArrayUtils</span><span class="p">.</span><span class="nl">o:</span>                 <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsCOMArray</span><span class="p">.</span><span class="nl">o:</span>                   <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsCOMPtr</span><span class="p">.</span><span class="nl">o:</span>                     <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsCRTGlue</span><span class="p">.</span><span class="nl">o:</span>                    <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsCategoryCache</span><span class="p">.</span><span class="nl">o:</span>              <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsClassInfoImpl</span><span class="p">.</span><span class="nl">o:</span>              <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsComponentManagerUtils</span><span class="p">.</span><span class="nl">o:</span>      <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsCycleCollectionParticipant</span><span class="p">.</span><span class="nl">o:</span> <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsCycleCollectorUtils</span><span class="p">.</span><span class="nl">o:</span>        <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsDeque</span><span class="p">.</span><span class="nl">o:</span>                      <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsEnumeratorUtils</span><span class="p">.</span><span class="nl">o:</span>            <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsGlueLinkingOSX</span><span class="p">.</span><span class="nl">o:</span>             <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsID</span><span class="p">.</span><span class="nl">o:</span>                         <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsIInterfaceRequestorUtils</span><span class="p">.</span><span class="nl">o:</span>   <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="err">。。。</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>全部x86_64のものである。色々調べたて、試したがうまく修正できない。BITTINESSを３２にしてコンパイルできる原因もわからないので、ずっとその辺で悩んでいた。</p>
+
+<p>sdkの中にはいたら、libxpcomglue_s.aというライブラリがあって、ar xで.oファイルをGenericModule.oなどのファイルが取得した。前の64bitたけでコンパイルする時のエラは</p>
+
+<figure class='code'><figcaption><span>read</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">Undefined</span> <span class="n">symbols</span> <span class="k">for</span> <span class="n">architecture</span> <span class="nl">x86_64:</span>
+</span><span class='line'> <span class="s">&quot;vtable for mozilla::GenericModule&quot;</span><span class="p">,</span> <span class="n">referenced</span> <span class="nl">from:</span>
+</span><span class='line'>   <span class="n">mozilla</span><span class="o">::</span><span class="n">GenericModule</span><span class="o">::</span><span class="n">GenericModule</span><span class="p">(</span><span class="n">mozilla</span><span class="o">::</span><span class="n">Module</span> <span class="k">const</span><span class="o">*</span><span class="p">)</span><span class="n">in</span> <span class="n">crypt_module</span><span class="p">.</span><span class="n">o</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Makefileを修正して、sがついているライブラリをつかうと、新しいエラが出た。</p>
+
+<figure class='code'><figcaption><span>read</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">Undefined</span> <span class="n">symbols</span> <span class="k">for</span> <span class="n">architecture</span> <span class="nl">x86_64:</span>
+</span><span class='line'>  <span class="s">&quot;_moz_xmalloc&quot;</span><span class="p">,</span> <span class="n">referenced</span> <span class="nl">from:</span>
+</span><span class='line'>    <span class="n">mozilla</span><span class="o">::</span><span class="n">GenericModule</span><span class="o">::</span><span class="n">GetClassObject</span><span class="p">(</span><span class="n">nsIComponentManager</span><span class="o">*</span><span class="p">,</span> <span class="n">nsID</span> <span class="k">const</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">nsID</span> <span class="k">const</span><span class="o">&amp;</span><span class="p">,</span> <span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="n">in</span> <span class="n">libxpcomglue_s</span><span class="p">.</span><span class="n">a</span><span class="p">(</span><span class="n">GenericModule</span><span class="p">.</span><span class="n">o</span><span class="p">)</span>
+</span><span class='line'>  <span class="s">&quot;_moz_free&quot;</span><span class="p">,</span> <span class="n">referenced</span> <span class="nl">from:</span>
+</span><span class='line'>    <span class="n">mozilla</span><span class="o">::</span><span class="n">GenericModule</span><span class="o">::</span><span class="n">Release</span><span class="p">()</span>     <span class="n">in</span> <span class="n">libxpcomglue_s</span><span class="p">.</span><span class="n">a</span><span class="p">(</span><span class="n">GenericModule</span><span class="p">.</span><span class="n">o</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">mozilla</span><span class="o">::</span><span class="n">GenericFactory</span><span class="o">::</span><span class="n">Release</span><span class="p">()</span>     <span class="n">in</span> <span class="n">libxpcomglue_s</span><span class="p">.</span><span class="n">a</span><span class="p">(</span><span class="n">GenericFactory</span><span class="p">.</span><span class="n">o</span><span class="p">)</span>
+</span><span class='line'><span class="nl">ld:</span> <span class="n">symbol</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">not</span> <span class="n">found</span> <span class="k">for</span> <span class="n">architecture</span> <span class="n">x86_64</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>sdkでlibmozalloc.dylibを見つけたので、Makefileで追加すると、うまくコンパイルができた</p>
+
+<h2>次回</h2>
+
+<p>javascript側使えるようにする。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[6.15分散ゼミ 郭]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/06/14/6-dot-15fen-san-zemi-guo/"/>
+    <updated>2012-06-14T14:15:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/06/14/6-dot-15fen-san-zemi-guo</id>
+    <content type="html"><![CDATA[<h2>インターンシップ</h2>
+
+<p>東京のあるiOSゲーム開発の会社のインターンシップに参加した</p>
+
+<h2>OpenSSL</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="n">public_encrypt</span><span class="p">(</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pubkey</span><span class="p">,</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">from</span><span class="p">);</span>
+</span><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="n">private_decrypt</span><span class="p">(</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">prikey</span><span class="p">,</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">from</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>OpenSSLのライブラリを利用し、公開鍵で暗号化する関数と復号化する関数を書いた。一つはpublic keyと暗号化したい文字列を入れて、暗号化を行って、Base64の文字列を返す。もう一つはその逆である。</p>
+
+<p>テストしたら、1.3MBくらいのデータを暗号化して、復号化すると、25秒かかった。後から高速化できるので、とりあえずXPCOMで利用出来るようにした方がいいと思って、XPCOMのほうを先にやる。</p>
+
+<p>XPCOMのidlファイルに関数を追加し、xulrunner-sdk/sdk/bin/header.pyでheaderファイルを生成する時、</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">xpidl</span><span class="p">.</span><span class="n">IDLError</span><span class="o">:</span> <span class="n">error</span><span class="o">:</span> <span class="n">invalid</span> <span class="n">syntax</span><span class="p">,</span> <span class="n">jsIrsa</span><span class="p">.</span><span class="n">idl</span> <span class="n">line</span> <span class="mi">5</span><span class="o">:</span><span class="mi">6</span>
+</span><span class='line'>  <span class="kt">char</span><span class="o">*</span> <span class="n">public_encrypt</span><span class="p">(</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pubkey</span><span class="p">,</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">from</span><span class="p">);</span>
+</span><span class='line'>        <span class="o">^</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>というエラが出た。</p>
+
+<p>NPAPIの場合、NPStringがある、javascriptの引数を受け取りする時、NPVARIANT_TO_STRINGでjavascriptのオブジェクトをNSStringにして、NSStringをchar*にする必要がある。javascriptに値を返す時は逆にやらなければならない<br/>
+XPCOMも同じようにする必要がある。調べたら</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">IDL</span> <span class="n">type</span> <span class="o">|</span> <span class="n">C</span><span class="o">++</span> <span class="n">Type</span>
+</span><span class='line'><span class="o">---------|------------</span>
+</span><span class='line'><span class="n">string</span>   <span class="o">|</span> <span class="kt">char</span><span class="o">*</span>
+</span><span class='line'><span class="n">wstring</span>  <span class="o">|</span> <span class="n">PRUnichar</span><span class="o">*</span>
+</span><span class='line'><span class="n">AString</span>  <span class="o">|</span> <span class="n">nsAString</span>
+</span><span class='line'><span class="p">...</span>      <span class="o">|</span> <span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>idlは以下のように書く</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">interface</span> <span class="n">jsIrsa</span> <span class="o">:</span> <span class="n">nsISupports</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">string</span> <span class="n">encrypt</span><span class="p">(</span><span class="n">in</span> <span class="n">string</span> <span class="n">pubkey</span><span class="p">,</span> <span class="n">in</span> <span class="n">string</span> <span class="n">from</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">string</span> <span class="n">decrypt</span><span class="p">(</span><span class="n">in</span> <span class="n">string</span> <span class="n">prikey</span><span class="p">,</span> <span class="n">in</span> <span class="n">string</span> <span class="n">from</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>constをinにする。inは読み込み専用</p>
+
+<p>こうすると、idlから、.hと.cppのファイルが生成された。</p>
+
+<p>前回と同じように.soファイルが生成された。</p>
+
+<p>共有ライブラリが読み込まれたときに、中に入っている XPCOMを登録する機能が必要になる。その機能を crypt_module.cppとして実装する必要がある。</p>
+
+<p>ウェブ上で以下のように書いているが、</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cp">#include &quot;nsIGenericFactory.h&quot;</span>
+</span><span class='line'><span class="cp">#include &quot;myCalc.h&quot;</span>
+</span><span class='line'><span class="n">NS_GENERIC_FACTORY_CONSTRUCTOR</span><span class="p">(</span><span class="n">myCalc</span><span class="p">)</span>
+</span><span class='line'><span class="k">static</span> <span class="n">nsModuleComponentInfo</span> <span class="n">components</span><span class="p">[]</span> <span class="o">=</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>         <span class="n">MY_CALC_CLASS_NAME</span><span class="p">,</span>
+</span><span class='line'>           <span class="n">MY_CALC_CID</span><span class="p">,</span>
+</span><span class='line'>           <span class="n">MY_CALC_CONTRACT_ID</span><span class="p">,</span>
+</span><span class='line'>           <span class="n">myCalcConstructor</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="n">NS_IMPL_NSGETMODULE</span><span class="p">(</span><span class="s">&quot;myCalcModule&quot;</span><span class="p">,</span> <span class="n">components</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>nsIGenericFactory.hはもう使われてない。調べたら、#include &#8220;mozilla/ModuleUtils.h&#8221;にするべき</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &quot;mozilla/ModuleUtils.h&quot;</span>
+</span><span class='line'><span class="cp">#include &quot;crypt.h&quot;</span>
+</span><span class='line'><span class="n">NS_GENERIC_FACTORY_CONSTRUCTOR</span><span class="p">(</span><span class="n">Crypt</span><span class="p">)</span>
+</span><span class='line'><span class="n">NS_DEFINE_NAMED_CID</span><span class="p">(</span><span class="n">CRYPT_CID</span><span class="p">);</span>
+</span><span class='line'><span class="k">static</span> <span class="k">const</span> <span class="n">mozilla</span><span class="o">::</span><span class="n">Module</span><span class="o">::</span><span class="n">CIDEntry</span> <span class="n">kCryptCIDs</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">{</span> <span class="o">&amp;</span><span class="n">kCRYPT_CID</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">CryptConstructor</span> <span class="p">},</span>
+</span><span class='line'>        <span class="p">{</span> <span class="nb">NULL</span> <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="k">static</span> <span class="k">const</span> <span class="n">mozilla</span><span class="o">::</span><span class="n">Module</span><span class="o">::</span><span class="n">ContractIDEntry</span> <span class="n">kCryptContracts</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">{</span> <span class="n">CRYPT_CONTRACT_ID</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">kCRYPT_CID</span> <span class="p">},</span>
+</span><span class='line'>        <span class="p">{</span> <span class="nb">NULL</span> <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="k">static</span> <span class="k">const</span> <span class="n">mozilla</span><span class="o">::</span><span class="n">Module</span> <span class="n">kCryptModule</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">mozilla</span><span class="o">::</span><span class="n">Module</span><span class="o">::</span><span class="n">kVersion</span><span class="p">,</span>
+</span><span class='line'>        <span class="n">kCryptCIDs</span><span class="p">,</span>
+</span><span class='line'>        <span class="n">kCryptContracts</span><span class="p">,</span>
+</span><span class='line'>        <span class="nb">NULL</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="n">NSMODULE_DEFN</span><span class="p">(</span><span class="n">crypt_module</span><span class="p">)</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">kCryptModule</span><span class="p">;</span>
+</span><span class='line'><span class="n">NS_IMPL_MOZILLA192_NSGETMODULE</span><span class="p">(</span><span class="o">&amp;</span><span class="n">kCryptModule</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>コンパイルすると、以下のエラが出た。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">g</span><span class="o">++</span> <span class="o">-</span><span class="n">g</span> <span class="o">-</span><span class="n">Wall</span> <span class="o">-</span><span class="n">fno</span><span class="o">-</span><span class="n">rtti</span> <span class="o">-</span><span class="n">fno</span><span class="o">-</span><span class="n">exceptions</span> <span class="o">-</span><span class="n">shared</span> <span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">kaku</span><span class="o">/</span><span class="n">xulrunner</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="n">lib</span> <span class="o">-</span><span class="n">o</span> <span class="n">crypt</span><span class="p">.</span><span class="n">so</span>
+</span><span class='line'>    <span class="n">crypt</span><span class="p">.</span><span class="n">o</span> <span class="n">crypt_module</span><span class="p">.</span><span class="n">o</span> <span class="o">-</span><span class="n">lxpcomglue</span> <span class="o">-</span><span class="n">lnspr4</span> <span class="o">-</span><span class="n">lplds4</span>
+</span><span class='line'><span class="n">Undefined</span> <span class="n">symbols</span> <span class="k">for</span> <span class="n">architecture</span> <span class="nl">x86_64:</span>
+</span><span class='line'> <span class="s">&quot;vtable for mozilla::GenericModule&quot;</span><span class="p">,</span> <span class="n">referenced</span> <span class="nl">from:</span>
+</span><span class='line'>  <span class="n">mozilla</span><span class="o">::</span><span class="n">GenericModule</span><span class="o">::</span><span class="n">GenericModule</span><span class="p">(</span><span class="n">mozilla</span><span class="o">::</span><span class="n">Module</span> <span class="k">const</span><span class="o">*</span><span class="p">)</span><span class="n">in</span> <span class="n">crypt_module</span><span class="p">.</span><span class="n">o</span>
+</span><span class='line'><span class="nl">ld:</span> <span class="n">symbol</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">not</span> <span class="n">found</span> <span class="k">for</span> <span class="n">architecture</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="nl">collect2:</span> <span class="n">ld</span> <span class="n">returned</span> <span class="mi">1</span> <span class="n">exit</span> <span class="n">status</span>
+</span><span class='line'><span class="nl">make:</span> <span class="o">***</span> <span class="p">[</span><span class="n">crypt</span><span class="p">.</span><span class="n">so</span><span class="p">]</span> <span class="n">Error</span> <span class="mi">1</span>
+</span><span class='line'><span class="nl">make:</span> <span class="n">Target</span> <span class="err">`</span><span class="n">all</span><span class="err">&#39;</span> <span class="n">not</span> <span class="n">remade</span> <span class="n">because</span> <span class="n">of</span> <span class="n">errors</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一回コンパイルして、失敗した後、
+Makefileで</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">BITTINESS</span> <span class="o">=</span> <span class="o">-</span><span class="n">m32</span>
+</span><span class='line'><span class="n">CXX</span> <span class="o">=</span> <span class="n">c</span><span class="o">++</span> <span class="err">$</span><span class="p">{</span><span class="n">BITTINESS</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>を追加し、cleanしないでもう一回コンパイルすると、コンパイルが成功した</p>
+
+<p>make cleanしたら、以下のエラが出た</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">c</span><span class="o">++</span> <span class="o">-</span><span class="n">m32</span> <span class="o">-</span><span class="n">g</span> <span class="o">-</span><span class="n">Wall</span> <span class="o">-</span><span class="n">fno</span><span class="o">-</span><span class="n">rtti</span> <span class="o">-</span><span class="n">fno</span><span class="o">-</span><span class="n">exceptions</span> <span class="o">-</span><span class="n">shared</span> <span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">kaku</span><span class="o">/</span><span class="n">xulrunner</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="n">lib</span> <span class="o">-</span><span class="n">o</span>
+</span><span class='line'>    <span class="n">crypt</span><span class="p">.</span><span class="n">so</span> <span class="n">crypt</span><span class="p">.</span><span class="n">o</span> <span class="n">crypt_module</span><span class="p">.</span><span class="n">o</span> <span class="o">-</span><span class="n">lxpcomglue</span> <span class="o">-</span><span class="n">lnspr4</span> <span class="o">-</span><span class="n">lplds4</span>
+</span><span class='line'><span class="nl">ld:</span> <span class="nl">warning:</span> <span class="n">ignoring</span> <span class="n">file</span> <span class="n">xulrunner</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libxpcomglue</span><span class="p">.</span><span class="n">a</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">file</span> <span class="n">was</span> <span class="n">built</span> <span class="k">for</span> <span class="n">archive</span> <span class="n">which</span> <span class="n">is</span> <span class="n">not</span> <span class="n">the</span> <span class="n">architecture</span> <span class="n">being</span> <span class="n">linked</span> <span class="p">(</span><span class="n">i386</span><span class="p">)</span>
+</span><span class='line'><span class="nl">ld:</span> <span class="nl">warning:</span> <span class="n">ignoring</span> <span class="n">file</span> <span class="n">xulrunner</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libnspr4</span><span class="p">.</span><span class="n">dylib</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">file</span> <span class="n">was</span> <span class="n">built</span> <span class="k">for</span> <span class="n">unsupported</span> <span class="n">file</span> <span class="n">format</span> <span class="n">which</span> <span class="n">is</span> <span class="n">not</span> <span class="n">the</span> <span class="n">architecture</span> <span class="n">being</span> <span class="n">linked</span> <span class="p">(</span><span class="n">i386</span><span class="p">)</span>
+</span><span class='line'><span class="nl">ld:</span> <span class="nl">warning:</span> <span class="n">ignoring</span> <span class="n">file</span> <span class="n">xulrunner</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libplds4</span><span class="p">.</span><span class="n">dylib</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">file</span> <span class="n">was</span> <span class="n">built</span> <span class="k">for</span> <span class="n">unsupported</span> <span class="n">file</span> <span class="n">format</span> <span class="n">which</span> <span class="n">is</span> <span class="n">not</span> <span class="n">the</span> <span class="n">architecture</span> <span class="n">being</span> <span class="n">linked</span> <span class="p">(</span><span class="n">i386</span><span class="p">)</span>
+</span><span class='line'><span class="n">Undefined</span> <span class="n">symbols</span> <span class="k">for</span> <span class="n">architecture</span> <span class="nl">i386:</span>
+</span><span class='line'>  <span class="s">&quot;NS_TableDrivenQI(void*, QITableEntry const*, nsID const&amp;, void**)&quot;</span><span class="p">,</span> <span class="n">referenced</span> <span class="nl">from:</span>
+</span><span class='line'>    <span class="n">Crypt</span><span class="o">::</span><span class="n">QueryInterface</span><span class="p">(</span><span class="n">nsID</span> <span class="k">const</span><span class="o">&amp;</span><span class="p">,</span> <span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="n">in</span> <span class="n">crypt</span><span class="p">.</span><span class="n">o</span>
+</span><span class='line'>  <span class="s">&quot;vtable for mozilla::GenericModule&quot;</span><span class="p">,</span> <span class="n">referenced</span> <span class="nl">from:</span>
+</span><span class='line'>    <span class="n">mozilla</span><span class="o">::</span><span class="n">GenericModule</span><span class="o">::</span><span class="n">GenericModule</span><span class="p">(</span><span class="n">mozilla</span><span class="o">::</span><span class="n">Module</span> <span class="k">const</span><span class="o">*</span><span class="p">)</span><span class="n">in</span> <span class="n">crypt_module</span><span class="p">.</span><span class="n">o</span>
+</span><span class='line'><span class="nl">ld:</span> <span class="n">symbol</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">not</span> <span class="n">found</span> <span class="k">for</span> <span class="n">architecture</span> <span class="n">i386</span>
+</span><span class='line'><span class="nl">collect2:</span> <span class="n">ld</span> <span class="n">returned</span> <span class="mi">1</span> <span class="n">exit</span> <span class="n">status</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[6.1分散ゼミ　カク]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/05/31/6-dot-1fen-san-zemi-kaku/"/>
+    <updated>2012-05-31T23:08:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/05/31/6-dot-1fen-san-zemi-kaku</id>
+    <content type="html"><![CDATA[<p>xulrunnerインストール<br/>
+http://ftp.mozilla.org/pub/mozilla.org/xulrunner/releases/13.0b6/runtimes/<br/>
+macの場合/Library/Frameworks/XUL.Frameworkにインストールされる</p>
+
+<p>Gecko SDKをダウンロード<br/>
+https://developer.mozilla.org/en/Gecko_SDK<br/>
+Gecko 1.9.2 (Firefox 3.6)<br/>
+Gecko 12.0 (Firefox 12.0)<br/>
+xmppのプラグインは最新のfirefoxで動けない原因はここかもしれない</p>
+
+<p>idlファイル</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#include "nsISupports.idl"
+</span><span class='line'>[scriptable, uuid(c95498ae-16f5-4b46-8713-2cf79e30d4ef)]
+</span><span class='line'>interface myICalc : nsISupports
+</span><span class='line'>{
+</span><span class='line'>  long add(in long a, in long b);
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<p>$ ../../../xulrunner-sdk/sdk/bin/header.py -I ../../../xulrunner-sdk/idl -o myIcalc.h myICalc.idl<br/>
+$ ../../../xulrunner-sdk/sdk/bin/typelib.py -I ../../../xulrunner-sdk/idl -o myIcalc.xpt myICalc.idl</p>
+
+<p>headerファイル</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#ifndef __MYCALC_H__
+</span><span class='line'>#define __MYCALC_H__
+</span><span class='line'>#include "myICalc.h"
+</span><span class='line'>#define MY_CALC_CONTRACT_ID "@cozmixng.org/xpcom-sample/Calc;1"
+</span><span class='line'>#define MY_CALC_CLASS_NAME "Calculator"
+</span><span class='line'>#define MY_CALC_CID_STR "8931dfd3-edf3-4b7d-bd44-1da72064f0dc"
+</span><span class='line'>#define MY_CALC_CID {0x8931dfd3, 0xedf3, 0x4b7d, {0xbd, 0x44, 0x1d, 0xa7, 0x20, 0x64, 0xf0, 0xdc}}
+</span><span class='line'>class myCalc : public myICalc
+</span><span class='line'>{
+</span><span class='line'>public:
+</span><span class='line'>          NS_DECL_ISUPPORTS
+</span><span class='line'>          NS_DECL_MYICALC
+</span><span class='line'>          myCalc();
+</span><span class='line'>private:
+</span><span class='line'>          ~myCalc();
+</span><span class='line'>protected:
+</span><span class='line'>          /* additional members */
+</span><span class='line'>};
+</span><span class='line'>#endif</span></code></pre></td></tr></table></div></figure>
+
+
+<p>NS_DECL_ISUPPORTS: マクロ、nsISupportsクラスのメンバ<br/>
+NS_DECL_MYICALC: マクロ、myCalcクラスのメンバ<br/>
+この二つのマクロを利用し、コンストラクタ、デストラクタのみ書く</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#define NS_DECL_ISUPPORTS                                                     \
+</span><span class='line'>public:                                                                       \
+</span><span class='line'>  NS_IMETHOD QueryInterface(REFNSIID aIID,                                    \
+</span><span class='line'>                            void** aInstancePtr);                             \
+</span><span class='line'>  NS_IMETHOD_(nsrefcnt) AddRef(void);                                         \
+</span><span class='line'>  NS_IMETHOD_(nsrefcnt) Release(void);                                        \
+</span><span class='line'>protected:                                                                    \
+</span><span class='line'>  nsAutoRefCnt mRefCnt;                                                       \
+</span><span class='line'>  NS_DECL_OWNINGTHREAD                                                        \
+</span><span class='line'>public:</span></code></pre></td></tr></table></div></figure>
+
+
+<p>idlから生成したmyICalcクラスを継承する</p>
+
+<p>cppファイル</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#include "mozilla-config.h"
+</span><span class='line'>#include "myCalc.h"
+</span><span class='line'>NS_IMPL_ISUPPORTS1(myCalc, myICalc)
+</span><span class='line'>myCalc::myCalc()
+</span><span class='line'>{
+</span><span class='line'>        /* member initializers and constructor code */
+</span><span class='line'>}
+</span><span class='line'>myCalc::~myCalc()
+</span><span class='line'>{
+</span><span class='line'>        /* destructor code */
+</span><span class='line'>}
+</span><span class='line'>/* long add (in long a, in long b); */
+</span><span class='line'>NS_IMETHODIMP myCalc::Add(PRInt32 a, PRInt32 b, PRInt32 *_retval)
+</span><span class='line'>{
+</span><span class='line'>        *_retval = a + b;
+</span><span class='line'>        return NS_OK;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#define NS_IMPL_ISUPPORTS1(_class, _interface)                                \
+</span><span class='line'>  NS_IMPL_ADDREF(_class)                                                      \
+</span><span class='line'>  NS_IMPL_RELEASE(_class)                                                     \
+</span><span class='line'>  NS_IMPL_QUERY_INTERFACE1(_class, _interface)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最後にこれらのファイルをコンパイルし、.soファイルが生成されたら完成</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[5.25分散ゼミ]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/05/24/5-dot-25fen-san-zemi/"/>
+    <updated>2012-05-24T15:04:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/05/24/5-dot-25fen-san-zemi</id>
+    <content type="html"><![CDATA[<h2>pgp</h2>
+
+<p>$ gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;verify-options no-show-photo &#8211;use-agent -b -u 28893B0<br/>
+gpg: skipped &#8220;28893B0&#8221;: secret key not available<br/>
+gpg: signing failed: secret key not available<br/>
+$ gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;verify-options no-show-photo &#8211;use-agent -b -u 28893B08<br/>
+入力待ちの状態になった</p>
+
+<h3>public keyの交換</h3>
+
+<p>前回はaliceとbobobの二つの鍵を生成した<br/>
+alice.pub bobob.pub</p>
+
+<p>相手の公開鍵を登録<br/>
+gpg &#8211;import alice.pub<br/>
+gpg &#8211;import bobob.pub</p>
+
+<p>gpgの指紋を表示<br/>
+gpg &#8211;finggerprint</p>
+
+<p>gpg鍵署名<br/>
+gpg &#8211;lsign-key userid（Local 署名）<br/>
+gpg &#8211;sign-key userid（Exportable署名）</p>
+
+<p>信用データベースに登録<br/>
+gpg &#8211;edit-key userid</p>
+
+<p>gajimでpublic keyの表示が出来るので、public keyを選択</p>
+
+<h3>straceの結果</h3>
+
+<p>署名<br/>
+gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;verify-options no-show-photo -b -u 28893B08<br/>
+署名の検証<br/>
+gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;verify-options no-show-photo &#8211;verify &#8211;enable-special-filenames<br/>
+暗号化<br/>
+gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;recipient 6251A408 &#8211;no-secmem-warning &#8211;verify-options no-show-photo &#8211;encrypt<br/>
+復号化<br/>
+gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;verify-options no-show-photo &#8211;decrypt -q -u 28893B08</p>
+
+<h3>署名</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;presence</span> <span class="na">id=</span><span class="s">&quot;13&quot;</span> <span class="na">from=</span><span class="s">&quot;test0001@gmail.com/GajimF68D4BC1&quot;</span> <span class="na">to=</span><span class="s">&quot;test0001@gmail.com/GajimF68D4BC1&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;priority&gt;</span>50<span class="nt">&lt;/priority&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;c</span> <span class="na">node=</span><span class="s">&quot;http://gajim.org&quot;</span> <span class="na">ver=</span><span class="s">&quot;I8g2pphLu5w2XvNV8HDES9gqRaw=&quot;</span> <span class="na">hash=</span><span class="s">&quot;sha-1&quot;</span> <span class="na">xmlns=</span><span class="s">&quot;http://jabber.org/protocol/caps&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;x</span> <span class="na">xmlns=</span><span class="s">&quot;jabber:x:signed&quot;</span><span class="nt">&gt;</span>iJwEAAECAAYFAk+9738ACgkQUe7L3yiJOwhb/wP/a/9jfP0aSM0tp4QI/dGYuTqC
+</span><span class='line'>  　　0Wx1fh4oSROWIbj3vHLnjbMunEsZyei4mX+ctnMzQPiODwCg9rpe2v/gryTcSx88
+</span><span class='line'>  　　cIC1dsleD2AouUWspuMlOjJfyIkv9/VJuVwlTXTqKq7Kvf/x5+Enz51mzFBlNMNd
+</span><span class='line'>  　　+CUHr+/RuqJC8jWIQuc=
+</span><span class='line'>  　　=Pupl<span class="nt">&lt;/x&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;x</span> <span class="na">xmlns=</span><span class="s">&quot;vcard-temp:x:update&quot;</span><span class="nt">&gt;&lt;photo/&gt;&lt;/x&gt;</span>
+</span><span class='line'><span class="nt">&lt;/presence&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>暗号化と復号化</h3>
+
+<p>~$ gpg &#8211;fingerprint</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>/home/kaku/.gnupg/pubring.gpg
+</span><span class='line'>-----------------------------
+</span><span class='line'>pub   1024R/28893B08 2012-05-17
+</span><span class='line'>      Key fingerprint = 3EDC 2B33 3648 6DDC 1CB9  84EF 51EE CBDF 2889 3B08
+</span><span class='line'>    uid                  alice (key) <span class="nt">&lt;alice</span><span class="err">@alice.com</span><span class="nt">&gt;</span>
+</span><span class='line'>    sub   1024R/B6EAAF3A 2012-05-17
+</span><span class='line'>
+</span><span class='line'>pub   1024R/6251A408 2012-05-09
+</span><span class='line'>      Key fingerprint = 301A A4C9 1E05 8612 B153  A8A0 677E 0B66 6251 A408
+</span><span class='line'>      uid                  bobob (key) <span class="nt">&lt;bob</span><span class="err">@bob.com</span><span class="nt">&gt;</span>
+</span><span class='line'>      sub   1024R/3D3B85EB 2012-05-09
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>$ gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;recipient 28893B08 &#8211;no-secmem-warning &#8211;verify-options no-show-photo &#8211;encrypt<br/>
+文字列を入力し、Ctrl+Dを入力する</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>abc
+</span><span class='line'>-----BEGIN PGP MESSAGE-----
+</span><span class='line'>Version: GnuPG v1.4.10 (GNU/Linux)
+</span><span class='line'>
+</span><span class='line'>hIwDxfzxLrbqrzoBA/4xGWNSkVxs+SfEgU2iriS5fX//LrG0MqdN90JSumwB/PGs
+</span><span class='line'>6iRQZGzbr8a76s88gDOdiDHcQznWdMLDygpeDM/r7uEW1KdGFAmQ8StktxUGASig
+</span><span class='line'>iva3Ra4o4bS4Wj2wwH4dB3Nb3Sq3ePIx83SZ5ttct4o/D4BeRcYS3YAAVLYyAtI/
+</span><span class='line'>AQF5c/CoTQ0FXJFm7n9c+/Q5/z75qo17VlmWxK7OPzDL/IcfvHpEC2RAXObMlF2Y
+</span><span class='line'>5kKZBAk11BNHSlHoXaUh
+</span><span class='line'>=0Gdv
+</span><span class='line'>-----END PGP MESSAGE-----
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>$ gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;verify-options no-show-photo &#8211;decrypt -q -u B6EAAF3A<br/>
+暗号文を入力し、Ctrl+Dを入力する</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>-----BEGIN PGP MESSAGE-----
+</span><span class='line'>Version: GnuPG v1.4.10 (GNU/Linux)
+</span><span class='line'>
+</span><span class='line'>hIwDxfzxLrbqrzoBA/4xGWNSkVxs+SfEgU2iriS5fX//LrG0MqdN90JSumwB/PGs
+</span><span class='line'>6iRQZGzbr8a76s88gDOdiDHcQznWdMLDygpeDM/r7uEW1KdGFAmQ8StktxUGASig
+</span><span class='line'>iva3Ra4o4bS4Wj2wwH4dB3Nb3Sq3ePIx83SZ5ttct4o/D4BeRcYS3YAAVLYyAtI/
+</span><span class='line'>AQF5c/CoTQ0FXJFm7n9c+/Q5/z75qo17VlmWxK7OPzDL/IcfvHpEC2RAXObMlF2Y
+</span><span class='line'>5kKZBAk11BNHSlHoXaUh
+</span><span class='line'>=0Gdv
+</span><span class='line'>-----END PGP MESSAGE-----
+</span><span class='line'>abc
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[5.18分散ゼミ]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/05/17/5-dot-18fen-san-zemi/"/>
+    <updated>2012-05-17T22:57:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/05/17/5-dot-18fen-san-zemi</id>
+    <content type="html"><![CDATA[<h2>gloox</h2>
+
+<p>c++で書かれたxmppライブラリ</p>
+
+<p>OpenPGPをサポートする</p>
+
+<p>しかし、keyの生成やkeyで暗号化や復号化などが自分で行わなければいけない</p>
+
+<h2>straceでgajimの動作を調べた</h2>
+
+<p>strace -f -F -o ~/gajim.txt gajim</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>3930  execve<span class="o">(</span><span class="s2">&quot;/bin/sh&quot;</span>, <span class="o">[</span><span class="s2">&quot;sh&quot;</span>, <span class="s2">&quot;-c&quot;</span>, <span class="s2">&quot;gpg -h &gt;/dev/null 2&gt;&amp;1&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> 0
+</span><span class='line'>3931  execve<span class="o">(</span><span class="s2">&quot;/usr/bin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;-h&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> 0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>しかでない</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>3931  access<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/gpg.conf-1.4.10&quot;</span>, R_OK<span class="o">)</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>3931  access<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/gpg.conf-1.4&quot;</span>, R_OK<span class="o">)</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>3931  access<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/gpg.conf-1&quot;</span>, R_OK<span class="o">)</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>3931  access<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/gpg.conf&quot;</span>, R_OK<span class="o">)</span> <span class="o">=</span> 0
+</span><span class='line'>3931  access<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/options&quot;</span>, R_OK<span class="o">)</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>3931  stat64<span class="o">(</span><span class="s2">&quot;~/.gnupg&quot;</span>, 0xbfc3d1d0<span class="o">)</span>    <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>3931  stat64<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/gpg.conf&quot;</span>, <span class="o">{</span><span class="nv">st_mode</span><span class="o">=</span>S_IFREG|0600, <span class="nv">st_size</span><span class="o">=</span>9364, ...<span class="o">})</span> <span class="o">=</span> 0
+</span><span class='line'>3931  stat64<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg&quot;</span>, <span class="o">{</span><span class="nv">st_mode</span><span class="o">=</span>S_IFDIR|0700, <span class="nv">st_size</span><span class="o">=</span>4096, ...<span class="o">})</span> <span class="o">=</span> 0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>gpg.confをアクセスしたので、そのファイルを開いてみると、</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>keyserver hkp://keys.gnupg.net
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>keysever：keyの交換を行うサーバー</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>gpg --send-key id
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>を実行すると、そのkeyをサーバーに送る</p>
+
+<h3>keyの生成が自分でやる必要があるらしいので、手動でkeyを生成</h3>
+
+<p>生成したとき、面白いものが出てきた</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>今から長い乱数を生成します。キーボードを打つとか、マウスを動かす
+</span><span class='line'>とか、ディスクにアクセスするとかの他のことをすると、乱数生成子で
+</span><span class='line'>乱雑さの大きないい乱数を生成しやすくなるので、お勧めいたします。
+</span><span class='line'>+++++++++++++++.++++++++++....++++++++++++++++++++.++++++++++++++++++++++++++++++++++++++++..++++++++++++++++++++++++++++++++++++++++.+++++&gt;.++++++++++...........+++++
+</span><span class='line'>十分な長さの乱数が得られません。OSがもっと乱雑さを収集
+</span><span class='line'>できるよう、何かしてください! <span class="o">(</span>あと282バイトいります<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最初はなかなか進まないが、裏でネットワークでファイルを送るとか、いろいろやるとうまく生成した</p>
+
+<p>gajimでgpg keyの選択のメニューが出てきた。</p>
+
+<p>keyの交換keyserverは自動的にやってくれると思ったが、うまく行かない</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>5607  execve<span class="o">(</span><span class="s2">&quot;/usr/local/sbin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;34&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--verify&quot;</span>, <span class="s2">&quot;--enable-special-filenames&quot;</span>, <span class="s2">&quot;-&quot;</span>, <span class="s2">&quot;-&amp;30&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>5607  execve<span class="o">(</span><span class="s2">&quot;/usr/local/bin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;34&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--verify&quot;</span>, <span class="s2">&quot;--enable-special-filenames&quot;</span>, <span class="s2">&quot;-&quot;</span>, <span class="s2">&quot;-&amp;30&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>5607  execve<span class="o">(</span><span class="s2">&quot;/usr/sbin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;34&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--verify&quot;</span>, <span class="s2">&quot;--enable-special-filenames&quot;</span>, <span class="s2">&quot;-&quot;</span>, <span class="s2">&quot;-&amp;30&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>5607  execve<span class="o">(</span><span class="s2">&quot;/usr/bin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;34&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--verify&quot;</span>, <span class="s2">&quot;--enable-special-filenames&quot;</span>, <span class="s2">&quot;-&quot;</span>, <span class="s2">&quot;-&amp;30&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> 0
+</span><span class='line'>5646  execve<span class="o">(</span><span class="s2">&quot;/usr/local/sbin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;35&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--use-agent&quot;</span>, <span class="s2">&quot;-b&quot;</span>, <span class="s2">&quot;-u 28893B08&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>5646  execve<span class="o">(</span><span class="s2">&quot;/usr/local/bin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;35&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--use-agent&quot;</span>, <span class="s2">&quot;-b&quot;</span>, <span class="s2">&quot;-u 28893B08&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>5646  execve<span class="o">(</span><span class="s2">&quot;/usr/sbin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;35&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--use-agent&quot;</span>, <span class="s2">&quot;-b&quot;</span>, <span class="s2">&quot;-u 28893B08&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>5646  execve<span class="o">(</span><span class="s2">&quot;/usr/bin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;35&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--use-agent&quot;</span>, <span class="s2">&quot;-b&quot;</span>, <span class="s2">&quot;-u 28893B08&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> 0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>error</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>~<span class="nv">$ </span>strace -f -F -o ~/gajim2 gajim
+</span><span class='line'>gpg: decryption failed: secret key not available
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[5.11分散ゼミ]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/05/09/5-dot-11fen-san-zemi/"/>
+    <updated>2012-05-09T21:00:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/05/09/5-dot-11fen-san-zemi</id>
+    <content type="html"><![CDATA[<h2>就職活動</h2>
+
+<p>中国北京のある会社に面接を受けました。先週はskypeで面接して、今回は会社で直接面接する必要があるので、二日間帰国しました。</p>
+
+<p>いろいろ相談すると</p>
+
+<ul>
+<li>給料は一ヶ月10万円</li>
+<li>税金、保険などは一ヶ月25000円</li>
+<li>家賃は一ヶ月45000円</li>
+<li>食事は一ヶ月25000円</li>
+</ul>
+
+
+<p>残りは５０００円だけ!</p>
+
+<p>低すぎるので、悩んでいる</p>
+
+<h2>xmpp暗号化</h2>
+
+<p>Gajimでend to endの暗号化をする前のXMLデーターを取得し、分析してみた</p>
+
+<p>Simplified Encrypted Session Negotiation http://xmpp.org/extensions/xep-0217.html<br/>
+Encrypted Session Negotiation http://xmpp.org/extensions/xep-0116.html<br/>
+Offline Encrypted Sessions http://xmpp.org/extensions/xep-0187.html<br/>
+Stanza Encryption http://xmpp.org/extensions/xep-0200.html<br/>
+Current Jabber OpenPGP Usage http://xmpp.org/extensions/xep-0027.html</p>
+
+<p>Alice -> Bob　フォームを送信</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;message</span> <span class="na">to=</span><span class="s">&quot;bob@gmail.com/Gajim681D2858&quot;</span> <span class="na">id=</span><span class="s">&quot;49&quot;</span> <span class="na">from=</span><span class="s">&quot;alice@gmail.com/GajimEE1BF740&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;feature</span> <span class="na">xmlns=</span><span class="s">&quot;http://jabber.org/protocol/feature-neg&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;x</span> <span class="na">type=</span><span class="s">&quot;form&quot;</span> <span class="na">xmlns=</span><span class="s">&quot;jabber:x:data&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;FORM_TYPE&quot;</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>urn:xmpp:ssn<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;accept&quot;</span> <span class="na">type=</span><span class="s">&quot;boolean&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>1<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;required/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;logging&quot;</span> <span class="na">type=</span><span class="s">&quot;list-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;required/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;option&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;value&gt;</span>may<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/option&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;option&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;value&gt;</span>mustnot<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/option&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;disclosure&quot;</span> <span class="na">type=</span><span class="s">&quot;list-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;required/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;option&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;value&gt;</span>never<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/option&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;security&quot;</span> <span class="na">type=</span><span class="s">&quot;list-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;required/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;option&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;value&gt;</span>e2e<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/option&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;crypt_algs&quot;</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>aes128-ctr<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;hash_algs&quot;</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>sha256<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;compress&quot;</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>none<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;stanzas&quot;</span> <span class="na">type=</span><span class="s">&quot;list-multi&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;option&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;value&gt;</span>message<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/option&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;init_pubkey&quot;</span> <span class="na">type=</span><span class="s">&quot;list-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;option&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;value&gt;</span>none<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/option&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;option&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;value&gt;</span>key<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/option&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;option&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;value&gt;</span>hash<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/option&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;resp_pubkey&quot;</span> <span class="na">type=</span><span class="s">&quot;list-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;option&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;value&gt;</span>none<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/option&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;option&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;value&gt;</span>key<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/option&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;rekey_freq&quot;</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>4294967295<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;sas_algs&quot;</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>sas28x5<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;sign_algs&quot;</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>http://www.w3.org/2000/09/xmldsig#rsa-sha256<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;my_nonce&quot;</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>/phXl5d0EjQ=<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;modp&quot;</span> <span class="na">type=</span><span class="s">&quot;list-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;option</span> <span class="na">label=</span><span class="s">&quot;None&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;value&gt;</span>5<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/option&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;option</span> <span class="na">label=</span><span class="s">&quot;None&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;value&gt;</span>14<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/option&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;dhhashes&quot;</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>rJVVWlW+Ejedj12oa+jZNxhREGd2a8mJwpR8BxRVMnY=<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>mt1tK2HOuyoVt9IIV20ozlZ90DHD5xEgVBa80KxyJMs=<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;/x&gt;</span>
+</span><span class='line'><span class="nt">&lt;/feature&gt;</span>
+</span><span class='line'><span class="nt">&lt;thread&gt;</span>CkLXnnbvEXPcgYFvxhcEiqoYCPvrJmvN<span class="nt">&lt;/thread&gt;</span>
+</span><span class='line'><span class="nt">&lt;nos:x</span> <span class="na">value=</span><span class="s">&quot;disabled&quot;</span> <span class="na">xmlns:nos=</span><span class="s">&quot;google:nosave&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;arc:record</span> <span class="na">otr=</span><span class="s">&quot;false&quot;</span> <span class="na">xmlns:arc=</span><span class="s">&quot;http://jabber.org/protocol/archive&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/message&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Bob -> Alice フォームを情報を返信</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;message</span> <span class="na">xmlns=</span><span class="s">&quot;jabber:client&quot;</span> <span class="na">to=</span><span class="s">&quot;alice@gmail.com/GajimEE1BF740&quot;</span> <span class="na">id=</span><span class="s">&quot;47&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;feature</span> <span class="na">xmlns=</span><span class="s">&quot;http://jabber.org/protocol/feature-neg&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;x</span> <span class="na">xmlns=</span><span class="s">&quot;jabber:x:data&quot;</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;FORM_TYPE&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>urn:xmpp:ssn<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;accept&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>true<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;crypt_algs&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>aes128-ctr<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;disclosure&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>never<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;logging&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>may<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;sign_algs&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>http://www.w3.org/2000/09/xmldsig#rsa-sha256<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;compress&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>none<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;init_pubkey&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>none<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;stanzas&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>message<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;hash_algs&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>sha256<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;sas_algs&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>sas28x5<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;resp_pubkey&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>none<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;security&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>e2e<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;rekey_freq&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>4294967295<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;modp&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>5<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;nonce&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>/phXl5d0EjQ=<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;my_nonce&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>yYs4UP2i72w=<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;counter&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>wxe+LnrR3HdVfkOtmLnp2Q==<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;dhkeys&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>q08JZVv/ESZF6G5SXN9PTjJcu8qJbhGqx+6eAlI093Yl7tS+X0WQqkxAJjPdhcxTP1AdUqQzpkDL9lC7rhIzmIZQdF1abHgJRgRASmKS0NLPsnN7+GCV0VmzDxsOW+VsXCuWvY+zAyJIktfSM/t9ZV7A/pKMCSbiUJiLIG1UlqmaB2GUg8c4F3UqHUxCiNjx6r8s3oBSiwANcIXQ9blO9tFjQUY+Tgl4zvUTzZcbYo4YgBgXuA0gTCsCRguwcCq8<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;/x&gt;</span>
+</span><span class='line'><span class="nt">&lt;/feature&gt;</span>
+</span><span class='line'><span class="nt">&lt;thread&gt;</span>CkLXnnbvEXPcgYFvxhcEiqoYCPvrJmvN<span class="nt">&lt;/thread&gt;</span>
+</span><span class='line'><span class="nt">&lt;/message&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>field</p>
+
+<ul>
+<li>crypt_algs 暗号化アルゴリズム</li>
+<li>hash_algs hashアルゴリズム</li>
+<li>compress 圧縮アルゴリズム</li>
+<li>init_pubkey key,hash,noneの三つ</li>
+<li>resp_pubkey　key,hash,noneの三つ</li>
+<li>rekey_freq　key再交換するためのスタンザの最小値</li>
+<li>sas_algs　Short Authentication String generation algorithm</li>
+<li>modp まだ不明</li>
+<li>dhhashes He</li>
+</ul>
+
+
+<p>p: 大きいな素数<br/>
+g: GF(p)<a href="http://ja.wikipedia.org/wiki/%E4%BD%93_(%E6%95%B0%E5%AD%A6">体_(数学)</a>)<br/>
+e: g<sup>x</sup> mod p<br/>
+He = SHA256(e)</p>
+
+<ul>
+<li>dhkeys d</li>
+</ul>
+
+
+<p>Nb: bobのsession id</p>
+
+<ul>
+<li>count Ca</li>
+</ul>
+
+
+<p>Ca: n-bit ランダム数字<br/>
+Cb: Ca XOR 2<sup>(n-1)<br/></sup>
+y: ランダム数字 2<sup>(2n-1)</sup> &lt; y &lt; p-1<br/>
+d: g<sup>y</sup> mod p<br/>
+K: HASH(e<sup>y</sup> mod p)</p>
+
+<p>Alice -> Bob 証明書を送る</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;message</span> <span class="na">to=</span><span class="s">&quot;bob@gmail.com/Gajim681D2858&quot;</span> <span class="na">id=</span><span class="s">&quot;51&quot;</span> <span class="na">from=</span><span class="s">&quot;alice@gmail.com/GajimEE1BF740&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;feature</span> <span class="na">xmlns=</span><span class="s">&quot;http://jabber.org/protocol/feature-neg&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;x</span> <span class="na">type=</span><span class="s">&quot;result&quot;</span> <span class="na">xmlns=</span><span class="s">&quot;jabber:x:data&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;FORM_TYPE&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>urn:xmpp:ssn<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;accept&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>1<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;nonce&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>yYs4UP2i72w=<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;rshashes&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>zkbnC/o1qRPF+72CvCacQIn0/KRkn3lcjE/KAfkQuXE=<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;dhkeys&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>57TcfePevFWXaCcsnX3NDTVaXDzArJI7vGY+CRlc75jbsnlw5MDD9QHL9RH7ntgiG9+YliJI7rJ2NnkJgTb7sAelh8GH0vDQxCcN0jKBu6qYs8p+loTxB/uQuvu9EoDU3bGGszefSJdJR5fBJvRm5UiHMT1OUvpcBSq8JjSDO7nkijDHrQfXyNq6ES3m8MoOEhdLYWkO/xlv8x9xpXGlWt7ztpu5xcbIRmWugwTlPdpz2XCukJYyhULHTwmfO06d<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;identity&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>s/OOrDGf0XGdBFZNnhuasOK7HoG9ACLW/B9s3jkx+cw=<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;mac&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>/PshCshCat8by9RYsOizBDGOCk7C0kdkGfKGjVqrVBM=<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;/x&gt;</span>
+</span><span class='line'><span class="nt">&lt;/feature&gt;</span>
+</span><span class='line'><span class="nt">&lt;thread&gt;</span>CkLXnnbvEXPcgYFvxhcEiqoYCPvrJmvN<span class="nt">&lt;/thread&gt;</span>
+</span><span class='line'><span class="nt">&lt;nos:x</span> <span class="na">value=</span><span class="s">&quot;disabled&quot;</span> <span class="na">xmlns:nos=</span><span class="s">&quot;google:nosave&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;arc:record</span> <span class="na">otr=</span><span class="s">&quot;false&quot;</span> <span class="na">xmlns:arc=</span><span class="s">&quot;http://jabber.org/protocol/archive&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/message&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Bob -> Alice 証明書を送る</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;message</span> <span class="na">xmlns=</span><span class="s">&quot;jabber:client&quot;</span> <span class="na">to=</span><span class="s">&quot;alice@gmail.com/GajimEE1BF740&quot;</span> <span class="na">id=</span><span class="s">&quot;48&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;init</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.xmpp.org/extensions/xep-0116.html#ns-init&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;x</span> <span class="na">xmlns=</span><span class="s">&quot;jabber:x:data&quot;</span> <span class="na">type=</span><span class="s">&quot;result&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;FORM_TYPE&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>urn:xmpp:ssn<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;nonce&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>/phXl5d0EjQ=<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;srshash&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>/tyH+oMCSh0G1/1JF2t0YTjszQmr/VRrwoi5lhMznbo=<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;identity&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>bdTTIAY+fQXUivs+xcBuy3Tb1Fe+3HLxfIWZaBavCvY=<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;field</span> <span class="na">var=</span><span class="s">&quot;mac&quot;</span> <span class="na">type=</span><span class="s">&quot;text-single&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;value&gt;</span>6UdXee7X/WAWl8sdsfs99DvvoCaaazJ0uSMZGZdUMhQ=<span class="nt">&lt;/value&gt;</span>
+</span><span class='line'><span class="nt">&lt;/field&gt;</span>
+</span><span class='line'><span class="nt">&lt;/x&gt;</span>
+</span><span class='line'><span class="nt">&lt;/init&gt;</span>
+</span><span class='line'><span class="nt">&lt;thread&gt;</span>CkLXnnbvEXPcgYFvxhcEiqoYCPvrJmvN<span class="nt">&lt;/thread&gt;</span>
+</span><span class='line'><span class="nt">&lt;/message&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>field</p>
+
+<ul>
+<li>nonce ランダム数字のhash値</li>
+<li>rshashes 前のsessionのhash値</li>
+<li>identity 暗号化された証明書</li>
+<li>mac 証明書の整合性</li>
+</ul>
+
+
+<h2>わからないもの</h2>
+
+<p>MODP (Modular Exponential)</p>
+
+<p>SAS(Short Authentication String)</p>
+
+<p>MAC</p>
+
+<p>HMAC</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[12.4.27分散ゼミ　カク]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/04/24/11-dot-4-27zemi/"/>
+    <updated>2012-04-24T17:21:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/04/24/11-dot-4-27zemi</id>
+    <content type="html"><![CDATA[<h2>gajim</h2>
+
+<p>ソースコードを読んでいる</p>
+
+<p>gajimのホームページで以下の紹介文がある
+FEATURES:
+TLS, GPG and End-To-End encryption support (with SSL legacy support)</p>
+
+<p>End-To-Endの暗号化はsslで行っていると思ったが、xmppサーバと通信する部分しかsslを使ってないらしい。</p>
+
+<p>End-To-Endの暗号化はPGPで行っている</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">send_chat_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jid</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">keyID</span><span class="p">,</span> <span class="n">account</span><span class="p">):</span>
+</span><span class='line'>  <span class="sd">&quot;&quot;&quot;</span>
+</span><span class='line'><span class="sd">  Send chat &#39;message&#39; to &#39;jid&#39;, using account (optional) &#39;account&#39;. If keyID</span>
+</span><span class='line'><span class="sd">  is specified, encrypt the message with the pgp key</span>
+</span><span class='line'><span class="sd">  &quot;&quot;&quot;</span>
+</span><span class='line'>  <span class="n">jid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_real_jid</span><span class="p">(</span><span class="n">jid</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_message</span><span class="p">(</span><span class="n">jid</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">keyID</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>pgp,gpg</h3>
+
+<p>pgpがあって、Pretty Good Privacyの略だとわかったが、gpgもソースコードで出てきた。
+調べたら、openpgp,gnupgも出てきて、混乱になった</p>
+
+<h3>gajimのxml出力</h3>
+
+<p>gajimを試したとき、コンソールでxmlの出力を取得できるので、gajimとichatの通信と、gajimとgajimの通信ときのxmlを取得した</p>
+
+<h4>ichatからgajimに送信したときの受信側のxml</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="c">&lt;!-- In --&gt;</span>
+</span><span class='line'><span class="nt">&lt;message</span> <span class="na">to=</span><span class="s">&quot;test0003@gmail.com&quot;</span> <span class="na">type=</span><span class="s">&quot;chat&quot;</span> <span class="na">id=</span><span class="s">&quot;iChat_6D205F70&quot;</span> <span class="na">from=</span><span class="s">&quot;test0001@gmail.com/kakuMacB434868F&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>hi<span class="nt">&lt;/body&gt;</span>
+</span><span class='line'>  ......
+</span><span class='line'><span class="nt">&lt;/message&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>gajimからgajimに送信したときの受信側のxml</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="c">&lt;!-- In --&gt;</span>
+</span><span class='line'><span class="nt">&lt;message</span> <span class="na">to=</span><span class="s">&quot;test0003@gmail.com/GajimCAF438C9&quot;</span> <span class="na">type=</span><span class="s">&quot;chat&quot;</span> <span class="na">id=</span><span class="s">&quot;63&quot;</span> <span class="na">from=</span><span class="s">&quot;test0001@gmail.com/GajimDFC2E294&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;thread&gt;</span>VVeMaVLvwtTWMfUtbrhWrpenrpZWsoAf<span class="nt">&lt;/thread&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;c</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.xmpp.org/extensions/xep-0200.html#ns&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;data&gt;</span>4D6X9xa/yGJc804JuZSIC+ZsyAPcaFmHFl91DxsZFU5kKHdb0ZTm2EMFeQ7td83btDk31beJ+tXmFK53z93
+</span><span class='line'>  OKrlkQFyZiJiuxn9u3yfIFWu6QyQGaQhFH/ndXrQu3OAwEvTZ+WD24nJ0+nLdXaWmzQ==<span class="nt">&lt;/data&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;mac&gt;</span>KfpslvfsS2Gy693AhPkj9jiCZ5IDTzyYajyKzI7+o8Y=<span class="nt">&lt;/mac&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/c&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>[This is part of an encrypted session. If you see this message, something went wrong.]
+</span><span class='line'>  ([This is part of an encrypted session. If you see this message, something went wrong.])<span class="nt">&lt;/body&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;nos:x</span> <span class="na">value=</span><span class="s">&quot;disabled&quot;</span> <span class="na">xmlns:nos=</span><span class="s">&quot;google:nosave&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;arc:record</span> <span class="na">otr=</span><span class="s">&quot;false&quot;</span> <span class="na">xmlns:arc=</span><span class="s">&quot;http://jabber.org/protocol/archive&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/message&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">&lt;!-- Out --&gt;</span>
+</span><span class='line'><span class="nt">&lt;message</span> <span class="na">xmlns=</span><span class="s">&quot;jabber:client&quot;</span> <span class="na">to=</span><span class="s">&quot;test0001@gmail.com/GajimDFC2E294&quot;</span> <span class="na">type=</span><span class="s">&quot;chat&quot;</span> <span class="na">id=</span><span class="s">&quot;63&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;received</span> <span class="na">xmlns=</span><span class="s">&quot;urn:xmpp:receipts&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;thread&gt;</span>VVeMaVLvwtTWMfUtbrhWrpenrpZWsoAf<span class="nt">&lt;/thread&gt;</span>
+</span><span class='line'><span class="nt">&lt;/message&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[12.4.20ゼミ]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/04/17/11-dot-4-20zemi/"/>
+    <updated>2012-04-17T18:30:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/04/17/11-dot-4-20zemi</id>
+    <content type="html"><![CDATA[<h2>Octopress</h2>
+
+<p>ゼミ内容などをOctopressで書きはじまっている</p>
+
+<p>rubyでかかれた静的サイトジェネレーターで、gitで内容を管理する。emacsやvimなどで記事を書くことができる。内容を書くときはmarkdown記法で内容を書く。</p>
+
+<h2>XMPPクライアント間の暗号化</h2>
+
+<p>xmppのクライアントをいくつ調べた、gajimというものを見つけた。sslでEnd-To-Endの暗号化を行ってくれる。インストールしてみると、gajim同士しか暗号化できない。</p>
+
+<h3>rubyのxmppライブラリ</h3>
+
+<p>xmpp4r　ruby1.8.7で実行できた</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;xmpp4r&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;openssl&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">user</span> <span class="o">=</span> <span class="s1">&#39;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&#39;</span>
+</span><span class='line'><span class="n">pass</span> <span class="o">=</span> <span class="s1">&#39;server&#39;</span>
+</span><span class='line'><span class="n">client</span> <span class="o">=</span> <span class="no">Jabber</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Jabber</span><span class="o">::</span><span class="no">JID</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">user</span><span class="si">}</span><span class="s2">/xmpp&quot;</span><span class="p">))</span>
+</span><span class='line'><span class="n">client</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;kaku-desktop.softlab.cs.tsukuba.ac.jp&#39;</span><span class="p">,</span> <span class="mi">5222</span><span class="p">)</span>
+</span><span class='line'><span class="n">client</span><span class="o">.</span><span class="n">auth</span><span class="p">(</span><span class="n">pass</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># set presence</span>
+</span><span class='line'><span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="no">Jabber</span><span class="o">::</span><span class="no">Presence</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">set_show</span><span class="p">(</span><span class="ss">:chat</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">client</span><span class="o">.</span><span class="n">add_message_callback</span> <span class="k">do</span> <span class="o">|</span><span class="n">m</span><span class="o">|</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="ss">:error</span>
+</span><span class='line'>    <span class="n">m2</span> <span class="o">=</span> <span class="no">Jabber</span><span class="o">::</span><span class="no">Message</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">from</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">m</span><span class="o">.</span><span class="n">body</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">m2</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">type</span>
+</span><span class='line'>    <span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">m2</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="n">m</span><span class="o">.</span><span class="n">from</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="n">m</span><span class="o">.</span><span class="n">body</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="n">m</span><span class="o">.</span><span class="n">type</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">sleep</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>証明書の作成</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;openssl&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">module</span> <span class="nn">MyCer</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">get</span>
+</span><span class='line'>    <span class="n">key</span> <span class="o">=</span> <span class="no">OpenSSL</span><span class="o">::</span><span class="no">PKey</span><span class="o">::</span><span class="no">RSA</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">read</span> <span class="s2">&quot;/Users/kaku/.ssh/id_rsa&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">digest</span> <span class="o">=</span> <span class="no">OpenSSL</span><span class="o">::</span><span class="no">Digest</span><span class="o">::</span><span class="no">SHA1</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">issu</span> <span class="o">=</span> <span class="nb">sub</span> <span class="o">=</span> <span class="no">OpenSSL</span><span class="o">::</span><span class="no">X509</span><span class="o">::</span><span class="no">Name</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+</span><span class='line'>    <span class="nb">sub</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;JP&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">sub</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="s1">&#39;ST&#39;</span><span class="p">,</span> <span class="s1">&#39;Tsukuba&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">sub</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="s1">&#39;CN&#39;</span><span class="p">,</span> <span class="s1">&#39;Kaku&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">cer</span> <span class="o">=</span> <span class="no">OpenSSL</span><span class="o">::</span><span class="no">X509</span><span class="o">::</span><span class="no">Certificate</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+</span><span class='line'>    <span class="c1"># 証明書が有効になる時刻,無効になる時刻</span>
+</span><span class='line'>    <span class="n">cer</span><span class="o">.</span><span class="n">not_before</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">cer</span><span class="o">.</span><span class="n">not_after</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">cer</span><span class="o">.</span><span class="n">public_key</span> <span class="o">=</span> <span class="n">key</span>  <span class="c1"># 署名する対象となる公開鍵</span>
+</span><span class='line'>    <span class="n">cer</span><span class="o">.</span><span class="n">serial</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>    <span class="n">cer</span><span class="o">.</span><span class="n">issuer</span> <span class="o">=</span> <span class="n">issu</span>
+</span><span class='line'>    <span class="n">cer</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="nb">sub</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">cer</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">digest</span><span class="p">)</span> <span class="c1"># 署名するのに使う秘密鍵とハッシュ関数</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">cer</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="kp">module_function</span> <span class="ss">:get</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>sslサーバ</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;socket&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;openssl&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;./mycer&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kp">include</span> <span class="no">OpenSSL</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">ctx</span> <span class="o">=</span> <span class="no">SSL</span><span class="o">::</span><span class="no">SSLContext</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+</span><span class='line'><span class="n">ctx</span><span class="o">.</span><span class="n">cert</span> <span class="o">=</span> <span class="no">MyCer</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</span><span class='line'><span class="n">ctx</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="no">PKey</span><span class="o">::</span><span class="no">RSA</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;/Users/kaku/.ssh/id_rsa&#39;</span><span class="p">))</span>
+</span><span class='line'><span class="n">svr</span> <span class="o">=</span> <span class="no">TCPServer</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
+</span><span class='line'><span class="n">serv</span> <span class="o">=</span> <span class="no">SSL</span><span class="o">::</span><span class="no">SSLServer</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">svr</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="kp">loop</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">while</span> <span class="n">soc</span> <span class="o">=</span> <span class="n">serv</span><span class="o">.</span><span class="n">accept</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="n">soc</span><span class="o">.</span><span class="n">read</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>sslクライアント</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;socket&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;openssl&#39;</span>
+</span><span class='line'><span class="kp">include</span> <span class="no">OpenSSL</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">soc</span> <span class="o">=</span> <span class="no">TCPSocket</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)</span>
+</span><span class='line'><span class="n">ssl</span> <span class="o">=</span> <span class="no">SSL</span><span class="o">::</span><span class="no">SSLSocket</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">soc</span><span class="p">)</span>
+</span><span class='line'><span class="n">ssl</span><span class="o">.</span><span class="n">connect</span>
+</span><span class='line'><span class="n">ssl</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">print</span> <span class="n">ssl</span><span class="o">.</span><span class="n">peer_cert</span><span class="o">.</span><span class="n">to_text</span>
+</span><span class='line'><span class="n">ssl</span><span class="o">.</span><span class="n">close</span>
+</span><span class='line'><span class="n">soc</span><span class="o">.</span><span class="n">close</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>もし、暗号化するだけなら、公開鍵暗号化方式ですればいいと思うが、
+xmppのend to endでsslの通信路を利用するのはどうすればいいかまだわからない。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[First blog]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/04/16/first-blog/"/>
+    <updated>2012-04-16T13:26:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/04/16/first-blog</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
 </feed>

@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>5.18分散ゼミ - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="gloox c++で書かれたxmppライブラリ OpenPGPをサポートする しかし、keyの生成やkeyで暗号化や復号化などが自分で行わなければいけない straceでgajimの動作を調べた strace -f -F -o ~/gajim.txt gajim 1
+2
+3930 execve(& &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://guofei.github.com/master_report/blog/2012/05/17/5-dot-18fen-san-zemi/">
+  <link href="/master_report/favicon.png" rel="icon">
+  <link href="/master_report/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/master_report/javascripts/modernizr-2.0.js"></script>
+  <script src="/master_report/javascripts/ender.js"></script>
+  <script src="/master_report/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/master_report/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/master_report/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/master_report/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:guofei.github.com/master_report" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/master_report/">Blog</a></li>
+  <li><a href="/master_report/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">5.18分散ゼミ</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-17T22:57:00+09:00" pubdate data-updated="true">May 17<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>gloox</h2>
+
+<p>c++で書かれたxmppライブラリ</p>
+
+<p>OpenPGPをサポートする</p>
+
+<p>しかし、keyの生成やkeyで暗号化や復号化などが自分で行わなければいけない</p>
+
+<h2>straceでgajimの動作を調べた</h2>
+
+<p>strace -f -F -o ~/gajim.txt gajim</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>3930  execve<span class="o">(</span><span class="s2">&quot;/bin/sh&quot;</span>, <span class="o">[</span><span class="s2">&quot;sh&quot;</span>, <span class="s2">&quot;-c&quot;</span>, <span class="s2">&quot;gpg -h &gt;/dev/null 2&gt;&amp;1&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> 0
+</span><span class='line'>3931  execve<span class="o">(</span><span class="s2">&quot;/usr/bin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;-h&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> 0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>しかでない</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>3931  access<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/gpg.conf-1.4.10&quot;</span>, R_OK<span class="o">)</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>3931  access<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/gpg.conf-1.4&quot;</span>, R_OK<span class="o">)</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>3931  access<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/gpg.conf-1&quot;</span>, R_OK<span class="o">)</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>3931  access<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/gpg.conf&quot;</span>, R_OK<span class="o">)</span> <span class="o">=</span> 0
+</span><span class='line'>3931  access<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/options&quot;</span>, R_OK<span class="o">)</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>3931  stat64<span class="o">(</span><span class="s2">&quot;~/.gnupg&quot;</span>, 0xbfc3d1d0<span class="o">)</span>    <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>3931  stat64<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/gpg.conf&quot;</span>, <span class="o">{</span><span class="nv">st_mode</span><span class="o">=</span>S_IFREG|0600, <span class="nv">st_size</span><span class="o">=</span>9364, ...<span class="o">})</span> <span class="o">=</span> 0
+</span><span class='line'>3931  stat64<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg&quot;</span>, <span class="o">{</span><span class="nv">st_mode</span><span class="o">=</span>S_IFDIR|0700, <span class="nv">st_size</span><span class="o">=</span>4096, ...<span class="o">})</span> <span class="o">=</span> 0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>gpg.confをアクセスしたので、そのファイルを開いてみると、</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>keyserver hkp://keys.gnupg.net
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>keysever：keyの交換を行うサーバー</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>gpg --send-key id
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>を実行すると、そのkeyをサーバーに送る</p>
+
+<h3>keyの生成が自分でやる必要があるらしいので、手動でkeyを生成</h3>
+
+<p>生成したとき、面白いものが出てきた</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>今から長い乱数を生成します。キーボードを打つとか、マウスを動かす
+</span><span class='line'>とか、ディスクにアクセスするとかの他のことをすると、乱数生成子で
+</span><span class='line'>乱雑さの大きないい乱数を生成しやすくなるので、お勧めいたします。
+</span><span class='line'>+++++++++++++++.++++++++++....++++++++++++++++++++.++++++++++++++++++++++++++++++++++++++++..++++++++++++++++++++++++++++++++++++++++.+++++&gt;.++++++++++...........+++++
+</span><span class='line'>十分な長さの乱数が得られません。OSがもっと乱雑さを収集
+</span><span class='line'>できるよう、何かしてください! <span class="o">(</span>あと282バイトいります<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最初はなかなか進まないが、裏でネットワークでファイルを送るとか、いろいろやるとうまく生成した</p>
+
+<p>gajimでgpg keyの選択のメニューが出てきた。</p>
+
+<p>keyの交換keyserverは自動的にやってくれると思ったが、うまく行かない</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>5607  execve<span class="o">(</span><span class="s2">&quot;/usr/local/sbin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;34&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--verify&quot;</span>, <span class="s2">&quot;--enable-special-filenames&quot;</span>, <span class="s2">&quot;-&quot;</span>, <span class="s2">&quot;-&amp;30&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>5607  execve<span class="o">(</span><span class="s2">&quot;/usr/local/bin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;34&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--verify&quot;</span>, <span class="s2">&quot;--enable-special-filenames&quot;</span>, <span class="s2">&quot;-&quot;</span>, <span class="s2">&quot;-&amp;30&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>5607  execve<span class="o">(</span><span class="s2">&quot;/usr/sbin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;34&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--verify&quot;</span>, <span class="s2">&quot;--enable-special-filenames&quot;</span>, <span class="s2">&quot;-&quot;</span>, <span class="s2">&quot;-&amp;30&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>5607  execve<span class="o">(</span><span class="s2">&quot;/usr/bin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;34&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--verify&quot;</span>, <span class="s2">&quot;--enable-special-filenames&quot;</span>, <span class="s2">&quot;-&quot;</span>, <span class="s2">&quot;-&amp;30&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> 0
+</span><span class='line'>5646  execve<span class="o">(</span><span class="s2">&quot;/usr/local/sbin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;35&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--use-agent&quot;</span>, <span class="s2">&quot;-b&quot;</span>, <span class="s2">&quot;-u 28893B08&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>5646  execve<span class="o">(</span><span class="s2">&quot;/usr/local/bin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;35&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--use-agent&quot;</span>, <span class="s2">&quot;-b&quot;</span>, <span class="s2">&quot;-u 28893B08&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>5646  execve<span class="o">(</span><span class="s2">&quot;/usr/sbin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;35&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--use-agent&quot;</span>, <span class="s2">&quot;-b&quot;</span>, <span class="s2">&quot;-u 28893B08&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span><span class='line'>5646  execve<span class="o">(</span><span class="s2">&quot;/usr/bin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;35&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--use-agent&quot;</span>, <span class="s2">&quot;-b&quot;</span>, <span class="s2">&quot;-u 28893B08&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> 0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>error</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>~<span class="nv">$ </span>strace -f -F -o ~/gajim2 gajim
+</span><span class='line'>gpg: decryption failed: secret key not available
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-17T22:57:00+09:00" pubdate data-updated="true">May 17<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/master_report/blog/categories/openpgp/'>openpgp</a>, <a class='category' href='/master_report/blog/categories/xmpp/'>xmpp</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://guofei.github.com/master_report/blog/2012/05/17/5-dot-18fen-san-zemi/" data-via="" data-counturl="http://guofei.github.com/master_report/blog/2012/05/17/5-dot-18fen-san-zemi/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/master_report/blog/2012/05/09/5-dot-11fen-san-zemi/" title="Previous Post: 5.11分散ゼミ">&laquo; 5.11分散ゼミ</a>
+      
+      
+        <a class="basic-alignment right" href="/master_report/blog/2012/05/24/5-dot-25fen-san-zemi/" title="Next Post: 5.25分散ゼミ">5.25分散ゼミ &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/06/28/javascriptkaraxpcomfalseguan-shu-wohu-bichu-su/">javascriptからXPCOMの関数を呼び出す</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/06/21/skypekit-to-xpcomdefalsean-hao-hua-kuo-zhang-ji-neng/">skypekit と xpcomでの暗号化拡張機能</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/06/14/6-dot-15fen-san-zemi-guo/">6.15分散ゼミ 郭</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/05/31/6-dot-1fen-san-zemi-kaku/">6.1分散ゼミ　カク</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/05/24/5-dot-25fen-san-zemi/">5.25分散ゼミ</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

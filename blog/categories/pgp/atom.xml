@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: pgp | My Octopress Blog]]></title>
+  <link href="http://guofei.github.com/master_report/blog/categories/pgp/atom.xml" rel="self"/>
+  <link href="http://guofei.github.com/master_report/"/>
+  <updated>2012-07-06T03:06:50+09:00</updated>
+  <id>http://guofei.github.com/master_report/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[5.25分散ゼミ]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/05/24/5-dot-25fen-san-zemi/"/>
+    <updated>2012-05-24T15:04:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/05/24/5-dot-25fen-san-zemi</id>
+    <content type="html"><![CDATA[<h2>pgp</h2>
+
+<p>$ gpg --batch --no-tty --armor --no-secmem-warning --verify-options no-show-photo --use-agent -b -u 28893B0<br/>
+gpg: skipped "28893B0": secret key not available<br/>
+gpg: signing failed: secret key not available<br/>
+$ gpg --batch --no-tty --armor --no-secmem-warning --verify-options no-show-photo --use-agent -b -u 28893B08<br/>
+入力待ちの状態になった</p>
+
+<h3>public keyの交換</h3>
+
+<p>前回はaliceとbobobの二つの鍵を生成した<br/>
+alice.pub bobob.pub</p>
+
+<p>相手の公開鍵を登録<br/>
+gpg --import alice.pub<br/>
+gpg --import bobob.pub</p>
+
+<p>gpgの指紋を表示<br/>
+gpg --finggerprint</p>
+
+<p>gpg鍵署名<br/>
+gpg --lsign-key userid（Local 署名）<br/>
+gpg --sign-key userid（Exportable署名）</p>
+
+<p>信用データベースに登録<br/>
+gpg --edit-key userid</p>
+
+<p>gajimでpublic keyの表示が出来るので、public keyを選択</p>
+
+<h3>straceの結果</h3>
+
+<p>署名<br/>
+gpg --batch --no-tty --armor --no-secmem-warning --verify-options no-show-photo -b -u 28893B08<br/>
+署名の検証<br/>
+gpg --batch --no-tty --armor --no-secmem-warning --verify-options no-show-photo --verify --enable-special-filenames<br/>
+暗号化<br/>
+gpg --batch --no-tty --armor --recipient 6251A408 --no-secmem-warning --verify-options no-show-photo --encrypt<br/>
+復号化<br/>
+gpg --batch --no-tty --armor --no-secmem-warning --verify-options no-show-photo --decrypt -q -u 28893B08</p>
+
+<h3>署名</h3>
+
+<p><code>xml
+&lt;presence id="13" from="test0001@gmail.com/GajimF68D4BC1" to="test0001@gmail.com/GajimF68D4BC1"&gt;
+  &lt;priority&gt;50&lt;/priority&gt;
+  &lt;c node="http://gajim.org" ver="I8g2pphLu5w2XvNV8HDES9gqRaw=" hash="sha-1" xmlns="http://jabber.org/protocol/caps"/&gt;
+  &lt;x xmlns="jabber:x:signed"&gt;iJwEAAECAAYFAk+9738ACgkQUe7L3yiJOwhb/wP/a/9jfP0aSM0tp4QI/dGYuTqC
+  　　0Wx1fh4oSROWIbj3vHLnjbMunEsZyei4mX+ctnMzQPiODwCg9rpe2v/gryTcSx88
+  　　cIC1dsleD2AouUWspuMlOjJfyIkv9/VJuVwlTXTqKq7Kvf/x5+Enz51mzFBlNMNd
+  　　+CUHr+/RuqJC8jWIQuc=
+  　　=Pupl&lt;/x&gt;
+  &lt;x xmlns="vcard-temp:x:update"&gt;&lt;photo/&gt;&lt;/x&gt;
+&lt;/presence&gt;
+</code></p>
+
+<h3>暗号化と復号化</h3>
+
+<p>~$ gpg --fingerprint
+```</p>
+
+<h2>/home/kaku/.gnupg/pubring.gpg</h2>
+
+<p>pub   1024R/28893B08 2012-05-17</p>
+
+<pre><code>  Key fingerprint = 3EDC 2B33 3648 6DDC 1CB9  84EF 51EE CBDF 2889 3B08
+  uid                  alice (key) &lt;alice@alice.com&gt;
+  sub   1024R/B6EAAF3A 2012-05-17
+</code></pre>
+
+<p>pub   1024R/6251A408 2012-05-09</p>
+
+<pre><code>  Key fingerprint = 301A A4C9 1E05 8612 B153  A8A0 677E 0B66 6251 A408
+  uid                  bobob (key) &lt;bob@bob.com&gt;
+  sub   1024R/3D3B85EB 2012-05-09
+</code></pre>
+
+<p>```</p>
+
+<p>$ gpg --batch --no-tty --armor --recipient 28893B08 --no-secmem-warning --verify-options no-show-photo --encrypt<br/>
+文字列を入力し、Ctrl+Dを入力する
+```
+abc
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.4.10 (GNU/Linux)</p>
+
+<p>hIwDxfzxLrbqrzoBA/4xGWNSkVxs+SfEgU2iriS5fX//LrG0MqdN90JSumwB/PGs
+6iRQZGzbr8a76s88gDOdiDHcQznWdMLDygpeDM/r7uEW1KdGFAmQ8StktxUGASig
+iva3Ra4o4bS4Wj2wwH4dB3Nb3Sq3ePIx83SZ5ttct4o/D4BeRcYS3YAAVLYyAtI/
+AQF5c/CoTQ0FXJFm7n9c+/Q5/z75qo17VlmWxK7OPzDL/IcfvHpEC2RAXObMlF2Y
+5kKZBAk11BNHSlHoXaUh
+=0Gdv
+-----END PGP MESSAGE-----
+```</p>
+
+<p>$ gpg --batch --no-tty --armor --no-secmem-warning --verify-options no-show-photo --decrypt -q -u B6EAAF3A<br/>
+暗号文を入力し、Ctrl+Dを入力する
+```
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.4.10 (GNU/Linux)</p>
+
+<p>hIwDxfzxLrbqrzoBA/4xGWNSkVxs+SfEgU2iriS5fX//LrG0MqdN90JSumwB/PGs
+6iRQZGzbr8a76s88gDOdiDHcQznWdMLDygpeDM/r7uEW1KdGFAmQ8StktxUGASig
+iva3Ra4o4bS4Wj2wwH4dB3Nb3Sq3ePIx83SZ5ttct4o/D4BeRcYS3YAAVLYyAtI/
+AQF5c/CoTQ0FXJFm7n9c+/Q5/z75qo17VlmWxK7OPzDL/IcfvHpEC2RAXObMlF2Y
+5kKZBAk11BNHSlHoXaUh
+=0Gdv
+-----END PGP MESSAGE-----
+abc
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>12.4.27分散ゼミ　カク - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="gajim ソースコードを読んでいる gajimのホームページで以下の紹介文がある
+FEATURES:
+TLS, GPG and End-To-End encryption support (with SSL legacy support) End-To- &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://guofei.github.com/master_report/blog/2012/04/24/11-dot-4-27zemi/">
+  <link href="/master_report/favicon.png" rel="icon">
+  <link href="/master_report/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/master_report/javascripts/modernizr-2.0.js"></script>
+  <script src="/master_report/javascripts/ender.js"></script>
+  <script src="/master_report/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/master_report/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/master_report/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/master_report/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:guofei.github.com/master_report" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/master_report/">Blog</a></li>
+  <li><a href="/master_report/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">12.4.27分散ゼミ　カク</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-24T17:21:00+09:00" pubdate data-updated="true">Apr 24<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>gajim</h2>
+
+<p>ソースコードを読んでいる</p>
+
+<p>gajimのホームページで以下の紹介文がある
+FEATURES:
+TLS, GPG and End-To-End encryption support (with SSL legacy support)</p>
+
+<p>End-To-Endの暗号化はsslで行っていると思ったが、xmppサーバと通信する部分しかsslを使ってないらしい。</p>
+
+<p>End-To-Endの暗号化はPGPで行っている</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">send_chat_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jid</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">keyID</span><span class="p">,</span> <span class="n">account</span><span class="p">):</span>
+</span><span class='line'>  <span class="sd">&quot;&quot;&quot;</span>
+</span><span class='line'><span class="sd">  Send chat &#39;message&#39; to &#39;jid&#39;, using account (optional) &#39;account&#39;. If keyID</span>
+</span><span class='line'><span class="sd">  is specified, encrypt the message with the pgp key</span>
+</span><span class='line'><span class="sd">  &quot;&quot;&quot;</span>
+</span><span class='line'>  <span class="n">jid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_real_jid</span><span class="p">(</span><span class="n">jid</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_message</span><span class="p">(</span><span class="n">jid</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">keyID</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>pgp,gpg</h3>
+
+<p>pgpがあって、Pretty Good Privacyの略だとわかったが、gpgもソースコードで出てきた。
+調べたら、openpgp,gnupgも出てきて、混乱になった</p>
+
+<h3>gajimのxml出力</h3>
+
+<p>gajimを試したとき、コンソールでxmlの出力を取得できるので、gajimとichatの通信と、gajimとgajimの通信ときのxmlを取得した</p>
+
+<h4>ichatからgajimに送信したときの受信側のxml</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="c">&lt;!-- In --&gt;</span>
+</span><span class='line'><span class="nt">&lt;message</span> <span class="na">to=</span><span class="s">&quot;test0003@gmail.com&quot;</span> <span class="na">type=</span><span class="s">&quot;chat&quot;</span> <span class="na">id=</span><span class="s">&quot;iChat_6D205F70&quot;</span> <span class="na">from=</span><span class="s">&quot;test0001@gmail.com/kakuMacB434868F&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>hi<span class="nt">&lt;/body&gt;</span>
+</span><span class='line'>  ......
+</span><span class='line'><span class="nt">&lt;/message&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>gajimからgajimに送信したときの受信側のxml</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="c">&lt;!-- In --&gt;</span>
+</span><span class='line'><span class="nt">&lt;message</span> <span class="na">to=</span><span class="s">&quot;test0003@gmail.com/GajimCAF438C9&quot;</span> <span class="na">type=</span><span class="s">&quot;chat&quot;</span> <span class="na">id=</span><span class="s">&quot;63&quot;</span> <span class="na">from=</span><span class="s">&quot;test0001@gmail.com/GajimDFC2E294&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;thread&gt;</span>VVeMaVLvwtTWMfUtbrhWrpenrpZWsoAf<span class="nt">&lt;/thread&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;c</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.xmpp.org/extensions/xep-0200.html#ns&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;data&gt;</span>4D6X9xa/yGJc804JuZSIC+ZsyAPcaFmHFl91DxsZFU5kKHdb0ZTm2EMFeQ7td83btDk31beJ+tXmFK53z93
+</span><span class='line'>  OKrlkQFyZiJiuxn9u3yfIFWu6QyQGaQhFH/ndXrQu3OAwEvTZ+WD24nJ0+nLdXaWmzQ==<span class="nt">&lt;/data&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;mac&gt;</span>KfpslvfsS2Gy693AhPkj9jiCZ5IDTzyYajyKzI7+o8Y=<span class="nt">&lt;/mac&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/c&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>[This is part of an encrypted session. If you see this message, something went wrong.]
+</span><span class='line'>  ([This is part of an encrypted session. If you see this message, something went wrong.])<span class="nt">&lt;/body&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;nos:x</span> <span class="na">value=</span><span class="s">&quot;disabled&quot;</span> <span class="na">xmlns:nos=</span><span class="s">&quot;google:nosave&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;arc:record</span> <span class="na">otr=</span><span class="s">&quot;false&quot;</span> <span class="na">xmlns:arc=</span><span class="s">&quot;http://jabber.org/protocol/archive&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/message&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">&lt;!-- Out --&gt;</span>
+</span><span class='line'><span class="nt">&lt;message</span> <span class="na">xmlns=</span><span class="s">&quot;jabber:client&quot;</span> <span class="na">to=</span><span class="s">&quot;test0001@gmail.com/GajimDFC2E294&quot;</span> <span class="na">type=</span><span class="s">&quot;chat&quot;</span> <span class="na">id=</span><span class="s">&quot;63&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;received</span> <span class="na">xmlns=</span><span class="s">&quot;urn:xmpp:receipts&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;thread&gt;</span>VVeMaVLvwtTWMfUtbrhWrpenrpZWsoAf<span class="nt">&lt;/thread&gt;</span>
+</span><span class='line'><span class="nt">&lt;/message&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-24T17:21:00+09:00" pubdate data-updated="true">Apr 24<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/master_report/blog/categories/seminar/'>seminar</a>, <a class='category' href='/master_report/blog/categories/xmpp/'>xmpp</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://guofei.github.com/master_report/blog/2012/04/24/11-dot-4-27zemi/" data-via="" data-counturl="http://guofei.github.com/master_report/blog/2012/04/24/11-dot-4-27zemi/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/master_report/blog/2012/04/17/11-dot-4-20zemi/" title="Previous Post: 12.4.20ゼミ">&laquo; 12.4.20ゼミ</a>
+      
+      
+        <a class="basic-alignment right" href="/master_report/blog/2012/05/09/5-dot-11fen-san-zemi/" title="Next Post: 5.11分散ゼミ">5.11分散ゼミ &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/06/28/javascriptkaraxpcomfalseguan-shu-wohu-bichu-su/">javascriptからXPCOMの関数を呼び出す</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/06/21/skypekit-to-xpcomdefalsean-hao-hua-kuo-zhang-ji-neng/">skypekit と xpcomでの暗号化拡張機能</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/06/14/6-dot-15fen-san-zemi-guo/">6.15分散ゼミ 郭</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/05/31/6-dot-1fen-san-zemi-kaku/">6.1分散ゼミ　カク</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/05/24/5-dot-25fen-san-zemi/">5.25分散ゼミ</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

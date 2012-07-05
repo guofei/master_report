@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: seminar | My Octopress Blog]]></title>
+  <link href="http://guofei.github.com/master_report/blog/categories/seminar/atom.xml" rel="self"/>
+  <link href="http://guofei.github.com/master_report/"/>
+  <updated>2012-07-06T03:06:50+09:00</updated>
+  <id>http://guofei.github.com/master_report/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[5.11分散ゼミ]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/05/09/5-dot-11fen-san-zemi/"/>
+    <updated>2012-05-09T21:00:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/05/09/5-dot-11fen-san-zemi</id>
+    <content type="html"><![CDATA[<h2>就職活動</h2>
+
+<p>中国北京のある会社に面接を受けました。先週はskypeで面接して、今回は会社で直接面接する必要があるので、二日間帰国しました。</p>
+
+<p>いろいろ相談すると</p>
+
+<ul>
+<li>給料は一ヶ月10万円</li>
+<li>税金、保険などは一ヶ月25000円</li>
+<li>家賃は一ヶ月45000円</li>
+<li>食事は一ヶ月25000円</li>
+</ul>
+
+
+<p>残りは５０００円だけ!</p>
+
+<p>低すぎるので、悩んでいる</p>
+
+<h2>xmpp暗号化</h2>
+
+<p>Gajimでend to endの暗号化をする前のXMLデーターを取得し、分析してみた</p>
+
+<p>Simplified Encrypted Session Negotiation http://xmpp.org/extensions/xep-0217.html<br/>
+Encrypted Session Negotiation http://xmpp.org/extensions/xep-0116.html<br/>
+Offline Encrypted Sessions http://xmpp.org/extensions/xep-0187.html<br/>
+Stanza Encryption http://xmpp.org/extensions/xep-0200.html<br/>
+Current Jabber OpenPGP Usage http://xmpp.org/extensions/xep-0027.html</p>
+
+<p>Alice -> Bob　フォームを送信
+```xml
+<message to="bob@gmail.com/Gajim681D2858" id="49" from="alice@gmail.com/GajimEE1BF740">
+<feature xmlns="http://jabber.org/protocol/feature-neg">
+<x type="form" xmlns="jabber:x:data">
+<field var="FORM_TYPE" type="hidden">
+  <value>urn:xmpp:ssn</value>
+</field>
+<field var="accept" type="boolean">
+  <value>1</value>
+  <required/>
+</field>
+<field var="logging" type="list-single">
+  <required/>
+  <option></p>
+
+<pre><code>&lt;value&gt;may&lt;/value&gt;
+</code></pre>
+
+<p>  </option>
+  <option></p>
+
+<pre><code>&lt;value&gt;mustnot&lt;/value&gt;
+</code></pre>
+
+<p>  </option>
+</field>
+<field var="disclosure" type="list-single">
+  <required/>
+  <option></p>
+
+<pre><code>&lt;value&gt;never&lt;/value&gt;
+</code></pre>
+
+<p>  </option>
+</field>
+<field var="security" type="list-single">
+  <required/>
+  <option></p>
+
+<pre><code>&lt;value&gt;e2e&lt;/value&gt;
+</code></pre>
+
+<p>  </option>
+</field>
+<field var="crypt_algs" type="hidden">
+  <value>aes128-ctr</value>
+</field>
+<field var="hash_algs" type="hidden">
+  <value>sha256</value>
+</field>
+<field var="compress" type="hidden">
+  <value>none</value>
+</field>
+<field var="stanzas" type="list-multi">
+  <option></p>
+
+<pre><code>&lt;value&gt;message&lt;/value&gt;
+</code></pre>
+
+<p>  </option>
+</field>
+<field var="init_pubkey" type="list-single">
+  <option></p>
+
+<pre><code>&lt;value&gt;none&lt;/value&gt;
+</code></pre>
+
+<p>  </option>
+  <option></p>
+
+<pre><code>&lt;value&gt;key&lt;/value&gt;
+</code></pre>
+
+<p>  </option>
+  <option></p>
+
+<pre><code>&lt;value&gt;hash&lt;/value&gt;
+</code></pre>
+
+<p>  </option>
+</field>
+<field var="resp_pubkey" type="list-single">
+  <option></p>
+
+<pre><code>&lt;value&gt;none&lt;/value&gt;
+</code></pre>
+
+<p>  </option>
+  <option></p>
+
+<pre><code>&lt;value&gt;key&lt;/value&gt;
+</code></pre>
+
+<p>  </option>
+</field>
+<field var="rekey_freq" type="hidden">
+  <value>4294967295</value>
+</field>
+<field var="sas_algs" type="hidden">
+  <value>sas28x5</value>
+</field>
+<field var="sign_algs" type="hidden">
+  <value>http://www.w3.org/2000/09/xmldsig#rsa-sha256</value>
+</field>
+<field var="my_nonce" type="hidden">
+  <value>/phXl5d0EjQ=</value>
+</field>
+<field var="modp" type="list-single">
+  <option label="None"></p>
+
+<pre><code>&lt;value&gt;5&lt;/value&gt;
+</code></pre>
+
+<p>  </option>
+  <option label="None"></p>
+
+<pre><code>&lt;value&gt;14&lt;/value&gt;
+</code></pre>
+
+<p>  </option>
+</field>
+<field var="dhhashes" type="hidden">
+  <value>rJVVWlW+Ejedj12oa+jZNxhREGd2a8mJwpR8BxRVMnY=</value>
+  <value>mt1tK2HOuyoVt9IIV20ozlZ90DHD5xEgVBa80KxyJMs=</value>
+</field>
+</x>
+</feature>
+<thread>CkLXnnbvEXPcgYFvxhcEiqoYCPvrJmvN</thread>
+&lt;nos:x value="disabled" xmlns:nos="google:nosave"/>
+&lt;arc:record otr="false" xmlns:arc="http://jabber.org/protocol/archive"/>
+</message>
+```</p>
+
+<p>Bob -> Alice フォームを情報を返信
+<code>xml
+&lt;message xmlns="jabber:client" to="alice@gmail.com/GajimEE1BF740" id="47"&gt;
+&lt;feature xmlns="http://jabber.org/protocol/feature-neg"&gt;
+&lt;x xmlns="jabber:x:data" type="submit"&gt;
+&lt;field var="FORM_TYPE" type="text-single"&gt;
+  &lt;value&gt;urn:xmpp:ssn&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="accept" type="text-single"&gt;
+  &lt;value&gt;true&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="crypt_algs" type="text-single"&gt;
+  &lt;value&gt;aes128-ctr&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="disclosure" type="text-single"&gt;
+  &lt;value&gt;never&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="logging" type="text-single"&gt;
+  &lt;value&gt;may&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="sign_algs" type="text-single"&gt;
+  &lt;value&gt;http://www.w3.org/2000/09/xmldsig#rsa-sha256&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="compress" type="text-single"&gt;
+  &lt;value&gt;none&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="init_pubkey" type="text-single"&gt;
+  &lt;value&gt;none&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="stanzas" type="text-single"&gt;
+  &lt;value&gt;message&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="hash_algs" type="text-single"&gt;
+  &lt;value&gt;sha256&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="sas_algs" type="text-single"&gt;
+  &lt;value&gt;sas28x5&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="resp_pubkey" type="text-single"&gt;
+  &lt;value&gt;none&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="security" type="text-single"&gt;
+  &lt;value&gt;e2e&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="rekey_freq" type="text-single"&gt;
+  &lt;value&gt;4294967295&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="modp" type="text-single"&gt;
+  &lt;value&gt;5&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="nonce" type="text-single"&gt;
+  &lt;value&gt;/phXl5d0EjQ=&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="my_nonce" type="text-single"&gt;
+  &lt;value&gt;yYs4UP2i72w=&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="counter" type="text-single"&gt;
+  &lt;value&gt;wxe+LnrR3HdVfkOtmLnp2Q==&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="dhkeys" type="text-single"&gt;
+  &lt;value&gt;q08JZVv/ESZF6G5SXN9PTjJcu8qJbhGqx+6eAlI093Yl7tS+X0WQqkxAJjPdhcxTP1AdUqQzpkDL9lC7rhIzmIZQdF1abHgJRgRASmKS0NLPsnN7+GCV0VmzDxsOW+VsXCuWvY+zAyJIktfSM/t9ZV7A/pKMCSbiUJiLIG1UlqmaB2GUg8c4F3UqHUxCiNjx6r8s3oBSiwANcIXQ9blO9tFjQUY+Tgl4zvUTzZcbYo4YgBgXuA0gTCsCRguwcCq8&lt;/value&gt;
+&lt;/field&gt;
+&lt;/x&gt;
+&lt;/feature&gt;
+&lt;thread&gt;CkLXnnbvEXPcgYFvxhcEiqoYCPvrJmvN&lt;/thread&gt;
+&lt;/message&gt;
+</code>
+field</p>
+
+<ul>
+<li>crypt_algs 暗号化アルゴリズム</li>
+<li>hash_algs hashアルゴリズム</li>
+<li>compress 圧縮アルゴリズム</li>
+<li>init_pubkey key,hash,noneの三つ</li>
+<li>resp_pubkey　key,hash,noneの三つ</li>
+<li>rekey_freq　key再交換するためのスタンザの最小値</li>
+<li>sas_algs　Short Authentication String generation algorithm</li>
+<li>modp まだ不明</li>
+<li>dhhashes He</li>
+</ul>
+
+
+<p>p: 大きいな素数<br/>
+g: GF(p)<a href="http://ja.wikipedia.org/wiki/%E4%BD%93_(%E6%95%B0%E5%AD%A6">体_(数学)</a>)<br/>
+e: g<sup>x</sup> mod p<br/>
+He = SHA256(e)</p>
+
+<ul>
+<li>dhkeys d</li>
+</ul>
+
+
+<p>Nb: bobのsession id</p>
+
+<ul>
+<li>count Ca</li>
+</ul>
+
+
+<p>Ca: n-bit ランダム数字<br/>
+Cb: Ca XOR 2<sup>(n-1)<br/></sup>
+y: ランダム数字 2<sup>(2n-1)</sup> &lt; y &lt; p-1<br/>
+d: g<sup>y</sup> mod p<br/>
+K: HASH(e<sup>y</sup> mod p)</p>
+
+<p>Alice -> Bob 証明書を送る
+<code>xml
+&lt;message to="bob@gmail.com/Gajim681D2858" id="51" from="alice@gmail.com/GajimEE1BF740"&gt;
+&lt;feature xmlns="http://jabber.org/protocol/feature-neg"&gt;
+&lt;x type="result" xmlns="jabber:x:data"&gt;
+&lt;field var="FORM_TYPE" type="text-single"&gt;
+  &lt;value&gt;urn:xmpp:ssn&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="accept" type="text-single"&gt;
+  &lt;value&gt;1&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="nonce" type="text-single"&gt;
+  &lt;value&gt;yYs4UP2i72w=&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="rshashes" type="text-single"&gt;
+  &lt;value&gt;zkbnC/o1qRPF+72CvCacQIn0/KRkn3lcjE/KAfkQuXE=&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="dhkeys" type="text-single"&gt;
+  &lt;value&gt;57TcfePevFWXaCcsnX3NDTVaXDzArJI7vGY+CRlc75jbsnlw5MDD9QHL9RH7ntgiG9+YliJI7rJ2NnkJgTb7sAelh8GH0vDQxCcN0jKBu6qYs8p+loTxB/uQuvu9EoDU3bGGszefSJdJR5fBJvRm5UiHMT1OUvpcBSq8JjSDO7nkijDHrQfXyNq6ES3m8MoOEhdLYWkO/xlv8x9xpXGlWt7ztpu5xcbIRmWugwTlPdpz2XCukJYyhULHTwmfO06d&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="identity" type="text-single"&gt;
+  &lt;value&gt;s/OOrDGf0XGdBFZNnhuasOK7HoG9ACLW/B9s3jkx+cw=&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="mac" type="text-single"&gt;
+  &lt;value&gt;/PshCshCat8by9RYsOizBDGOCk7C0kdkGfKGjVqrVBM=&lt;/value&gt;
+&lt;/field&gt;
+&lt;/x&gt;
+&lt;/feature&gt;
+&lt;thread&gt;CkLXnnbvEXPcgYFvxhcEiqoYCPvrJmvN&lt;/thread&gt;
+&lt;nos:x value="disabled" xmlns:nos="google:nosave"/&gt;
+&lt;arc:record otr="false" xmlns:arc="http://jabber.org/protocol/archive"/&gt;
+&lt;/message&gt;
+</code></p>
+
+<p>Bob -> Alice 証明書を送る
+<code>xml
+&lt;message xmlns="jabber:client" to="alice@gmail.com/GajimEE1BF740" id="48"&gt;
+&lt;init xmlns="http://www.xmpp.org/extensions/xep-0116.html#ns-init"&gt;
+&lt;x xmlns="jabber:x:data" type="result"&gt;
+&lt;field var="FORM_TYPE" type="text-single"&gt;
+  &lt;value&gt;urn:xmpp:ssn&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="nonce" type="text-single"&gt;
+  &lt;value&gt;/phXl5d0EjQ=&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="srshash" type="text-single"&gt;
+  &lt;value&gt;/tyH+oMCSh0G1/1JF2t0YTjszQmr/VRrwoi5lhMznbo=&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="identity" type="text-single"&gt;
+  &lt;value&gt;bdTTIAY+fQXUivs+xcBuy3Tb1Fe+3HLxfIWZaBavCvY=&lt;/value&gt;
+&lt;/field&gt;
+&lt;field var="mac" type="text-single"&gt;
+  &lt;value&gt;6UdXee7X/WAWl8sdsfs99DvvoCaaazJ0uSMZGZdUMhQ=&lt;/value&gt;
+&lt;/field&gt;
+&lt;/x&gt;
+&lt;/init&gt;
+&lt;thread&gt;CkLXnnbvEXPcgYFvxhcEiqoYCPvrJmvN&lt;/thread&gt;
+&lt;/message&gt;
+</code>
+field</p>
+
+<ul>
+<li>nonce ランダム数字のhash値</li>
+<li>rshashes 前のsessionのhash値</li>
+<li>identity 暗号化された証明書</li>
+<li>mac 証明書の整合性</li>
+</ul>
+
+
+<h2>わからないもの</h2>
+
+<p>MODP (Modular Exponential)</p>
+
+<p>SAS(Short Authentication String)</p>
+
+<p>MAC</p>
+
+<p>HMAC</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[12.4.27分散ゼミ　カク]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/04/24/11-dot-4-27zemi/"/>
+    <updated>2012-04-24T17:21:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/04/24/11-dot-4-27zemi</id>
+    <content type="html"><![CDATA[<h2>gajim</h2>
+
+<p>ソースコードを読んでいる</p>
+
+<p>gajimのホームページで以下の紹介文がある
+FEATURES:
+TLS, GPG and End-To-End encryption support (with SSL legacy support)</p>
+
+<p>End-To-Endの暗号化はsslで行っていると思ったが、xmppサーバと通信する部分しかsslを使ってないらしい。</p>
+
+<p>End-To-Endの暗号化はPGPで行っている
+<code>python
+def send_chat_message(self, jid, message, keyID, account):
+  """
+  Send chat 'message' to 'jid', using account (optional) 'account'. If keyID
+  is specified, encrypt the message with the pgp key
+  """
+  jid = self._get_real_jid(jid, account)
+  return self._send_message(jid, message, keyID, account)
+</code></p>
+
+<h3>pgp,gpg</h3>
+
+<p>pgpがあって、Pretty Good Privacyの略だとわかったが、gpgもソースコードで出てきた。
+調べたら、openpgp,gnupgも出てきて、混乱になった</p>
+
+<h3>gajimのxml出力</h3>
+
+<p>gajimを試したとき、コンソールでxmlの出力を取得できるので、gajimとichatの通信と、gajimとgajimの通信ときのxmlを取得した</p>
+
+<h4>ichatからgajimに送信したときの受信側のxml</h4>
+
+<p>``` xml</p>
+
+<!-- In -->
+
+
+<p><message to="test0003@gmail.com" type="chat" id="iChat_6D205F70" from="test0001@gmail.com/kakuMacB434868F">
+  <body>hi</body>
+  ......
+</message>
+```</p>
+
+<h4>gajimからgajimに送信したときの受信側のxml</h4>
+
+<p>``` xml</p>
+
+<!-- In -->
+
+
+<p><message to="test0003@gmail.com/GajimCAF438C9" type="chat" id="63" from="test0001@gmail.com/GajimDFC2E294">
+  <thread>VVeMaVLvwtTWMfUtbrhWrpenrpZWsoAf</thread>
+  <c xmlns="http://www.xmpp.org/extensions/xep-0200.html#ns"></p>
+
+<pre><code>&lt;data&gt;4D6X9xa/yGJc804JuZSIC+ZsyAPcaFmHFl91DxsZFU5kKHdb0ZTm2EMFeQ7td83btDk31beJ+tXmFK53z93
+OKrlkQFyZiJiuxn9u3yfIFWu6QyQGaQhFH/ndXrQu3OAwEvTZ+WD24nJ0+nLdXaWmzQ==&lt;/data&gt;
+&lt;mac&gt;KfpslvfsS2Gy693AhPkj9jiCZ5IDTzyYajyKzI7+o8Y=&lt;/mac&gt;
+</code></pre>
+
+<p>  </c>
+  <body>[This is part of an encrypted session. If you see this message, something went wrong.]
+  ([This is part of an encrypted session. If you see this message, something went wrong.])</body>
+  &lt;nos:x value="disabled" xmlns:nos="google:nosave"/>
+  &lt;arc:record otr="false" xmlns:arc="http://jabber.org/protocol/archive"/>
+</message></p>
+
+<!-- Out -->
+
+
+<p><message xmlns="jabber:client" to="test0001@gmail.com/GajimDFC2E294" type="chat" id="63">
+  <received xmlns="urn:xmpp:receipts" />
+  <thread>VVeMaVLvwtTWMfUtbrhWrpenrpZWsoAf</thread>
+</message>
+```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[12.4.20ゼミ]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/04/17/11-dot-4-20zemi/"/>
+    <updated>2012-04-17T18:30:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/04/17/11-dot-4-20zemi</id>
+    <content type="html"><![CDATA[<h2>Octopress</h2>
+
+<p>ゼミ内容などをOctopressで書きはじまっている</p>
+
+<p>rubyでかかれた静的サイトジェネレーターで、gitで内容を管理する。emacsやvimなどで記事を書くことができる。内容を書くときはmarkdown記法で内容を書く。</p>
+
+<h2>XMPPクライアント間の暗号化</h2>
+
+<p>xmppのクライアントをいくつ調べた、gajimというものを見つけた。sslでEnd-To-Endの暗号化を行ってくれる。インストールしてみると、gajim同士しか暗号化できない。</p>
+
+<h3>rubyのxmppライブラリ</h3>
+
+<p>xmpp4r　ruby1.8.7で実行できた</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;xmpp4r&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;openssl&#39;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;user = &#39;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&#39;</span>
+</span><span class='line'><span class="sr">pass = &#39;server&#39;</span>
+</span><span class='line'><span class="sr">client = Jabber::Client.new(Jabber::JID.new(&quot;</span><span class="si">#{</span><span class="n">user</span><span class="si">}</span><span class="sr">/xm</span><span class="n">pp</span><span class="s2">&quot;))</span>
+</span><span class='line'><span class="s2">client.connect(&#39;kaku-desktop.softlab.cs.tsukuba.ac.jp&#39;, 5222)</span>
+</span><span class='line'><span class="s2">client.auth(pass)&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&lt;h1&gt;set presence&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&lt;p&gt;client.send(Jabber::Presence.new.set_show(:chat))&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&lt;p&gt;client.add_message_callback do |m|</span>
+</span><span class='line'><span class="s2">  if m.type != :error&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&lt;pre&gt;&lt;code&gt;m2 = Jabber::Message.new(m.from, &quot;</span><span class="c1">#{m.body}&quot;)</span>
+</span><span class='line'><span class="n">m2</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">type</span>
+</span><span class='line'><span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">m2</span><span class="p">)</span>
+</span><span class='line'><span class="nb">p</span> <span class="n">m</span><span class="o">.</span><span class="n">from</span>
+</span><span class='line'><span class="nb">p</span> <span class="n">m</span><span class="o">.</span><span class="n">body</span>
+</span><span class='line'><span class="nb">p</span> <span class="n">m</span><span class="o">.</span><span class="n">type</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;sleep</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>証明書の作成</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;openssl&#39;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;module MyCer</span>
+</span><span class='line'><span class="sr">  def get&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">key</span> <span class="o">=</span> <span class="no">OpenSSL</span><span class="o">::</span><span class="no">PKey</span><span class="o">::</span><span class="no">RSA</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">read</span> <span class="s2">&quot;/Users/kaku/.ssh/id_rsa&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">digest</span> <span class="o">=</span> <span class="no">OpenSSL</span><span class="o">::</span><span class="no">Digest</span><span class="o">::</span><span class="no">SHA1</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+</span><span class='line'><span class="n">issu</span> <span class="o">=</span> <span class="nb">sub</span> <span class="o">=</span> <span class="no">OpenSSL</span><span class="o">::</span><span class="no">X509</span><span class="o">::</span><span class="no">Name</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+</span><span class='line'><span class="nb">sub</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;JP&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">sub</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="s1">&#39;ST&#39;</span><span class="p">,</span> <span class="s1">&#39;Tsukuba&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">sub</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="s1">&#39;CN&#39;</span><span class="p">,</span> <span class="s1">&#39;Kaku&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">cer</span> <span class="o">=</span> <span class="no">OpenSSL</span><span class="o">::</span><span class="no">X509</span><span class="o">::</span><span class="no">Certificate</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+</span><span class='line'><span class="c1"># 証明書が有効になる時刻,無効になる時刻</span>
+</span><span class='line'><span class="n">cer</span><span class="o">.</span><span class="n">not_before</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'><span class="n">cer</span><span class="o">.</span><span class="n">not_after</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'><span class="n">cer</span><span class="o">.</span><span class="n">public_key</span> <span class="o">=</span> <span class="n">key</span>  <span class="c1"># 署名する対象となる公開鍵</span>
+</span><span class='line'><span class="n">cer</span><span class="o">.</span><span class="n">serial</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'><span class="n">cer</span><span class="o">.</span><span class="n">issuer</span> <span class="o">=</span> <span class="n">issu</span>
+</span><span class='line'><span class="n">cer</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="nb">sub</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">cer</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">digest</span><span class="p">)</span> <span class="c1"># 署名するのに使う秘密鍵とハッシュ関数</span>
+</span><span class='line'><span class="k">return</span> <span class="n">cer</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span><span class='line'>  <span class="kp">module_function</span> <span class="ss">:get</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>sslサーバ</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;socket&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;openssl&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;./mycer&#39;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;include OpenSSL&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">ctx</span> <span class="o">=</span> <span class="no">SSL</span><span class="o">::</span><span class="no">SSLContext</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+</span><span class='line'><span class="n">ctx</span><span class="o">.</span><span class="n">cert</span> <span class="o">=</span> <span class="no">MyCer</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</span><span class='line'><span class="n">ctx</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="no">PKey</span><span class="o">::</span><span class="no">RSA</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;/Users/kaku/.ssh/id_rsa&#39;</span><span class="p">))</span>
+</span><span class='line'><span class="n">svr</span> <span class="o">=</span> <span class="no">TCPServer</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
+</span><span class='line'><span class="n">serv</span> <span class="o">=</span> <span class="no">SSL</span><span class="o">::</span><span class="no">SSLServer</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">svr</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;loop do</span>
+</span><span class='line'><span class="sr">  while soc = serv.accept&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nb">puts</span> <span class="n">soc</span><span class="o">.</span><span class="n">read</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>sslクライアント</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;socket&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;openssl&#39;</span>
+</span><span class='line'><span class="kp">include</span> <span class="no">OpenSSL</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;soc = TCPSocket.new(&#39;localhost&#39;, 5000)</span>
+</span><span class='line'><span class="sr">ssl = SSL::SSLSocket.new(soc)</span>
+</span><span class='line'><span class="sr">ssl.connect</span>
+</span><span class='line'><span class="sr">ssl.write(&#39;hello&#39;)</span>
+</span><span class='line'><span class="sr">print ssl.peer_cert.to_text</span>
+</span><span class='line'><span class="sr">ssl.close</span>
+</span><span class='line'><span class="sr">soc.close</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>もし、暗号化するだけなら、公開鍵暗号化方式ですればいいと思うが、
+xmppのend to endでsslの通信路を利用するのはどうすればいいかまだわからない。</p>
+]]></content>
+  </entry>
+  
+</feed>

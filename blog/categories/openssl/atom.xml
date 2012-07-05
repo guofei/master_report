@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: openssl | My Octopress Blog]]></title>
+  <link href="http://guofei.github.com/master_report/blog/categories/openssl/atom.xml" rel="self"/>
+  <link href="http://guofei.github.com/master_report/"/>
+  <updated>2012-07-06T03:06:50+09:00</updated>
+  <id>http://guofei.github.com/master_report/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[6.15分散ゼミ 郭]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/06/14/6-dot-15fen-san-zemi-guo/"/>
+    <updated>2012-06-14T14:15:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/06/14/6-dot-15fen-san-zemi-guo</id>
+    <content type="html"><![CDATA[<h2>インターンシップ</h2>
+
+<p>東京のあるiOSゲーム開発の会社のインターンシップに参加した</p>
+
+<h2>OpenSSL</h2>
+
+<p><code>c
+char* public_encrypt(const unsigned char *pubkey, const unsigned char *from);
+char* private_decrypt(const unsigned char *prikey, const unsigned char *from);
+</code>
+OpenSSLのライブラリを利用し、公開鍵で暗号化する関数と復号化する関数を書いた。一つはpublic keyと暗号化したい文字列を入れて、暗号化を行って、Base64の文字列を返す。もう一つはその逆である。</p>
+
+<p>テストしたら、1.3MBくらいのデータを暗号化して、復号化すると、25秒かかった。後から高速化できるので、とりあえずXPCOMで利用出来るようにした方がいいと思って、XPCOMのほうを先にやる。</p>
+
+<p>XPCOMのidlファイルに関数を追加し、xulrunner-sdk/sdk/bin/header.pyでheaderファイルを生成する時、
+```
+xpidl.IDLError: error: invalid syntax, jsIrsa.idl line 5:6
+  char<em> public_encrypt(const unsigned char </em>pubkey, const unsigned char *from);</p>
+
+<pre><code>    ^
+</code></pre>
+
+<p>```
+というエラが出た。</p>
+
+<p>NPAPIの場合、NPStringがある、javascriptの引数を受け取りする時、NPVARIANT_TO_STRINGでjavascriptのオブジェクトをNSStringにして、NSStringをchar*にする必要がある。javascriptに値を返す時は逆にやらなければならない<br/>
+XPCOMも同じようにする必要がある。調べたら
+<code>
+IDL type | C++ Type
+---------|------------
+string   | char*
+wstring  | PRUnichar*
+AString  | nsAString
+...      | ...
+</code></p>
+
+<p>idlは以下のように書く
+<code>c
+interface jsIrsa : nsISupports
+{
+  string encrypt(in string pubkey, in string from);
+  string decrypt(in string prikey, in string from);
+};
+</code>
+constをinにする。inは読み込み専用</p>
+
+<p>こうすると、idlから、.hと.cppのファイルが生成された。</p>
+
+<p>前回と同じように.soファイルが生成された。</p>
+
+<p>共有ライブラリが読み込まれたときに、中に入っている XPCOMを登録する機能が必要になる。その機能を crypt_module.cppとして実装する必要がある。</p>
+
+<p>ウェブ上で以下のように書いているが、
+```c</p>
+
+<h1>include "nsIGenericFactory.h"</h1>
+
+<h1>include "myCalc.h"</h1>
+
+<p>NS_GENERIC_FACTORY_CONSTRUCTOR(myCalc)
+static nsModuleComponentInfo components[] =
+{</p>
+
+<pre><code>{
+       MY_CALC_CLASS_NAME,
+       MY_CALC_CID,
+       MY_CALC_CONTRACT_ID,
+       myCalcConstructor,
+}
+</code></pre>
+
+<p>};
+NS_IMPL_NSGETMODULE("myCalcModule", components)
+```</p>
+
+<p>nsIGenericFactory.hはもう使われてない。調べたら、#include "mozilla/ModuleUtils.h"にするべき</p>
+
+<p>```cpp</p>
+
+<h1>include "mozilla/ModuleUtils.h"</h1>
+
+<h1>include "crypt.h"</h1>
+
+<p>NS_GENERIC_FACTORY_CONSTRUCTOR(Crypt)
+NS_DEFINE_NAMED_CID(CRYPT_CID);
+static const mozilla::Module::CIDEntry kCryptCIDs[] = {</p>
+
+<pre><code>    { &amp;kCRYPT_CID, false, NULL, CryptConstructor },
+    { NULL }
+</code></pre>
+
+<p>};
+static const mozilla::Module::ContractIDEntry kCryptContracts[] = {</p>
+
+<pre><code>    { CRYPT_CONTRACT_ID, &amp;kCRYPT_CID },
+    { NULL }
+</code></pre>
+
+<p>};
+static const mozilla::Module kCryptModule = {</p>
+
+<pre><code>    mozilla::Module::kVersion,
+    kCryptCIDs,
+    kCryptContracts,
+    NULL
+</code></pre>
+
+<p>};
+NSMODULE_DEFN(crypt_module) = &kCryptModule;
+NS_IMPL_MOZILLA192_NSGETMODULE(&amp;kCryptModule)
+```</p>
+
+<p>コンパイルすると、以下のエラが出た。
+```
+g++ -g -Wall -fno-rtti -fno-exceptions -shared -L/Users/kaku/xulrunner-sdk/lib -o crypt.so</p>
+
+<pre><code>crypt.o crypt_module.o -lxpcomglue -lnspr4 -lplds4
+</code></pre>
+
+<p>Undefined symbols for architecture x86_64:
+ "vtable for mozilla::GenericModule", referenced from:
+  mozilla::GenericModule::GenericModule(mozilla::Module const<em>)in crypt_module.o
+ld: symbol(s) not found for architecture x86_64
+collect2: ld returned 1 exit status
+make: </em>** [crypt.so] Error 1
+make: Target `all' not remade because of errors.
+```</p>
+
+<p>一回コンパイルして、失敗した後、
+Makefileで
+<code>
+BITTINESS = -m32
+CXX = c++ ${BITTINESS}
+</code>
+を追加し、cleanしないでもう一回コンパイルすると、コンパイルが成功した</p>
+
+<p>make cleanしたら、以下のエラが出た
+```
+c++ -m32 -g -Wall -fno-rtti -fno-exceptions -shared -L/Users/kaku/xulrunner-sdk/lib -o</p>
+
+<pre><code>crypt.so crypt.o crypt_module.o -lxpcomglue -lnspr4 -lplds4
+</code></pre>
+
+<p>ld: warning: ignoring file xulrunner-sdk/lib/libxpcomglue.a,</p>
+
+<pre><code>file was built for archive which is not the architecture being linked (i386)
+</code></pre>
+
+<p>ld: warning: ignoring file xulrunner-sdk/lib/libnspr4.dylib,</p>
+
+<pre><code>file was built for unsupported file format which is not the architecture being linked (i386)
+</code></pre>
+
+<p>ld: warning: ignoring file xulrunner-sdk/lib/libplds4.dylib,</p>
+
+<pre><code>file was built for unsupported file format which is not the architecture being linked (i386)
+</code></pre>
+
+<p>Undefined symbols for architecture i386:
+  "NS_TableDrivenQI(void<em>, QITableEntry const</em>, nsID const&amp;, void**)", referenced from:</p>
+
+<pre><code>Crypt::QueryInterface(nsID const&amp;, void**)in crypt.o
+</code></pre>
+
+<p>  "vtable for mozilla::GenericModule", referenced from:</p>
+
+<pre><code>mozilla::GenericModule::GenericModule(mozilla::Module const*)in crypt_module.o
+</code></pre>
+
+<p>ld: symbol(s) not found for architecture i386
+collect2: ld returned 1 exit status
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

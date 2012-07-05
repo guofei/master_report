@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: openpgp | My Octopress Blog]]></title>
+  <link href="http://guofei.github.com/master_report/blog/categories/openpgp/atom.xml" rel="self"/>
+  <link href="http://guofei.github.com/master_report/"/>
+  <updated>2012-07-06T03:06:50+09:00</updated>
+  <id>http://guofei.github.com/master_report/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[5.18分散ゼミ]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/05/17/5-dot-18fen-san-zemi/"/>
+    <updated>2012-05-17T22:57:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/05/17/5-dot-18fen-san-zemi</id>
+    <content type="html"><![CDATA[<h2>gloox</h2>
+
+<p>c++で書かれたxmppライブラリ</p>
+
+<p>OpenPGPをサポートする</p>
+
+<p>しかし、keyの生成やkeyで暗号化や復号化などが自分で行わなければいけない</p>
+
+<h2>straceでgajimの動作を調べた</h2>
+
+<p>strace -f -F -o ~/gajim.txt gajim
+<code>sh
+3930  execve("/bin/sh", ["sh", "-c", "gpg -h &gt;/dev/null 2&gt;&amp;1"], [/* 40 vars */]) = 0
+3931  execve("/usr/bin/gpg", ["gpg", "-h"], [/* 40 vars */]) = 0
+</code></p>
+
+<p>しかでない</p>
+
+<p><code>sh
+3931  access("/home/kaku/.gnupg/gpg.conf-1.4.10", R_OK) = -1 ENOENT (No such file or directory)
+3931  access("/home/kaku/.gnupg/gpg.conf-1.4", R_OK) = -1 ENOENT (No such file or directory)
+3931  access("/home/kaku/.gnupg/gpg.conf-1", R_OK) = -1 ENOENT (No such file or directory)
+3931  access("/home/kaku/.gnupg/gpg.conf", R_OK) = 0
+3931  access("/home/kaku/.gnupg/options", R_OK) = -1 ENOENT (No such file or directory)
+3931  stat64("~/.gnupg", 0xbfc3d1d0)    = -1 ENOENT (No such file or directory)
+3931  stat64("/home/kaku/.gnupg/gpg.conf", {st_mode=S_IFREG|0600, st_size=9364, ...}) = 0
+3931  stat64("/home/kaku/.gnupg", {st_mode=S_IFDIR|0700, st_size=4096, ...}) = 0
+</code></p>
+
+<p>gpg.confをアクセスしたので、そのファイルを開いてみると、</p>
+
+<p><code>
+keyserver hkp://keys.gnupg.net
+</code></p>
+
+<p>keysever：keyの交換を行うサーバー
+<code>
+gpg --send-key id
+</code>
+を実行すると、そのkeyをサーバーに送る</p>
+
+<h3>keyの生成が自分でやる必要があるらしいので、手動でkeyを生成</h3>
+
+<p>生成したとき、面白いものが出てきた
+<code>
+今から長い乱数を生成します。キーボードを打つとか、マウスを動かす
+とか、ディスクにアクセスするとかの他のことをすると、乱数生成子で
+乱雑さの大きないい乱数を生成しやすくなるので、お勧めいたします。
++++++++++++++++.++++++++++....++++++++++++++++++++.++++++++++++++++++++++++++++++++++++++++..++++++++++++++++++++++++++++++++++++++++.+++++&gt;.++++++++++...........+++++
+十分な長さの乱数が得られません。OSがもっと乱雑さを収集
+できるよう、何かしてください! (あと282バイトいります)
+</code>
+最初はなかなか進まないが、裏でネットワークでファイルを送るとか、いろいろやるとうまく生成した</p>
+
+<p>gajimでgpg keyの選択のメニューが出てきた。</p>
+
+<p>keyの交換keyserverは自動的にやってくれると思ったが、うまく行かない</p>
+
+<p><code>
+5607  execve("/usr/local/sbin/gpg", ["gpg", "--status-fd", "34", "--batch", "--no-tty", "--armor", "--no-secmem-warning", "--verify-options", "no-show-photo", "--verify", "--enable-special-filenames", "-", "-&amp;30"], [/* 40 vars */]) = -1 ENOENT (No such file or directory)
+5607  execve("/usr/local/bin/gpg", ["gpg", "--status-fd", "34", "--batch", "--no-tty", "--armor", "--no-secmem-warning", "--verify-options", "no-show-photo", "--verify", "--enable-special-filenames", "-", "-&amp;30"], [/* 40 vars */]) = -1 ENOENT (No such file or directory)
+5607  execve("/usr/sbin/gpg", ["gpg", "--status-fd", "34", "--batch", "--no-tty", "--armor", "--no-secmem-warning", "--verify-options", "no-show-photo", "--verify", "--enable-special-filenames", "-", "-&amp;30"], [/* 40 vars */]) = -1 ENOENT (No such file or directory)
+5607  execve("/usr/bin/gpg", ["gpg", "--status-fd", "34", "--batch", "--no-tty", "--armor", "--no-secmem-warning", "--verify-options", "no-show-photo", "--verify", "--enable-special-filenames", "-", "-&amp;30"], [/* 40 vars */]) = 0
+5646  execve("/usr/local/sbin/gpg", ["gpg", "--status-fd", "35", "--batch", "--no-tty", "--armor", "--no-secmem-warning", "--verify-options", "no-show-photo", "--use-agent", "-b", "-u 28893B08"], [/* 40 vars */]) = -1 ENOENT (No such file or directory)
+5646  execve("/usr/local/bin/gpg", ["gpg", "--status-fd", "35", "--batch", "--no-tty", "--armor", "--no-secmem-warning", "--verify-options", "no-show-photo", "--use-agent", "-b", "-u 28893B08"], [/* 40 vars */]) = -1 ENOENT (No such file or directory)
+5646  execve("/usr/sbin/gpg", ["gpg", "--status-fd", "35", "--batch", "--no-tty", "--armor", "--no-secmem-warning", "--verify-options", "no-show-photo", "--use-agent", "-b", "-u 28893B08"], [/* 40 vars */]) = -1 ENOENT (No such file or directory)
+5646  execve("/usr/bin/gpg", ["gpg", "--status-fd", "35", "--batch", "--no-tty", "--armor", "--no-secmem-warning", "--verify-options", "no-show-photo", "--use-agent", "-b", "-u 28893B08"], [/* 40 vars */]) = 0
+</code></p>
+
+<p>error
+<code>
+~$ strace -f -F -o ~/gajim2 gajim
+gpg: decryption failed: secret key not available
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: skypekit | My Octopress Blog]]></title>
+  <link href="http://guofei.github.com/master_report/blog/categories/skypekit/atom.xml" rel="self"/>
+  <link href="http://guofei.github.com/master_report/"/>
+  <updated>2012-07-06T03:06:50+09:00</updated>
+  <id>http://guofei.github.com/master_report/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[skypekit と xpcomでの暗号化拡張機能]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/06/21/skypekit-to-xpcomdefalsean-hao-hua-kuo-zhang-ji-neng/"/>
+    <updated>2012-06-21T22:35:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/06/21/skypekit-to-xpcomdefalsean-hao-hua-kuo-zhang-ji-neng</id>
+    <content type="html"><![CDATA[<h3>SkypeKit</h3>
+
+<p>xpcomをコンパイルするとき、色々なところで詰まったので、skypekitについて調べた</p>
+
+<p>SkypeKitは、Skypeデスクトップアプリケーションがなくても機能する。 SkypeKitは、ユーザに何も表示せず実行される、Skypeの「ヘッドレス」バージョンと考えられる。前のSkype Public APIは今後改善されることはないが、維持管理は行われている。</p>
+
+<p>現在ではC++,Java,.net,Pythonのライブラリを提供している。ライブラリをダウンロードするとき、お金の支払う要求が来たので、やめた。検索すると、C,Ruby版のものが公開している。</p>
+
+<p>ruby https://github.com/railsware/skypekit<br/>
+C https://github.com/railsware/libskypekit</p>
+
+<p>```
+require "skypekit"
+$skype = Skypekit::Skype.new(:keyfile => ENV['SK_KEY'])
+$skype.start
+$skype.login(ENV['SK_USER'], ENV['SK_PASS'])
+loop do
+  event = $skype.get_event
+  unless event</p>
+
+<pre><code>sleep 5
+next
+</code></pre>
+
+<p>  end
+  case event.type
+  when :account_status</p>
+
+<pre><code>if event.data.logged_in?
+  puts "Congrats! We are Logged in!"
+end
+if event.data.logged_out?
+  puts "Authentication failed: #{event.data.reason}"
+end
+</code></pre>
+
+<p>  when :chat_message</p>
+
+<pre><code>message = event.data
+p message
+if message.body == "ping"
+  $skype.send_chat_message(message.convo_id, "pong")
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>app2appなどの機能もあるが、ruby版は実装していない。C++のサンプルコードをネットで見つけた
+<code>cpp write
+bool      cmdResult;
+SEString  appName = "TestApp1";
+SEString  streamName;
+char      buffer[32 * 1024];
+uint      bufSize = 32 * 1024;
+SEBinary writeBuffer;
+writeBuffer.set(&amp;buffer, bufSize);
+skype-&gt;App2AppWrite(appName, streamName, writeBuffer, cmdResult);
+</code></p>
+
+<p>``` cpp read
+void MySkype::OnApp2AppStreamListChange (</p>
+
+<pre><code>    const Sid::String &amp;appname,
+    const APP2APP_STREAMS &amp;listType,
+    const Sid::List_String &amp;streams,
+    const Sid::List_uint &amp;receivedSizes)
+</code></pre>
+
+<p>{</p>
+
+<pre><code>    if (streams.size() != 0)
+    {
+            for (uint i=0; I &lt; streams.size(); i++)
+            {
+                    if (listType == Skype::RECEIVED_STREAMS)
+                    {
+                            bool      readOk;
+                            SEBinary  buffer;
+                            App2AppRead(appname, streams[i], readOk, buffer);
+                    };
+            };
+    };
+</code></pre>
+
+<p>};
+```</p>
+
+<h3>XPCOM</h3>
+
+<p>前回はコンパイルするとき、ld: symbol(s) not found for architecture x86_64のところで詰まった。ar x libxpcomglue.aでやって、file *.oで.oファイルを調べた
+<code>
+$ file *.o
+nsArrayEnumerator.o:            Mach-O 64-bit object x86_64
+nsArrayUtils.o:                 Mach-O 64-bit object x86_64
+nsCOMArray.o:                   Mach-O 64-bit object x86_64
+nsCOMPtr.o:                     Mach-O 64-bit object x86_64
+nsCRTGlue.o:                    Mach-O 64-bit object x86_64
+nsCategoryCache.o:              Mach-O 64-bit object x86_64
+nsClassInfoImpl.o:              Mach-O 64-bit object x86_64
+nsComponentManagerUtils.o:      Mach-O 64-bit object x86_64
+nsCycleCollectionParticipant.o: Mach-O 64-bit object x86_64
+nsCycleCollectorUtils.o:        Mach-O 64-bit object x86_64
+nsDeque.o:                      Mach-O 64-bit object x86_64
+nsEnumeratorUtils.o:            Mach-O 64-bit object x86_64
+nsGlueLinkingOSX.o:             Mach-O 64-bit object x86_64
+nsID.o:                         Mach-O 64-bit object x86_64
+nsIInterfaceRequestorUtils.o:   Mach-O 64-bit object x86_64
+。。。
+</code>
+全部x86_64のものである。色々調べたて、試したがうまく修正できない。BITTINESSを３２にしてコンパイルできる原因もわからないので、ずっとその辺で悩んでいた。</p>
+
+<p>sdkの中にはいたら、libxpcomglue_s.aというライブラリがあって、ar xで.oファイルをGenericModule.oなどのファイルが取得した。前の64bitたけでコンパイルする時のエラは
+<code>
+Undefined symbols for architecture x86_64:
+ "vtable for mozilla::GenericModule", referenced from:
+   mozilla::GenericModule::GenericModule(mozilla::Module const*)in crypt_module.o
+</code>
+Makefileを修正して、sがついているライブラリをつかうと、新しいエラが出た。
+```
+Undefined symbols for architecture x86_64:
+  "_moz_xmalloc", referenced from:</p>
+
+<pre><code>mozilla::GenericModule::GetClassObject(nsIComponentManager*, nsID const&amp;, nsID const&amp;, void**)in libxpcomglue_s.a(GenericModule.o)
+</code></pre>
+
+<p>  "_moz_free", referenced from:</p>
+
+<pre><code>mozilla::GenericModule::Release()     in libxpcomglue_s.a(GenericModule.o)
+mozilla::GenericFactory::Release()     in libxpcomglue_s.a(GenericFactory.o)
+</code></pre>
+
+<p>ld: symbol(s) not found for architecture x86_64
+```
+sdkでlibmozalloc.dylibを見つけたので、Makefileで追加すると、うまくコンパイルができた</p>
+
+<h2>次回</h2>
+
+<p>javascript側使えるようにする。</p>
+]]></content>
+  </entry>
+  
+</feed>

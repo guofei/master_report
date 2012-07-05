@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: XPCOM | My Octopress Blog]]></title>
+  <link href="http://guofei.github.com/master_report/blog/categories/xpcom/atom.xml" rel="self"/>
+  <link href="http://guofei.github.com/master_report/"/>
+  <updated>2012-07-06T03:06:50+09:00</updated>
+  <id>http://guofei.github.com/master_report/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[javascriptからXPCOMの関数を呼び出す]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/06/28/javascriptkaraxpcomfalseguan-shu-wohu-bichu-su/"/>
+    <updated>2012-06-28T22:41:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/06/28/javascriptkaraxpcomfalseguan-shu-wohu-bichu-su</id>
+    <content type="html"><![CDATA[<h3>xpcom</h3>
+
+<p>JavaScriptからXPCOMの関数を呼び出す時、obj = Components.classes[cid].createInstance()；で呼び出すことができるが、自分が書いた関数を呼び出すとTypeError: Components.classes[cid] isundefinedというエラが出た。</p>
+
+<p>/Users/kaku/Library/Application Support/Firefox/Profiles/7sbio35o.defaultディレクトリのcompreg.datの中で登録できるかどうかを調べられる。</p>
+
+<p>grep rsa compreg.datで調べたら、正しい時は以下のようになるはずだが
+<code>
+abs:/.../xpcom-sample@cozmixng.org/components/myCalc.so,1173322260000
+{8931dfd3-edf3-4b7d-bd44-1da72064f0dc},,,,abs:/.../myCalc.so
+</code>
+何も出てこなかった。</p>
+
+<p>結構firefoxのバージョンとSDKのバージョンと自分の所のライブラリのバージョンと関わるらしいので、FireFox3.6 Firefox9などを色々試して、linux上も試したが、結局、ずっとエラのままだった。</p>
+
+<h3>Ctypes</h3>
+
+<p>調べた途中で、Ctypesというものを見つけて、複数のバージョンの Firefox で利用できるもの
+```
+Components.utils.import('resource://gre/modules/ctypes.jsm');
+var m = ctypes.open('/usr/lib/libc.dylib');</p>
+
+<p>var c = m.declare('cabs',</p>
+
+<pre><code>            ctypes.default_abi,
+            ctypes.double,
+            ctypes.double);
+</code></pre>
+
+<p>alert(c(-1));
+m.close();
+```
+普通のhtmlで利用できないが、拡張機能でうまく実行できた</p>
+]]></content>
+  </entry>
+  
+</feed>
