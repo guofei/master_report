@@ -1,0 +1,117 @@
+---
+layout: post
+title: "12.4.20ゼミ"
+date: 2012-04-17 18:30
+comments: true
+categories: [seminar, xmpp]
+---
+##Octopress
+
+ゼミ内容などをOctopressで書きはじまっている
+
+rubyでかかれた静的サイトジェネレーターで、gitで内容を管理する。emacsやvimなどで記事を書くことができる。内容を書くときはmarkdown記法で内容を書く。
+
+##XMPPクライアント間の暗号化
+xmppのクライアントをいくつ調べた、gajimというものを見つけた。sslでEnd-To-Endの暗号化を行ってくれる。インストールしてみると、gajim同士しか暗号化できない。
+###rubyのxmppライブラリ
+xmpp4r　ruby1.8.7で実行できた
+
+{% codeblock lang:ruby %}
+require 'rubygems'
+require 'xmpp4r'
+require 'openssl'
+
+user = 'server@kaku-desktop.softlab.cs.tsukuba.ac.jp'
+pass = 'server'
+client = Jabber::Client.new(Jabber::JID.new("#{user}/xmpp"))
+client.connect('kaku-desktop.softlab.cs.tsukuba.ac.jp', 5222)
+client.auth(pass)
+
+# set presence
+client.send(Jabber::Presence.new.set_show(:chat))
+
+client.add_message_callback do |m|
+  if m.type != :error
+    m2 = Jabber::Message.new(m.from, "#{m.body}")
+    m2.type = m.type
+    client.send(m2)
+    p m.from
+    p m.body
+    p m.type
+  end
+end
+
+sleep
+{% endcodeblock %}
+
+
+証明書の作成
+
+{% codeblock lang:ruby %}
+require 'openssl'
+
+module MyCer
+  def get
+    key = OpenSSL::PKey::RSA.new(File.read "/Users/kaku/.ssh/id_rsa")
+    digest = OpenSSL::Digest::SHA1.new()
+    issu = sub = OpenSSL::X509::Name.new()
+    sub.add_entry('C', 'JP')
+    sub.add_entry('ST', 'Tsukuba')
+    sub.add_entry('CN', 'Kaku')
+
+    cer = OpenSSL::X509::Certificate.new()
+    # 証明書が有効になる時刻,無効になる時刻
+    cer.not_before = Time.at(0)
+    cer.not_after = Time.at(0)
+    cer.public_key = key  # 署名する対象となる公開鍵
+    cer.serial = 1
+    cer.issuer = issu
+    cer.subject = sub
+
+    cer.sign(key, digest) # 署名するのに使う秘密鍵とハッシュ関数
+    return cer
+  end
+  module_function :get
+end
+{% endcodeblock %}
+
+sslサーバ
+
+{% codeblock lang:ruby %}
+require 'socket'
+require 'openssl'
+require './mycer'
+
+include OpenSSL
+
+ctx = SSL::SSLContext.new()
+ctx.cert = MyCer.get()
+ctx.key = PKey::RSA.new(File.read('/Users/kaku/.ssh/id_rsa'))
+svr = TCPServer.new(5000)
+serv = SSL::SSLServer.new(svr, ctx)
+
+loop do
+  while soc = serv.accept
+    puts soc.read
+  end
+end
+{% endcodeblock %}
+
+sslクライアント
+
+{% codeblock lang:ruby %}
+require 'socket'
+require 'openssl'
+include OpenSSL
+
+soc = TCPSocket.new('localhost', 5000)
+ssl = SSL::SSLSocket.new(soc)
+ssl.connect
+ssl.write('hello')
+print ssl.peer_cert.to_text
+ssl.close
+soc.close
+{% endcodeblock %}
+
+もし、暗号化するだけなら、公開鍵暗号化方式ですればいいと思うが、
+xmppのend to endでsslの通信路を利用するのはどうすればいいかまだわからない。

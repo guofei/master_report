@@ -1,0 +1,65 @@
+---
+layout: post
+title: "12.4.27分散ゼミ　カク"
+date: 2012-04-24 17:21
+comments: true
+categories: [seminar, xmpp]
+---
+##gajim
+ソースコードを読んでいる
+
+gajimのホームページで以下の紹介文がある
+FEATURES:
+TLS, GPG and End-To-End encryption support (with SSL legacy support)
+
+End-To-Endの暗号化はsslで行っていると思ったが、xmppサーバと通信する部分しかsslを使ってないらしい。
+
+End-To-Endの暗号化はPGPで行っている
+``` python
+def send_chat_message(self, jid, message, keyID, account):
+  """
+  Send chat 'message' to 'jid', using account (optional) 'account'. If keyID
+  is specified, encrypt the message with the pgp key
+  """
+  jid = self._get_real_jid(jid, account)
+  return self._send_message(jid, message, keyID, account)
+```
+
+###pgp,gpg
+pgpがあって、Pretty Good Privacyの略だとわかったが、gpgもソースコードで出てきた。
+調べたら、openpgp,gnupgも出てきて、混乱になった
+
+###gajimのxml出力
+gajimを試したとき、コンソールでxmlの出力を取得できるので、gajimとichatの通信と、gajimとgajimの通信ときのxmlを取得した
+
+####ichatからgajimに送信したときの受信側のxml
+``` xml
+<!-- In -->
+<message to="test0003@gmail.com" type="chat" id="iChat_6D205F70" from="test0001@gmail.com/kakuMacB434868F">
+  <body>hi</body>
+  ......
+</message>
+```
+
+####gajimからgajimに送信したときの受信側のxml
+``` xml
+<!-- In -->
+<message to="test0003@gmail.com/GajimCAF438C9" type="chat" id="63" from="test0001@gmail.com/GajimDFC2E294">
+  <thread>VVeMaVLvwtTWMfUtbrhWrpenrpZWsoAf</thread>
+  <c xmlns="http://www.xmpp.org/extensions/xep-0200.html#ns">
+    <data>4D6X9xa/yGJc804JuZSIC+ZsyAPcaFmHFl91DxsZFU5kKHdb0ZTm2EMFeQ7td83btDk31beJ+tXmFK53z93
+	OKrlkQFyZiJiuxn9u3yfIFWu6QyQGaQhFH/ndXrQu3OAwEvTZ+WD24nJ0+nLdXaWmzQ==</data>
+    <mac>KfpslvfsS2Gy693AhPkj9jiCZ5IDTzyYajyKzI7+o8Y=</mac>
+  </c>
+  <body>[This is part of an encrypted session. If you see this message, something went wrong.]
+  ([This is part of an encrypted session. If you see this message, something went wrong.])</body>
+  <nos:x value="disabled" xmlns:nos="google:nosave"/>
+  <arc:record otr="false" xmlns:arc="http://jabber.org/protocol/archive"/>
+</message>
+
+<!-- Out -->
+<message xmlns="jabber:client" to="test0001@gmail.com/GajimDFC2E294" type="chat" id="63">
+  <received xmlns="urn:xmpp:receipts" />
+  <thread>VVeMaVLvwtTWMfUtbrhWrpenrpZWsoAf</thread>
+</message>
+```
