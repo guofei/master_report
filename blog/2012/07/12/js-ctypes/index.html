@@ -5,14 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Ctypesでライブラリを呼び出す - Master Report</title>
+  <title>js ctypes - Master Report</title>
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="OpenSSL暗号PKI SSL/TLSライブラリの詳細 読んでいる ctypes javascriptから.soファイルを読んでみたが、ずっと問題になっている 1
-2
-3
-Components.utils.import('resource://gre/modules/ctypes.jsm'); &hellip;">
+  <meta name="description" content="OpenSSLの本 BIO部分：入出力の抽象化、暗号化や符号化,ファイルやネットワークといった入出力の詳細をアプリケーションから隠蔽する Ctypes firefoxのdebugツールでエラーを見た
+var r = ctypes.open(&#8216;/Users/kaku/ctypesrsa/ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +19,7 @@ Components.utils.import('resource://gre/modules/ctypes.jsm'); &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://guofei.github.com/master_report/blog/2012/07/06/ctypesderaiburariwohu-bichu-su/">
+  <link rel="canonical" href="http://guofei.github.com/master_report/blog/2012/07/12/js-ctypes/">
   <link href="/master_report/favicon.png" rel="icon">
   <link href="/master_report/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/master_report/javascripts/modernizr-2.0.js"></script>
@@ -68,7 +66,7 @@ Components.utils.import('resource://gre/modules/ctypes.jsm'); &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Ctypesでライブラリを呼び出す</h1>
+      <h1 class="entry-title">Js Ctypes</h1>
     
     
       <p class="meta">
@@ -84,44 +82,26 @@ Components.utils.import('resource://gre/modules/ctypes.jsm'); &hellip;">
   
 
 
-<time datetime="2012-07-06T03:10:00+09:00" pubdate data-updated="true">Jul 6<span>th</span>, 2012</time>
+<time datetime="2012-07-12T20:50:00+09:00" pubdate data-updated="true">Jul 12<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h3>OpenSSL暗号PKI SSL/TLSライブラリの詳細</h3>
+<div class="entry-content"><h3>OpenSSLの本</h3>
 
-<p>読んでいる</p>
+<p>BIO部分：入出力の抽象化、暗号化や符号化,ファイルやネットワークといった入出力の詳細をアプリケーションから隠蔽する</p>
 
-<h3>ctypes</h3>
+<h3>Ctypes</h3>
 
-<p>javascriptから.soファイルを読んでみたが、ずっと問題になっている</p>
+<p>firefoxのdebugツールでエラーを見た
+var r = ctypes.open(&#8216;/Users/kaku/ctypesrsa/components/libjsrsa.dylib&#8217;);
+エラー: couldn&#8217;t open library</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Components.utils.import('resource://gre/modules/ctypes.jsm');
-</span><span class='line'>var m = ctypes.open('/usr/lib/libc.dylib');
-</span><span class='line'>alert(m);</span></code></pre></td></tr></table></div></figure>
+<p>自分が書いたものが問題になるのかを確認するため、簡単なライブラリを書いた。</p>
 
-
-<p>で呼び出すと、[object Library]が出たが、</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Components.utils.import('resource://gre/modules/ctypes.jsm');
-</span><span class='line'>var r = ctypes.open('/Users/kaku/ctypesrsa/components/libjsrsa.so');
-</span><span class='line'>alert(r);</span></code></pre></td></tr></table></div></figure>
-
-
-<p>で何も出なかった。.soファイルを.dylibにしても同じ</p>
-
-<p>しかし、firefox９でやってみると、うまく出た。xmpp拡張のほうはfirefox4以下しか動けない。</p>
-
-<p>firefox9で暗号化と復号化をやったら、暗号化したものはうまく復号化できなかった。javascriptで出力した暗号文をCで復号化すると、うまく復号化できたので、自分が書いたライブラリの問題だと思う。</p>
+<p>mytest.h</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -129,25 +109,57 @@ Components.utils.import('resource://gre/modules/ctypes.jsm'); &hellip;">
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Components.utils.import('resource://gre/modules/ctypes.jsm');
-</span><span class='line'>var r = ctypes.open('/Users/kaku/ctypesrsa/components/libjsrsa.dylib');
-</span><span class='line'>var encrypt = r.declare('public_encrypt', ctypes.default_abi, ctypes.unsigned_char.ptr, ctypes.unsigned_char.ptr, ctypes.unsigned_char.ptr);
-</span><span class='line'>var ciphertext = encrypt('-----BEGIN RSA PUBLIC KEY----...-----END RSA PUBLIC KEY-----\n', 'abc').readString();
-</span><span class='line'>alert(ciphertext);
-</span><span class='line'>var decrypt = r.declare('private_decrypt', ctypes.default_abi, ctypes.unsigned_char.ptr, ctypes.unsigned_char.ptr, ctypes.unsigned_char.ptr);
-</span><span class='line'>var text = decrype('-----BEGIN RSA PRIVATE KEY-----...-----\n', ciphertext).readString();
-</span><span class='line'>alert(text);
-</span><span class='line'>r.close();</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#ifndef _MYTEST_H_
+</span><span class='line'>#define _MYTEST_H_
+</span><span class='line'>
+</span><span class='line'>int my_add(int a, int b);
+</span><span class='line'>
+</span><span class='line'>#endif /* _MYTEST_H_ */</span></code></pre></td></tr></table></div></figure>
 
 
-<h3>来週</h3>
+<p>mytest.c</p>
 
-<p>OpenSSLの本を読み続く。
-問題になる部分を修正。
-firefox３で動けない原因を探す。</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#include "mytest.h"
+</span><span class='line'>
+</span><span class='line'>int my_add(int a, int b)
+</span><span class='line'>{
+</span><span class='line'>        return a+b;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cc -dynamiclib mytest.c -o libmytest.dylib</span></code></pre></td></tr></table></div></figure>
+
+
+<p>macのgccは　llvm-gcc　なので、gccを入れて、もう一回コンパイルしたが、同じエラーになる。Xcodeでコンパイルしても、同じ</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gcc-4.2 -dynamiclib mytest.c -o libmytest.dylib</span></code></pre></td></tr></table></div></figure>
+
+
+<p>このURLで<a href="http://stackoverflow.com/questions/9348604/build-a-dll-to-be-used-by-mozilla-js-ctype">http://stackoverflow.com/questions/9348604/build-a-dll-to-be-used-by-mozilla-js-ctype</a>s同じような問題があった。windowsでライブラリを開く時、システムのライブラリだとうまく使えるが、自分が書いたライブラリは使えない。</p>
+
+<p>以下のコードを追加すると、うまく実行できたらしい。DLLMainはダイナミックリンクライブラリためのエントリーポイント。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
+</span><span class='line'>{
+</span><span class='line'>  return TRUE;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Mac OS XでDLLMain見たいなものがないらしいので、やめた。Linuxで試して、うまく利用できた。</p>
+
+<p>今はライブラリを書いている。javascriptとCの間の型の変換の部分は少し複雑</p>
 </div>
 
 
@@ -170,15 +182,21 @@ firefox３で動けない原因を探す。</p>
   
 
 
-<time datetime="2012-07-06T03:10:00+09:00" pubdate data-updated="true">Jul 6<span>th</span>, 2012</time>
+<time datetime="2012-07-12T20:50:00+09:00" pubdate data-updated="true">Jul 12<span>th</span>, 2012</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/master_report/blog/categories/ctypes/'>ctypes</a>
+  
+</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://guofei.github.com/master_report/blog/2012/07/06/ctypesderaiburariwohu-bichu-su/" data-via="" data-counturl="http://guofei.github.com/master_report/blog/2012/07/06/ctypesderaiburariwohu-bichu-su/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://guofei.github.com/master_report/blog/2012/07/12/js-ctypes/" data-via="" data-counturl="http://guofei.github.com/master_report/blog/2012/07/12/js-ctypes/" >Tweet</a>
   
   
   
@@ -187,10 +205,8 @@ firefox３で動けない原因を探す。</p>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/master_report/blog/2012/06/28/javascriptkaraxpcomfalseguan-shu-wohu-bichu-su/" title="Previous Post: javascriptからXPCOMの関数を呼び出す">&laquo; javascriptからXPCOMの関数を呼び出す</a>
+        <a class="basic-alignment left" href="/master_report/blog/2012/07/06/ctypesderaiburariwohu-bichu-su/" title="Previous Post: Ctypesでライブラリを呼び出す">&laquo; Ctypesでライブラリを呼び出す</a>
       
-      
-        <a class="basic-alignment right" href="/master_report/blog/2012/07/12/js-ctypes/" title="Next Post: js ctypes">js ctypes &raquo;</a>
       
     </p>
   </footer>
