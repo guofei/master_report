@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ctypes | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/ctypes/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-07-13T02:33:23+09:00</updated>
+  <updated>2012-07-20T03:06:34+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -12,6 +12,177 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[javascriptでの公開鍵暗号化と復号化]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/07/20/javascriptdefalsegong-kai-jian-an-hao-hua-tofu-hao-hua/"/>
+    <updated>2012-07-20T02:57:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/07/20/javascriptdefalsegong-kai-jian-an-hao-hua-tofu-hao-hua</id>
+    <content type="html"><![CDATA[<h3>javascriptで暗号化ができて、復号化ができないバッグを修正した</h3>
+
+<p><code>
+エラー:malformed UTF-8 character sequence at offset
+</code>
+cでの戻り値がutf-8の文字コード以外に別のものが入っている。</p>
+
+<h3>sourcecode</h3>
+
+<p>```js
+Components.utils.import('resource://gre/modules/ctypes.jsm');
+var r = ctypes.open('/Users/kaku/Programs/M2/ctypesrsa/components/libjsrsa.dylib');</p>
+
+<p>var encrypt = r.declare('public_encrypt', ctypes.default_abi, ctypes.char.ptr, ctypes.char.ptr, ctypes.uint32_t, ctypes.char.ptr, ctypes.uint32_t);
+var ciphertext = encrypt(pubkey, pubkey.length, 'abc', 'abc'.length).readString();
+alert(ciphertext);</p>
+
+<p>var decrypt = r.declare('private_decrypt', ctypes.default_abi, ctypes.unsigned_char.ptr, ctypes.unsigned_char.ptr, ctypes.uint32_t, ctypes.unsigned_char.ptr, ctypes.uint32_t);
+var text = decrypt(pkey, pkey.length, ciphertext, ciphertext.length).readString();
+alert(text);
+```</p>
+
+<p>```c
+char<em> str_join(const char</em> a, const char* b)
+{</p>
+
+<pre><code>    if(a == NULL &amp;&amp; b == NULL)
+            return NULL;
+
+    size_t la = 0;
+    if(a)
+            la = strlen(a);
+
+    size_t lb = 0;
+    if(b)
+            lb = strlen(b);
+
+    char* p = malloc(la + lb + 1);
+    memcpy(p, a, la);
+    memcpy(p + la, b, lb + 1);
+    return p;
+</code></pre>
+
+<p>}</p>
+
+<p>char<em> public_encrypt(const char </em>pubkey, int key_len, const char *from, int from_len)
+{</p>
+
+<pre><code>    BIO *key_mem = BIO_new_mem_buf(pubkey, key_len);
+    RSA *key = PEM_read_bio_RSAPublicKey(key_mem, NULL, NULL, NULL);
+    BIO_free(key_mem);
+
+    BIO *plaintext_mem = BIO_new_mem_buf(from, from_len);
+
+    BIO *ciphertext_mem = BIO_new(BIO_s_mem());
+    BIO *bio_base64 = BIO_new(BIO_f_base64());
+    BIO_set_flags(bio_base64, BIO_FLAGS_BASE64_NO_NL);
+    BIO *bio_chain = BIO_push(bio_base64, ciphertext_mem);
+
+    int rsa_size = RSA_size(key);
+    char *inbuf = malloc(rsa_size);
+    char *outbuf = malloc(rsa_size);
+    while(1){
+            int read_size = rsa_size - 11;
+            int inlen = BIO_read(plaintext_mem, inbuf, read_size);
+            if(inlen &lt;= 0)
+                    break;
+
+            memset(outbuf, 0, rsa_size);
+
+            int outlen;
+            if((outlen = RSA_public_encrypt(inlen, inbuf, outbuf, key, RSA_PKCS1_PADDING)) == -1){
+                    print_error("failed to RSA_public_encrypt", ERR_get_error());
+                    exit(-1);
+            }
+
+            int len = BIO_write(bio_chain, outbuf, outlen);
+            int abc = 1;
+    }
+    BIO_flush(bio_chain);
+    free(inbuf);
+    free(outbuf);
+    BIO_free(plaintext_mem);
+    RSA_free(key);
+
+    char *ciphertext = NULL;
+    while(1){
+            int read_size = 512;
+            char *buf = calloc(read_size + 1, sizeof(char));
+            int len = BIO_read(ciphertext_mem, buf, read_size);
+            if(len &lt;= 0)
+                    break;
+            ciphertext = str_join(ciphertext, buf);
+    }
+    BIO_free_all(bio_chain);
+
+    return ciphertext;
+</code></pre>
+
+<p>}</p>
+
+<p>char<em> private_decrypt(const char </em>prikey, int key_len, const char *from, int from_len)
+{</p>
+
+<pre><code>    BIO *key_mem = BIO_new(BIO_s_mem());
+    int len = BIO_write(key_mem, prikey, key_len);
+    RSA *key = PEM_read_bio_RSAPrivateKey(key_mem, NULL, NULL, NULL);
+    BIO_free(key_mem);
+
+    BIO *bio_base64 = BIO_new(BIO_f_base64());
+    BIO_set_flags(bio_base64, BIO_FLAGS_BASE64_NO_NL);
+    BIO *mem_buf = BIO_new_mem_buf(from, from_len);
+    mem_buf = BIO_push(bio_base64, mem_buf);
+
+    BIO *plaintext_mem = BIO_new(BIO_s_mem());
+    int plaintext_len = 0;
+    int rsa_size = RSA_size(key);
+
+    char *inbuf = malloc(rsa_size);
+    char *outbuf = malloc(rsa_size);
+    while(1){
+            int read_size = rsa_size;
+            int inlen = BIO_read(mem_buf, inbuf, read_size);
+            if(inlen &lt;= 0)
+                    break;
+
+            memset(outbuf, 0, rsa_size);
+
+            int outlen;
+            if((outlen = RSA_private_decrypt(inlen, inbuf, outbuf, key, RSA_PKCS1_PADDING)) == -1){
+                    print_error("failed to RSA_private_decrypt", ERR_get_error());
+                    exit(-1);
+            }
+            int len = BIO_write(plaintext_mem, outbuf, outlen);
+            plaintext_len += len;
+    }
+    BIO_flush(plaintext_mem);
+    free(inbuf);
+    free(outbuf);
+    BIO_free_all(mem_buf);
+    RSA_free(key);
+
+    char *plaintext = NULL;
+    while(1){
+            int read_size = 512;
+            char *buf = calloc(read_size + 1, sizeof(char));
+            int len = BIO_read(plaintext_mem, buf, read_size);
+            if(len &lt;= 0)
+                    break;
+            plaintext = str_join(plaintext, buf);
+    }
+    BIO_free(plaintext_mem);
+
+    return plaintext;
+</code></pre>
+
+<p>}
+```</p>
+
+<h3>これから</h3>
+
+<p>署名などの機能を実現する。
+CSセミナの発表資料を準備する</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[js ctypes]]></title>
