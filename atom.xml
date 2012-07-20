@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-07-20T03:06:34+09:00</updated>
+  <updated>2012-07-20T12:06:18+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -24,7 +24,7 @@
 </pre></td><td class='code'><pre><code class=''><span class='line'>エラー:malformed UTF-8 character sequence at offset</span></code></pre></td></tr></table></div></figure>
 
 
-<p>cでの戻り値がutf-8の文字コード以外に別のものが入っている。</p>
+<p>cとjavascriptでの型変換がうまくいかないと思ったが、cの関数の戻り値がutf-8の文字コード以外に別のものが入っている。</p>
 
 <h3>sourcecode</h3>
 
