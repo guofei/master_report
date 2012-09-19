@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-07-20T12:06:18+09:00</updated>
+  <updated>2012-09-19T15:33:05+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[csセミナー発表]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/09/19/csseminafa-biao/"/>
+    <updated>2012-09-19T13:53:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/09/19/csseminafa-biao</id>
+    <content type="html"><![CDATA[<h3>聞かれた問題</h3>
+
+<ol>
+<li><p>協調アプリケーションの例</p>
+
+<p>動画協調アプリケーションやニュースフェードなどの協調アプリケーション</p></li>
+<li><p>Firefoxを使う理由、Chromeなどのブラウザはなぜ使わない</p>
+
+<p>開発の時、XMPPのXPCOMなどが使えるから、開発しやすい</p></li>
+<li><p>どういう有用性があるのか？</p></li>
+</ol>
+
+
+<h3>評価用紙での質問とコメント</h3>
+
+<ol>
+<li>早口</li>
+<li>中央サーバを用いた時のセキュリティの問題は？</li>
+<li>XMPPの説明はわかりにくい</li>
+<li>例えば複数のユーザがドキュメントを編集する時、そのドキュメントのデータはいったいどこにあるのか、何が中央サーバの役割を担うのかがよくわからなかった。</li>
+</ol>
+
+
+<h3>暗号化</h3>
+
+<p>ユーザは鍵の場所を指定して、鍵を読み込む部分を書いている</p>
+
+<h3>JsMruby - mruby NPAPI plugin</h3>
+
+<p>JavaScriptからmruby スクリプトの実行とmrubyからJavaScript スクリプトの実行ができる。</p>
+
+<p>文章
+http://masamitsu-murase.blogspot.jp/2012/09/jsmruby-mruby-npapi-plugin.html</p>
+
+<p>ソースコード（c＋＋）
+https://github.com/masamitsu-murase/JsMruby</p>
+
+<h3>就職</h3>
+
+<p>機能最終面接を受けて、落ちました。。。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[javascriptでの公開鍵暗号化と復号化]]></title>
