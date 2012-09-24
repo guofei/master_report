@@ -231,6 +231,10 @@ char* public_encrypt( &hellip;">
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
 </pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
 </span><span class='line'>        <span class="n">RSA</span> <span class="o">*</span><span class="n">my_private</span><span class="p">;</span>
 </span><span class='line'>        <span class="n">RSA</span> <span class="o">*</span><span class="n">my_public</span><span class="p">;</span>
@@ -241,6 +245,19 @@ char* public_encrypt( &hellip;">
 </span><span class='line'><span class="p">}</span><span class="n">KEYS</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">KEYS</span> <span class="n">keys</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">extern</span> <span class="n">RSA</span> <span class="o">*</span><span class="n">get_my_private_key</span><span class="p">(</span><span class="n">keys</span><span class="p">);</span>
+</span><span class='line'><span class="k">extern</span> <span class="n">RSA</span> <span class="o">*</span><span class="n">get_my_public_key</span><span class="p">(</span><span class="n">keys</span><span class="p">);</span>
+</span><span class='line'><span class="k">extern</span> <span class="n">RSA</span> <span class="o">*</span><span class="n">get_publib_key_from_id</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">id</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>暗号化の手順は</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">get_all_keys</span><span class="p">();</span>
+</span><span class='line'><span class="n">public_encrypt</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">key_id</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">from</span><span class="p">,</span> <span class="kt">int</span> <span class="n">data_len</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 </div>

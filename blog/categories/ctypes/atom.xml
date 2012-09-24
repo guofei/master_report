@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ctypes | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/ctypes/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-09-24T16:32:07+09:00</updated>
+  <updated>2012-09-24T16:41:10+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -110,8 +110,18 @@ typedef struct {</p>
 
 <p>}KEYS;</p>
 
-<p>KEYS keys;
+<p>KEYS keys;</p>
+
+<p>extern RSA <em>get_my_private_key(keys);
+extern RSA </em>get_my_public_key(keys);
+extern RSA <em>get_publib_key_from_id(char </em>id);
 ```</p>
+
+<p>暗号化の手順は
+<code>c
+get_all_keys();
+public_encrypt(const char *key_id, const char *from, int data_len);
+</code></p>
 ]]></content>
   </entry>
   
