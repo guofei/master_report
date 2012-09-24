@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ctypes | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/ctypes/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-09-19T15:57:46+09:00</updated>
+  <updated>2012-09-24T16:32:07+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -12,6 +12,108 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[暗号化]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/09/24/an-hao-hua/"/>
+    <updated>2012-09-24T16:21:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/09/24/an-hao-hua</id>
+    <content type="html"><![CDATA[<h3>javascriptでの暗号化</h3>
+
+<p>前は文字列を渡して暗号化を行う
+<code>c
+char* private_decrypt(const char *prikey, int key_len, const char *from, int from_len);
+char* public_encrypt(const char *pubkey, int key_len, const char *from, int from_len);
+</code></p>
+
+<p>ファイル名を指定して、暗号化を行う。
+<code>c
+char* public_encrypt(const char *file, const char *from, int data_len);
+char* private_decrypt(const char *file, const char *from, int data_len);
+</code></p>
+
+<p>```c
+typedef enum { PRIVATE_KEY , PUBLIC_KEY } KeyType;</p>
+
+<p>RSA <em>read_rsa_key_from_file(const char </em>file, KeyType type)
+{</p>
+
+<pre><code>    FILE *fp = fopen(file, "r");
+    if(fp == NULL){
+            perror(file);
+            return NULL;
+    }
+
+    RSA *key;
+    if(type == PUBLIC_KEY)
+            key = PEM_read_RSAPublicKey(fp, NULL, NULL, NULL);
+    else if(type == PRIVATE_KEY)
+            key = PEM_read_RSAPrivateKey(fp, NULL, NULL, NULL);
+
+    fclose(fp);
+
+    if(key == NULL){
+            fprintf(stderr, "failed to read key");
+            return NULL;
+    }
+
+    return key;
+</code></pre>
+
+<p>}</p>
+
+<p>void free_rsa_key(RSA *key)
+{</p>
+
+<pre><code>    RSA_free(key);
+</code></pre>
+
+<p>}</p>
+
+<p>int generate_rsa_key_to_file(const char *path, int size)
+{</p>
+
+<pre><code>    RSA *key = RSA_generate_key(size, 65537, NULL, NULL);
+    if(key == NULL){
+            print_error("generate key", ERR_get_error());
+            return -1;
+    }
+
+    if(!write_public_key(path, key))
+            return -1;
+
+    if(!write_private_key(path, key))
+            return -1;
+
+    RSA_free(key);
+
+    return 0;
+</code></pre>
+
+<p>}
+```</p>
+
+<p>毎回ファイルを読まなければならない</p>
+
+<p>外部でグローバルの変数を用意しているところ</p>
+
+<p>```c
+typedef struct {</p>
+
+<pre><code>    RSA *my_private;
+    RSA *my_public;
+    RSA **publics;
+    char **key_ids;
+    char **key_path;
+    size_t n_public;
+</code></pre>
+
+<p>}KEYS;</p>
+
+<p>KEYS keys;
+```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[javascriptでの公開鍵暗号化と復号化]]></title>

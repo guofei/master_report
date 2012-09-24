@@ -9,9 +9,10 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="聞かれた問題 協調アプリケーションの例 動画協調アプリケーションやニュースフェードなどの協調アプリケーション
-Firefoxを使う理由、Chromeなどのブラウザはなぜ使わない 開発の時、XMPPのXPCOMなどが使えるから、開発しやすい
-どういう有用性があるのか？ 評価用紙での質問とコメント &hellip;">
+  <meta name="description" content="javascriptでの暗号化 前は文字列を渡して暗号化を行う 1
+2
+char* private_decrypt(const char *prikey, int key_len, const char *from, int from_len);
+char* public_encrypt( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +65,190 @@ Firefoxを使う理由、Chromeなどのブラウザはなぜ使わない 開発
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/master_report/blog/2012/09/24/an-hao-hua/">暗号化</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-24T16:21:00+09:00" pubdate data-updated="true">Sep 24<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>javascriptでの暗号化</h3>
+
+<p>前は文字列を渡して暗号化を行う</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="n">private_decrypt</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">prikey</span><span class="p">,</span> <span class="kt">int</span> <span class="n">key_len</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">from</span><span class="p">,</span> <span class="kt">int</span> <span class="n">from_len</span><span class="p">);</span>
+</span><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="n">public_encrypt</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pubkey</span><span class="p">,</span> <span class="kt">int</span> <span class="n">key_len</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">from</span><span class="p">,</span> <span class="kt">int</span> <span class="n">from_len</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ファイル名を指定して、暗号化を行う。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="n">public_encrypt</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">file</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">from</span><span class="p">,</span> <span class="kt">int</span> <span class="n">data_len</span><span class="p">);</span>
+</span><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="n">private_decrypt</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">file</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">from</span><span class="p">,</span> <span class="kt">int</span> <span class="n">data_len</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">typedef</span> <span class="k">enum</span> <span class="p">{</span> <span class="n">PRIVATE_KEY</span> <span class="p">,</span> <span class="n">PUBLIC_KEY</span> <span class="p">}</span> <span class="n">KeyType</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">RSA</span> <span class="o">*</span><span class="nf">read_rsa_key_from_file</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">file</span><span class="p">,</span> <span class="n">KeyType</span> <span class="n">type</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>        <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">fp</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">perror</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+</span><span class='line'>                <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">RSA</span> <span class="o">*</span><span class="n">key</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="n">PUBLIC_KEY</span><span class="p">)</span>
+</span><span class='line'>                <span class="n">key</span> <span class="o">=</span> <span class="n">PEM_read_RSAPublicKey</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="n">PRIVATE_KEY</span><span class="p">)</span>
+</span><span class='line'>                <span class="n">key</span> <span class="o">=</span> <span class="n">PEM_read_RSAPrivateKey</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;failed to read key&quot;</span><span class="p">);</span>
+</span><span class='line'>                <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="n">key</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">free_rsa_key</span><span class="p">(</span><span class="n">RSA</span> <span class="o">*</span><span class="n">key</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>        <span class="n">RSA_free</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">generate_rsa_key_to_file</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>        <span class="n">RSA</span> <span class="o">*</span><span class="n">key</span> <span class="o">=</span> <span class="n">RSA_generate_key</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mi">65537</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">print_error</span><span class="p">(</span><span class="s">&quot;generate key&quot;</span><span class="p">,</span> <span class="n">ERR_get_error</span><span class="p">());</span>
+</span><span class='line'>                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">write_public_key</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span>
+</span><span class='line'>                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">write_private_key</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span>
+</span><span class='line'>                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">RSA_free</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>毎回ファイルを読まなければならない</p>
+
+<p>外部でグローバルの変数を用意しているところ</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">RSA</span> <span class="o">*</span><span class="n">my_private</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">RSA</span> <span class="o">*</span><span class="n">my_public</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">RSA</span> <span class="o">**</span><span class="n">publics</span><span class="p">;</span>
+</span><span class='line'>        <span class="kt">char</span> <span class="o">**</span><span class="n">key_ids</span><span class="p">;</span>
+</span><span class='line'>        <span class="kt">char</span> <span class="o">**</span><span class="n">key_path</span><span class="p">;</span>
+</span><span class='line'>        <span class="kt">size_t</span> <span class="n">n_public</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="n">KEYS</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">KEYS</span> <span class="n">keys</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1607,149 +1792,6 @@ gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;veri
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/master_report/blog/2012/05/17/5-dot-18fen-san-zemi/">5.18分散ゼミ</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-17T22:57:00+09:00" pubdate data-updated="true">May 17<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>gloox</h2>
-
-<p>c++で書かれたxmppライブラリ</p>
-
-<p>OpenPGPをサポートする</p>
-
-<p>しかし、keyの生成やkeyで暗号化や復号化などが自分で行わなければいけない</p>
-
-<h2>straceでgajimの動作を調べた</h2>
-
-<p>strace -f -F -o ~/gajim.txt gajim</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>3930  execve<span class="o">(</span><span class="s2">&quot;/bin/sh&quot;</span>, <span class="o">[</span><span class="s2">&quot;sh&quot;</span>, <span class="s2">&quot;-c&quot;</span>, <span class="s2">&quot;gpg -h &gt;/dev/null 2&gt;&amp;1&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> 0
-</span><span class='line'>3931  execve<span class="o">(</span><span class="s2">&quot;/usr/bin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;-h&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> 0
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>しかでない</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>3931  access<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/gpg.conf-1.4.10&quot;</span>, R_OK<span class="o">)</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
-</span><span class='line'>3931  access<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/gpg.conf-1.4&quot;</span>, R_OK<span class="o">)</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
-</span><span class='line'>3931  access<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/gpg.conf-1&quot;</span>, R_OK<span class="o">)</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
-</span><span class='line'>3931  access<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/gpg.conf&quot;</span>, R_OK<span class="o">)</span> <span class="o">=</span> 0
-</span><span class='line'>3931  access<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/options&quot;</span>, R_OK<span class="o">)</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
-</span><span class='line'>3931  stat64<span class="o">(</span><span class="s2">&quot;~/.gnupg&quot;</span>, 0xbfc3d1d0<span class="o">)</span>    <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
-</span><span class='line'>3931  stat64<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg/gpg.conf&quot;</span>, <span class="o">{</span><span class="nv">st_mode</span><span class="o">=</span>S_IFREG|0600, <span class="nv">st_size</span><span class="o">=</span>9364, ...<span class="o">})</span> <span class="o">=</span> 0
-</span><span class='line'>3931  stat64<span class="o">(</span><span class="s2">&quot;/home/kaku/.gnupg&quot;</span>, <span class="o">{</span><span class="nv">st_mode</span><span class="o">=</span>S_IFDIR|0700, <span class="nv">st_size</span><span class="o">=</span>4096, ...<span class="o">})</span> <span class="o">=</span> 0
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>gpg.confをアクセスしたので、そのファイルを開いてみると、</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>keyserver hkp://keys.gnupg.net
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>keysever：keyの交換を行うサーバー</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>gpg --send-key id
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>を実行すると、そのkeyをサーバーに送る</p>
-
-<h3>keyの生成が自分でやる必要があるらしいので、手動でkeyを生成</h3>
-
-<p>生成したとき、面白いものが出てきた</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>今から長い乱数を生成します。キーボードを打つとか、マウスを動かす
-</span><span class='line'>とか、ディスクにアクセスするとかの他のことをすると、乱数生成子で
-</span><span class='line'>乱雑さの大きないい乱数を生成しやすくなるので、お勧めいたします。
-</span><span class='line'>+++++++++++++++.++++++++++....++++++++++++++++++++.++++++++++++++++++++++++++++++++++++++++..++++++++++++++++++++++++++++++++++++++++.+++++&gt;.++++++++++...........+++++
-</span><span class='line'>十分な長さの乱数が得られません。OSがもっと乱雑さを収集
-</span><span class='line'>できるよう、何かしてください! <span class="o">(</span>あと282バイトいります<span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>最初はなかなか進まないが、裏でネットワークでファイルを送るとか、いろいろやるとうまく生成した</p>
-
-<p>gajimでgpg keyの選択のメニューが出てきた。</p>
-
-<p>keyの交換keyserverは自動的にやってくれると思ったが、うまく行かない</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>5607  execve<span class="o">(</span><span class="s2">&quot;/usr/local/sbin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;34&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--verify&quot;</span>, <span class="s2">&quot;--enable-special-filenames&quot;</span>, <span class="s2">&quot;-&quot;</span>, <span class="s2">&quot;-&amp;30&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
-</span><span class='line'>5607  execve<span class="o">(</span><span class="s2">&quot;/usr/local/bin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;34&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--verify&quot;</span>, <span class="s2">&quot;--enable-special-filenames&quot;</span>, <span class="s2">&quot;-&quot;</span>, <span class="s2">&quot;-&amp;30&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
-</span><span class='line'>5607  execve<span class="o">(</span><span class="s2">&quot;/usr/sbin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;34&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--verify&quot;</span>, <span class="s2">&quot;--enable-special-filenames&quot;</span>, <span class="s2">&quot;-&quot;</span>, <span class="s2">&quot;-&amp;30&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
-</span><span class='line'>5607  execve<span class="o">(</span><span class="s2">&quot;/usr/bin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;34&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--verify&quot;</span>, <span class="s2">&quot;--enable-special-filenames&quot;</span>, <span class="s2">&quot;-&quot;</span>, <span class="s2">&quot;-&amp;30&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> 0
-</span><span class='line'>5646  execve<span class="o">(</span><span class="s2">&quot;/usr/local/sbin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;35&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--use-agent&quot;</span>, <span class="s2">&quot;-b&quot;</span>, <span class="s2">&quot;-u 28893B08&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
-</span><span class='line'>5646  execve<span class="o">(</span><span class="s2">&quot;/usr/local/bin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;35&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--use-agent&quot;</span>, <span class="s2">&quot;-b&quot;</span>, <span class="s2">&quot;-u 28893B08&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
-</span><span class='line'>5646  execve<span class="o">(</span><span class="s2">&quot;/usr/sbin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;35&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--use-agent&quot;</span>, <span class="s2">&quot;-b&quot;</span>, <span class="s2">&quot;-u 28893B08&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
-</span><span class='line'>5646  execve<span class="o">(</span><span class="s2">&quot;/usr/bin/gpg&quot;</span>, <span class="o">[</span><span class="s2">&quot;gpg&quot;</span>, <span class="s2">&quot;--status-fd&quot;</span>, <span class="s2">&quot;35&quot;</span>, <span class="s2">&quot;--batch&quot;</span>, <span class="s2">&quot;--no-tty&quot;</span>, <span class="s2">&quot;--armor&quot;</span>, <span class="s2">&quot;--no-secmem-warning&quot;</span>, <span class="s2">&quot;--verify-options&quot;</span>, <span class="s2">&quot;no-show-photo&quot;</span>, <span class="s2">&quot;--use-agent&quot;</span>, <span class="s2">&quot;-b&quot;</span>, <span class="s2">&quot;-u 28893B08&quot;</span><span class="o">]</span>, <span class="o">[</span>/* 40 vars */<span class="o">])</span> <span class="o">=</span> 0
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>error</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>~<span class="nv">$ </span>strace -f -F -o ~/gajim2 gajim
-</span><span class='line'>gpg: decryption failed: secret key not available
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/master_report/blog/page/2/">&larr; Older</a>
@@ -1765,6 +1807,10 @@ gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;veri
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/master_report/blog/2012/09/24/an-hao-hua/">暗号化</a>
+      </li>
+    
+      <li class="post">
         <a href="/master_report/blog/2012/09/19/csseminafa-biao/">csセミナー発表</a>
       </li>
     
@@ -1778,10 +1824,6 @@ gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;veri
     
       <li class="post">
         <a href="/master_report/blog/2012/07/06/ctypesderaiburariwohu-bichu-su/">Ctypesでライブラリを呼び出す</a>
-      </li>
-    
-      <li class="post">
-        <a href="/master_report/blog/2012/06/28/javascriptkaraxpcomfalseguan-shu-wohu-bichu-su/">javascriptからXPCOMの関数を呼び出す</a>
       </li>
     
   </ul>
