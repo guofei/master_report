@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-01T16:17:06+09:00</updated>
+  <updated>2012-10-01T16:20:04+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -120,7 +120,7 @@
 </span><span class='line'>  <span class="nx">server</span><span class="p">.</span><span class="nx">friends</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connection&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">friend</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>    <span class="c1">//&quot;event&quot;イベントを作成</span>
 </span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">//全てのユーザに送信</span>
+</span><span class='line'>      <span class="c1">//全てのユーザに送信</span>
 </span><span class='line'>      <span class="nx">server</span><span class="p">.</span><span class="nx">friends</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;hello everyone&quot;</span><span class="p">);</span>
 </span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
 </span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
@@ -161,7 +161,7 @@
 </span><span class='line'>  <span class="nx">friend</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s2">&quot;client@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;client&quot;</span><span class="p">,</span> <span class="s2">&quot;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;app2&quot;</span><span class="p">,</span> <span class="s2">&quot;kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">);</span>
 </span><span class='line'>  <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connect&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;hello server 2&quot;</span><span class="p">);</span>
-</span><span class='line'>  <span class="c1">//close</span>
+</span><span class='line'>    <span class="c1">//close</span>
 </span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
 </span><span class='line'>  <span class="p">});</span>
 </span><span class='line'><span class="p">};</span>
@@ -174,7 +174,7 @@
 </span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
 </span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
 </span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>  <span class="c1">//接続が切れた時</span>
+</span><span class='line'>    <span class="c1">//接続が切れた時</span>
 </span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;disconnect&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;user disconnected&quot;</span><span class="p">);</span>
 </span><span class='line'>    <span class="p">});</span>
