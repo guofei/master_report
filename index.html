@@ -9,7 +9,7 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="Socket IOに似たようなAPIを書き換えた クライアントのイベント：connect サーバのイベント:connection,disconnect 複数のクライアントからの接続 1
+  <meta name="description" content="Socket IOに似たようなAPIを書き換えた socket io 1
 2
 3
 4
@@ -20,17 +20,7 @@
 9
 10
 11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22 &hellip;">
+var socket = io.connect(&#39;http://localhost&#39;); socket.on(&#39;news&#39;, function ( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -114,6 +104,35 @@
 
   <div class="entry-content"><h3>Socket IOに似たようなAPIを書き換えた</h3>
 
+<p>socket io</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nx">io</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s1">&#39;http://localhost&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;news&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;my other event&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">my</span><span class="o">:</span> <span class="s1">&#39;data&#39;</span> <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="nx">io</span><span class="p">.</span><span class="nx">sockets</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;connection&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">socket</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;news&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">hello</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span> <span class="p">});</span>
+</span><span class='line'>  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;my other event&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>friendsocket</p>
+
 <p>クライアントのイベント：connect</p>
 
 <p>サーバのイベント:connection,disconnect</p>
@@ -155,6 +174,7 @@
 <span class='line-number'>33</span>
 <span class='line-number'>34</span>
 <span class='line-number'>35</span>
+<span class='line-number'>36</span>
 </pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">client_test1_1</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'>  <span class="kd">var</span> <span class="nx">friend</span><span class="p">;</span>
 </span><span class='line'>  <span class="nx">friend</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s2">&quot;client@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;client&quot;</span><span class="p">,</span> <span class="s2">&quot;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;app1&quot;</span><span class="p">,</span> <span class="s2">&quot;kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">);</span>
@@ -178,13 +198,14 @@
 </span><span class='line'>  <span class="p">});</span>
 </span><span class='line'><span class="p">};</span>
 </span><span class='line'><span class="nx">server_test1</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">friends</span><span class="p">;</span>
-</span><span class='line'>  <span class="nx">friends</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="s2">&quot;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;server&quot;</span><span class="p">,</span> <span class="s2">&quot;app1&quot;</span><span class="p">,</span> <span class="s2">&quot;kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">);</span>
-</span><span class='line'>  <span class="nx">friends</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connection&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">friend</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">server</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">server</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="s2">&quot;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;server&quot;</span><span class="p">,</span> <span class="s2">&quot;app1&quot;</span><span class="p">,</span> <span class="s2">&quot;kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">//server.on(&quot;connection&quot;, function(friend)){}のほうが良い？？</span>
+</span><span class='line'>  <span class="nx">server</span><span class="p">.</span><span class="nx">friends</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connection&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">friend</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>    <span class="c1">//&quot;event&quot;イベントを作成</span>
 </span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>    <span class="c1">//全てのユーザに送信</span>
-</span><span class='line'>      <span class="nx">friends</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;hello everyone&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">server</span><span class="p">.</span><span class="nx">friends</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;hello everyone&quot;</span><span class="p">);</span>
 </span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
 </span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
 </span><span class='line'>    <span class="p">});</span>
@@ -219,7 +240,6 @@
 <span class='line-number'>22</span>
 <span class='line-number'>23</span>
 <span class='line-number'>24</span>
-<span class='line-number'>25</span>
 </pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">client_test2</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'>  <span class="kd">var</span> <span class="nx">friend</span><span class="p">;</span>
 </span><span class='line'>  <span class="nx">friend</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s2">&quot;client@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;client&quot;</span><span class="p">,</span> <span class="s2">&quot;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;app2&quot;</span><span class="p">,</span> <span class="s2">&quot;kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">);</span>
@@ -233,8 +253,7 @@
 </span><span class='line'><span class="nx">server_test2</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'>  <span class="kd">var</span> <span class="nx">server</span><span class="p">;</span>
 </span><span class='line'>  <span class="nx">server</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="s2">&quot;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;server&quot;</span><span class="p">,</span> <span class="s2">&quot;app2&quot;</span><span class="p">,</span> <span class="s2">&quot;kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">);</span>
-</span><span class='line'>  <span class="c1">//server.friends.on(&quot;connection&quot;, function(friend)){}のほうが良い？？</span>
-</span><span class='line'>  <span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connection&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">friend</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">server</span><span class="p">.</span><span class="nx">friends</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connection&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">friend</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
 </span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
@@ -260,7 +279,7 @@
 
 <p>username:client@kaku-desktop.softlab.cs.tsukuba.ac.jp password:client<br/>
 username:client2@&#8230;, password:client2<br/>
-username:server@&#8230;, password:client など</p>
+username:server@&#8230;, password:server など</p>
 
 <p>管理画面：
 http://kaku-desktop.softlab.cs.tsukuba.ac.jp:9090/</p>

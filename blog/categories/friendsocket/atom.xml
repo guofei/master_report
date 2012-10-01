@@ -4,7 +4,7 @@
   <title><![CDATA[Category: friendsocket | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/friendsocket/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-01T15:35:54+09:00</updated>
+  <updated>2012-10-01T16:17:06+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -19,6 +19,29 @@
     <updated>2012-10-01T14:16:00+09:00</updated>
     <id>http://guofei.github.com/master_report/blog/2012/10/01/friendsocket-apifalsexiu-zheng</id>
     <content type="html"><![CDATA[<h3>Socket IOに似たようなAPIを書き換えた</h3>
+
+<p>socket io
+```js
+var socket = io.connect('http://localhost');
+  socket.on('news', function (data) {</p>
+
+<pre><code>console.log(data);
+socket.emit('my other event', { my: 'data' });
+</code></pre>
+
+<p>});
+io.sockets.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {</p>
+
+<pre><code>console.log(data);
+</code></pre>
+
+<p>  });
+});
+```</p>
+
+<p>friendsocket</p>
 
 <p>クライアントのイベント：connect</p>
 
@@ -55,14 +78,15 @@ friend.on("all", function(m) {
 <p>  });
 };
 server_test1 = function() {
-  var friends;
-  friends = friendsocketio.listen("server@kaku-desktop.softlab.cs.tsukuba.ac.jp", "server", "app1", "kaku-desktop.softlab.cs.tsukuba.ac.jp");
-  friends.on("connection", function(friend) {</p>
+  var server;
+  server = friendsocketio.listen("server@kaku-desktop.softlab.cs.tsukuba.ac.jp", "server", "app1", "kaku-desktop.softlab.cs.tsukuba.ac.jp");
+  //server.on("connection", function(friend)){}のほうが良い？？
+  server.friends.on("connection", function(friend) {</p>
 
 <pre><code>//"event"イベントを作成
 friend.on("event", function(data, name) {
   //全てのユーザに送信
-  friends.emit("all", "hello everyone");
+  server.friends.emit("all", "hello everyone");
   alert(name);
   alert(data);
 });
@@ -90,8 +114,7 @@ friend.close();
 <p>server_test2 = function() {
   var server;
   server = friendsocketio.listen("server@kaku-desktop.softlab.cs.tsukuba.ac.jp", "server", "app2", "kaku-desktop.softlab.cs.tsukuba.ac.jp");
-  //server.friends.on("connection", function(friend)){}のほうが良い？？
-  server.on("connection", function(friend) {</p>
+  server.friends.on("connection", function(friend) {</p>
 
 <pre><code>friend.on("event", function(data, name) {
   alert(data);
@@ -119,7 +142,7 @@ friend.on("disconnect", function(m) {
 
 <p>username:client@kaku-desktop.softlab.cs.tsukuba.ac.jp password:client<br/>
 username:client2@..., password:client2<br/>
-username:server@..., password:client など</p>
+username:server@..., password:server など</p>
 
 <p>管理画面：
 http://kaku-desktop.softlab.cs.tsukuba.ac.jp:9090/</p>
