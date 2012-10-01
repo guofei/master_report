@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: friendsocket | Master Report]]></title>
+  <link href="http://guofei.github.com/master_report/blog/categories/friendsocket/atom.xml" rel="self"/>
+  <link href="http://guofei.github.com/master_report/"/>
+  <updated>2012-10-01T15:35:54+09:00</updated>
+  <id>http://guofei.github.com/master_report/</id>
+  <author>
+    <name><![CDATA[kaku]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Friendsocket APIの修正]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/10/01/friendsocket-apifalsexiu-zheng/"/>
+    <updated>2012-10-01T14:16:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/10/01/friendsocket-apifalsexiu-zheng</id>
+    <content type="html"><![CDATA[<h3>Socket IOに似たようなAPIを書き換えた</h3>
+
+<p>クライアントのイベント：connect</p>
+
+<p>サーバのイベント:connection,disconnect</p>
+
+<p>複数のクライアントからの接続
+```js
+client_test1_1 = function() {
+  var friend;
+  friend = friendsocketio.connect("client@kaku-desktop.softlab.cs.tsukuba.ac.jp", "client", "server@kaku-desktop.softlab.cs.tsukuba.ac.jp", "app1", "kaku-desktop.softlab.cs.tsukuba.ac.jp");
+  friend.on("connect", function(m) {</p>
+
+<pre><code>friend.on("all", function(m) {
+  alert(m);
+});
+friend.emit("event", "hello server 1");
+</code></pre>
+
+<p>  });
+};</p>
+
+<p>client_test1_2 = function() {
+  var friend;
+  friend = friendsocketio.connect("client2@kaku-desktop.softlab.cs.tsukuba.ac.jp", "client2", "server@kaku-desktop.softlab.cs.tsukuba.ac.jp", "app1", "kaku-desktop.softlab.cs.tsukuba.ac.jp");
+  //接続が行った時
+  friend.on("connect", function(m) {</p>
+
+<pre><code>//"all"イベントを作成
+friend.on("all", function(m) {
+  alert(m);
+});
+</code></pre>
+
+<p>  });
+};
+server_test1 = function() {
+  var friends;
+  friends = friendsocketio.listen("server@kaku-desktop.softlab.cs.tsukuba.ac.jp", "server", "app1", "kaku-desktop.softlab.cs.tsukuba.ac.jp");
+  friends.on("connection", function(friend) {</p>
+
+<pre><code>//"event"イベントを作成
+friend.on("event", function(data, name) {
+  //全てのユーザに送信
+  friends.emit("all", "hello everyone");
+  alert(name);
+  alert(data);
+});
+</code></pre>
+
+<p>  });
+};
+```</p>
+
+<p>複数のサーバを起動する
+```js
+client_test2 = function() {
+  var friend;
+  friend = friendsocketio.connect("client@kaku-desktop.softlab.cs.tsukuba.ac.jp", "client", "server@kaku-desktop.softlab.cs.tsukuba.ac.jp", "app2", "kaku-desktop.softlab.cs.tsukuba.ac.jp");
+  friend.on("connect", function(m) {</p>
+
+<pre><code>friend.emit("event", "hello server 2");
+//close
+friend.close();
+</code></pre>
+
+<p>  });
+};</p>
+
+<p>server_test2 = function() {
+  var server;
+  server = friendsocketio.listen("server@kaku-desktop.softlab.cs.tsukuba.ac.jp", "server", "app2", "kaku-desktop.softlab.cs.tsukuba.ac.jp");
+  //server.friends.on("connection", function(friend)){}のほうが良い？？
+  server.on("connection", function(friend) {</p>
+
+<pre><code>friend.on("event", function(data, name) {
+  alert(data);
+  alert(name);
+});
+//接続が切れた時
+friend.on("disconnect", function(m) {
+  alert("user disconnected");
+});
+</code></pre>
+
+<p>  });
+};
+```</p>
+
+<h3>環境</h3>
+
+<h4>firefox 3.6,xmpp4moz</h4>
+
+<p>voyagerの/Users/kaku/Public/firefox 3.6 linux mac xmpp4moz/</p>
+
+<h4>xmppサーバ</h4>
+
+<p>研究室の中しかアクセスできないxmppサーバをたてた。</p>
+
+<p>username:client@kaku-desktop.softlab.cs.tsukuba.ac.jp password:client<br/>
+username:client2@..., password:client2<br/>
+username:server@..., password:client など</p>
+
+<p>管理画面：
+http://kaku-desktop.softlab.cs.tsukuba.ac.jp:9090/</p>
+
+<p>ユーザ名：admin　パースワード:admin</p>
+]]></content>
+  </entry>
+  
+</feed>

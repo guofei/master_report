@@ -9,10 +9,28 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="javascriptでの暗号化 前は文字列を渡して暗号化を行う 1
+  <meta name="description" content="Socket IOに似たようなAPIを書き換えた クライアントのイベント：connect サーバのイベント:connection,disconnect 複数のクライアントからの接続 1
 2
-char* private_decrypt(const char *prikey, int key_len, const char *from, int from_len);
-char* public_encrypt( &hellip;">
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +83,195 @@ char* public_encrypt( &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/master_report/blog/2012/10/01/friendsocket-apifalsexiu-zheng/">Friendsocket APIの修正</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-01T14:16:00+09:00" pubdate data-updated="true">Oct 1<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Socket IOに似たようなAPIを書き換えた</h3>
+
+<p>クライアントのイベント：connect</p>
+
+<p>サーバのイベント:connection,disconnect</p>
+
+<p>複数のクライアントからの接続</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">client_test1_1</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">friend</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">friend</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s2">&quot;client@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;client&quot;</span><span class="p">,</span> <span class="s2">&quot;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;app1&quot;</span><span class="p">,</span> <span class="s2">&quot;kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connect&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;hello server 1&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">client_test1_2</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">friend</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">friend</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s2">&quot;client2@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;client2&quot;</span><span class="p">,</span> <span class="s2">&quot;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;app1&quot;</span><span class="p">,</span> <span class="s2">&quot;kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">//接続が行った時</span>
+</span><span class='line'>  <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connect&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">//&quot;all&quot;イベントを作成</span>
+</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="nx">m</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="nx">server_test1</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">friends</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">friends</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="s2">&quot;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;server&quot;</span><span class="p">,</span> <span class="s2">&quot;app1&quot;</span><span class="p">,</span> <span class="s2">&quot;kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">friends</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connection&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">friend</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">//&quot;event&quot;イベントを作成</span>
+</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">//全てのユーザに送信</span>
+</span><span class='line'>      <span class="nx">friends</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;hello everyone&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>複数のサーバを起動する</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">client_test2</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">friend</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">friend</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s2">&quot;client@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;client&quot;</span><span class="p">,</span> <span class="s2">&quot;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;app2&quot;</span><span class="p">,</span> <span class="s2">&quot;kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connect&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;hello server 2&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">//close</span>
+</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">server_test2</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">server</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">server</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="s2">&quot;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;server&quot;</span><span class="p">,</span> <span class="s2">&quot;app2&quot;</span><span class="p">,</span> <span class="s2">&quot;kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">//server.friends.on(&quot;connection&quot;, function(friend)){}のほうが良い？？</span>
+</span><span class='line'>  <span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connection&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">friend</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>  <span class="c1">//接続が切れた時</span>
+</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;disconnect&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;user disconnected&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>環境</h3>
+
+<h4>firefox 3.6,xmpp4moz</h4>
+
+<p>voyagerの/Users/kaku/Public/firefox 3.6 linux mac xmpp4moz/</p>
+
+<h4>xmppサーバ</h4>
+
+<p>研究室の中しかアクセスできないxmppサーバをたてた。</p>
+
+<p>username:client@kaku-desktop.softlab.cs.tsukuba.ac.jp password:client<br/>
+username:client2@&#8230;, password:client2<br/>
+username:server@&#8230;, password:client など</p>
+
+<p>管理画面：
+http://kaku-desktop.softlab.cs.tsukuba.ac.jp:9090/</p>
+
+<p>ユーザ名：admin　パースワード:admin</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1625,190 +1832,6 @@ NS_DECL_MYICALC: マクロ、myCalcクラスのメンバ<br/>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/master_report/blog/2012/05/24/5-dot-25fen-san-zemi/">5.25分散ゼミ</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-24T15:04:00+09:00" pubdate data-updated="true">May 24<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>pgp</h2>
-
-<p>$ gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;verify-options no-show-photo &#8211;use-agent -b -u 28893B0<br/>
-gpg: skipped &#8220;28893B0&#8221;: secret key not available<br/>
-gpg: signing failed: secret key not available<br/>
-$ gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;verify-options no-show-photo &#8211;use-agent -b -u 28893B08<br/>
-入力待ちの状態になった</p>
-
-<h3>public keyの交換</h3>
-
-<p>前回はaliceとbobobの二つの鍵を生成した<br/>
-alice.pub bobob.pub</p>
-
-<p>相手の公開鍵を登録<br/>
-gpg &#8211;import alice.pub<br/>
-gpg &#8211;import bobob.pub</p>
-
-<p>gpgの指紋を表示<br/>
-gpg &#8211;finggerprint</p>
-
-<p>gpg鍵署名<br/>
-gpg &#8211;lsign-key userid（Local 署名）<br/>
-gpg &#8211;sign-key userid（Exportable署名）</p>
-
-<p>信用データベースに登録<br/>
-gpg &#8211;edit-key userid</p>
-
-<p>gajimでpublic keyの表示が出来るので、public keyを選択</p>
-
-<h3>straceの結果</h3>
-
-<p>署名<br/>
-gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;verify-options no-show-photo -b -u 28893B08<br/>
-署名の検証<br/>
-gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;verify-options no-show-photo &#8211;verify &#8211;enable-special-filenames<br/>
-暗号化<br/>
-gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;recipient 6251A408 &#8211;no-secmem-warning &#8211;verify-options no-show-photo &#8211;encrypt<br/>
-復号化<br/>
-gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;verify-options no-show-photo &#8211;decrypt -q -u 28893B08</p>
-
-<h3>署名</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;presence</span> <span class="na">id=</span><span class="s">&quot;13&quot;</span> <span class="na">from=</span><span class="s">&quot;test0001@gmail.com/GajimF68D4BC1&quot;</span> <span class="na">to=</span><span class="s">&quot;test0001@gmail.com/GajimF68D4BC1&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;priority&gt;</span>50<span class="nt">&lt;/priority&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;c</span> <span class="na">node=</span><span class="s">&quot;http://gajim.org&quot;</span> <span class="na">ver=</span><span class="s">&quot;I8g2pphLu5w2XvNV8HDES9gqRaw=&quot;</span> <span class="na">hash=</span><span class="s">&quot;sha-1&quot;</span> <span class="na">xmlns=</span><span class="s">&quot;http://jabber.org/protocol/caps&quot;</span><span class="nt">/&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;x</span> <span class="na">xmlns=</span><span class="s">&quot;jabber:x:signed&quot;</span><span class="nt">&gt;</span>iJwEAAECAAYFAk+9738ACgkQUe7L3yiJOwhb/wP/a/9jfP0aSM0tp4QI/dGYuTqC
-</span><span class='line'>  　　0Wx1fh4oSROWIbj3vHLnjbMunEsZyei4mX+ctnMzQPiODwCg9rpe2v/gryTcSx88
-</span><span class='line'>  　　cIC1dsleD2AouUWspuMlOjJfyIkv9/VJuVwlTXTqKq7Kvf/x5+Enz51mzFBlNMNd
-</span><span class='line'>  　　+CUHr+/RuqJC8jWIQuc=
-</span><span class='line'>  　　=Pupl<span class="nt">&lt;/x&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;x</span> <span class="na">xmlns=</span><span class="s">&quot;vcard-temp:x:update&quot;</span><span class="nt">&gt;&lt;photo/&gt;&lt;/x&gt;</span>
-</span><span class='line'><span class="nt">&lt;/presence&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>暗号化と復号化</h3>
-
-<p>~$ gpg &#8211;fingerprint</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'>/home/kaku/.gnupg/pubring.gpg
-</span><span class='line'>-----------------------------
-</span><span class='line'>pub   1024R/28893B08 2012-05-17
-</span><span class='line'>      Key fingerprint = 3EDC 2B33 3648 6DDC 1CB9  84EF 51EE CBDF 2889 3B08
-</span><span class='line'>    uid                  alice (key) <span class="nt">&lt;alice</span><span class="err">@alice.com</span><span class="nt">&gt;</span>
-</span><span class='line'>    sub   1024R/B6EAAF3A 2012-05-17
-</span><span class='line'>
-</span><span class='line'>pub   1024R/6251A408 2012-05-09
-</span><span class='line'>      Key fingerprint = 301A A4C9 1E05 8612 B153  A8A0 677E 0B66 6251 A408
-</span><span class='line'>      uid                  bobob (key) <span class="nt">&lt;bob</span><span class="err">@bob.com</span><span class="nt">&gt;</span>
-</span><span class='line'>      sub   1024R/3D3B85EB 2012-05-09
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>$ gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;recipient 28893B08 &#8211;no-secmem-warning &#8211;verify-options no-show-photo &#8211;encrypt<br/>
-文字列を入力し、Ctrl+Dを入力する</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'>abc
-</span><span class='line'>-----BEGIN PGP MESSAGE-----
-</span><span class='line'>Version: GnuPG v1.4.10 (GNU/Linux)
-</span><span class='line'>
-</span><span class='line'>hIwDxfzxLrbqrzoBA/4xGWNSkVxs+SfEgU2iriS5fX//LrG0MqdN90JSumwB/PGs
-</span><span class='line'>6iRQZGzbr8a76s88gDOdiDHcQznWdMLDygpeDM/r7uEW1KdGFAmQ8StktxUGASig
-</span><span class='line'>iva3Ra4o4bS4Wj2wwH4dB3Nb3Sq3ePIx83SZ5ttct4o/D4BeRcYS3YAAVLYyAtI/
-</span><span class='line'>AQF5c/CoTQ0FXJFm7n9c+/Q5/z75qo17VlmWxK7OPzDL/IcfvHpEC2RAXObMlF2Y
-</span><span class='line'>5kKZBAk11BNHSlHoXaUh
-</span><span class='line'>=0Gdv
-</span><span class='line'>-----END PGP MESSAGE-----
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>$ gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;verify-options no-show-photo &#8211;decrypt -q -u B6EAAF3A<br/>
-暗号文を入力し、Ctrl+Dを入力する</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'>-----BEGIN PGP MESSAGE-----
-</span><span class='line'>Version: GnuPG v1.4.10 (GNU/Linux)
-</span><span class='line'>
-</span><span class='line'>hIwDxfzxLrbqrzoBA/4xGWNSkVxs+SfEgU2iriS5fX//LrG0MqdN90JSumwB/PGs
-</span><span class='line'>6iRQZGzbr8a76s88gDOdiDHcQznWdMLDygpeDM/r7uEW1KdGFAmQ8StktxUGASig
-</span><span class='line'>iva3Ra4o4bS4Wj2wwH4dB3Nb3Sq3ePIx83SZ5ttct4o/D4BeRcYS3YAAVLYyAtI/
-</span><span class='line'>AQF5c/CoTQ0FXJFm7n9c+/Q5/z75qo17VlmWxK7OPzDL/IcfvHpEC2RAXObMlF2Y
-</span><span class='line'>5kKZBAk11BNHSlHoXaUh
-</span><span class='line'>=0Gdv
-</span><span class='line'>-----END PGP MESSAGE-----
-</span><span class='line'>abc
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/master_report/blog/page/2/">&larr; Older</a>
@@ -1824,6 +1847,10 @@ gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;veri
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/master_report/blog/2012/10/01/friendsocket-apifalsexiu-zheng/">Friendsocket APIの修正</a>
+      </li>
+    
+      <li class="post">
         <a href="/master_report/blog/2012/09/24/an-hao-hua/">暗号化</a>
       </li>
     
@@ -1837,10 +1864,6 @@ gpg &#8211;batch &#8211;no-tty &#8211;armor &#8211;no-secmem-warning &#8211;veri
     
       <li class="post">
         <a href="/master_report/blog/2012/07/12/js-ctypes/">js ctypes</a>
-      </li>
-    
-      <li class="post">
-        <a href="/master_report/blog/2012/07/06/ctypesderaiburariwohu-bichu-su/">Ctypesでライブラリを呼び出す</a>
       </li>
     
   </ul>
