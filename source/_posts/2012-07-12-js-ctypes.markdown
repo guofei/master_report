@@ -1,0 +1,58 @@
+---
+layout: post
+title: "js ctypes"
+date: 2012-07-12 20:50
+comments: true
+categories: ctypes
+---
+### OpenSSLの本
+BIO部分：入出力の抽象化、暗号化や符号化,ファイルやネットワークといった入出力の詳細をアプリケーションから隠蔽する
+
+### Ctypes
+firefoxのdebugツールでエラーを見た
+var r = ctypes.open('/Users/kaku/ctypesrsa/components/libjsrsa.dylib');
+エラー: couldn't open library
+
+自分が書いたものが問題になるのかを確認するため、簡単なライブラリを書いた。
+
+mytest.h
+```
+#ifndef _MYTEST_H_
+#define _MYTEST_H_
+
+int my_add(int a, int b);
+
+#endif /* _MYTEST_H_ */
+```
+
+mytest.c
+```
+#include "mytest.h"
+
+int my_add(int a, int b)
+{
+        return a+b;
+}
+```
+```
+cc -dynamiclib mytest.c -o libmytest.dylib
+```
+
+macのgccは　llvm-gcc　なので、gccを入れて、もう一回コンパイルしたが、同じエラーになる。Xcodeでコンパイルしても、同じ
+```
+gcc-4.2 -dynamiclib mytest.c -o libmytest.dylib
+```
+
+このURLで[http://stackoverflow.com/questions/9348604/build-a-dll-to-be-used-by-mozilla-js-ctype](http://stackoverflow.com/questions/9348604/build-a-dll-to-be-used-by-mozilla-js-ctype)s同じような問題があった。windowsでライブラリを開く時、システムのライブラリだとうまく使えるが、自分が書いたライブラリは使えない。
+
+以下のコードを追加すると、うまく実行できたらしい。DLLMainはダイナミックリンクライブラリためのエントリーポイント。
+```
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
+{
+  return TRUE;
+}
+```
+
+Mac OS XでDLLMain見たいなものがないらしいので、やめた。Linuxで試して、うまく利用できた。
+
+今はライブラリを書いている。javascriptとCの間の型の変換の部分は少し複雑

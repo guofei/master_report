@@ -1,0 +1,99 @@
+---
+layout: post
+title: "暗号化"
+date: 2012-09-24 16:21
+comments: true
+categories: ctypes
+---
+### javascriptでの暗号化
+
+前は文字列を渡して暗号化を行う
+```c
+char* private_decrypt(const char *prikey, int key_len, const char *from, int from_len);
+char* public_encrypt(const char *pubkey, int key_len, const char *from, int from_len);
+```
+
+ファイル名を指定して、暗号化を行う。
+```c
+char* public_encrypt(const char *file, const char *from, int data_len);
+char* private_decrypt(const char *file, const char *from, int data_len);
+```
+
+```c
+typedef enum { PRIVATE_KEY , PUBLIC_KEY } KeyType;
+
+RSA *read_rsa_key_from_file(const char *file, KeyType type)
+{
+        FILE *fp = fopen(file, "r");
+        if(fp == NULL){
+                perror(file);
+                return NULL;
+        }
+
+        RSA *key;
+        if(type == PUBLIC_KEY)
+                key = PEM_read_RSAPublicKey(fp, NULL, NULL, NULL);
+        else if(type == PRIVATE_KEY)
+                key = PEM_read_RSAPrivateKey(fp, NULL, NULL, NULL);
+
+        fclose(fp);
+
+        if(key == NULL){
+                fprintf(stderr, "failed to read key");
+                return NULL;
+        }
+
+        return key;
+}
+
+void free_rsa_key(RSA *key)
+{
+        RSA_free(key);
+}
+
+int generate_rsa_key_to_file(const char *path, int size)
+{
+        RSA *key = RSA_generate_key(size, 65537, NULL, NULL);
+        if(key == NULL){
+                print_error("generate key", ERR_get_error());
+                return -1;
+        }
+
+        if(!write_public_key(path, key))
+                return -1;
+
+        if(!write_private_key(path, key))
+                return -1;
+
+        RSA_free(key);
+
+        return 0;
+}
+```
+
+毎回ファイルを読まなければならない
+
+外部でグローバルの変数を用意しているところ
+
+```c
+typedef struct {
+        RSA *my_private;
+        RSA *my_public;
+        RSA **publics;
+        char **key_ids;
+        char **key_path;
+        size_t n_public;
+}KEYS;
+
+KEYS keys;
+
+extern RSA *get_my_private_key(keys);
+extern RSA *get_my_public_key(keys);
+extern RSA *get_publib_key_from_id(char *id);
+```
+
+暗号化の手順は
+```c
+get_all_keys();
+public_encrypt(const char *key_id, const char *from, int data_len);
+```
