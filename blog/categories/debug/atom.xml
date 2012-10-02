@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: debug | Master Report]]></title>
+  <link href="http://guofei.github.com/master_report/blog/categories/debug/atom.xml" rel="self"/>
+  <link href="http://guofei.github.com/master_report/"/>
+  <updated>2012-10-02T10:58:43+09:00</updated>
+  <id>http://guofei.github.com/master_report/</id>
+  <author>
+    <name><![CDATA[kaku]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[plugin and addon debug]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/10/02/plugin-and-addon-debug/"/>
+    <updated>2012-10-02T10:52:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/10/02/plugin-and-addon-debug</id>
+    <content type="html"><![CDATA[<h3>gdbでpluginをdebug</h3>
+
+<ol>
+<li>chromeを立ち上げる時、/usr/bin/google-chrome --plugin-launcher='xterm -e gdb --args'</li>
+<li>pluginをロードするページを開く</li>
+<li>GDB付きのxterm windowが出てきて、そのwindowで.soのファイルをロードし、直接Debugできる。</li>
+</ol>
+
+
+<p>例：
+* /usr/bin/google-chrome --plugin-launcher='xterm -e gdb --args'
+* directory ~/path/to/npapi-sdk/samples/unix-basic/
+* breakpoint
+* start あるいは　run</p>
+
+<h3>chromebugでaddonをdebug</h3>
+
+<ol>
+<li>同じバージョンchromebug+firebugをインストール</li>
+<li>./firefox-bin –chromebugで実行すると、デバッグモードに入れる.(/Applications/Firefox 3.6.app/Contents/MacOS/firefox-bin)</li>
+<li>breakpointなどを設定できるし、マウスを変数名に指すと、値が出力してくれる。結構使いやすい</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

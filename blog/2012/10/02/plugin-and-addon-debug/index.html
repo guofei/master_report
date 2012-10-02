@@ -5,12 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>First blog - Master Report</title>
+  <title>plugin and addon debug - Master Report</title>
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="
-">
+  <meta name="description" content="gdbでpluginをdebug chromeを立ち上げる時、/usr/bin/google-chrome &#8211;plugin-launcher=&#8217;xterm -e gdb &#8211;args&#8217;
+pluginをロードするページを開く
+GDB付きのxterm &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://guofei.github.com/master_report/blog/2012/04/16/first-blog/">
+  <link rel="canonical" href="http://guofei.github.com/master_report/blog/2012/10/02/plugin-and-addon-debug/">
   <link href="/master_report/favicon.png" rel="icon">
   <link href="/master_report/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/master_report/javascripts/modernizr-2.0.js"></script>
@@ -66,7 +67,7 @@
   
   <header>
     
-      <h1 class="entry-title">First Blog</h1>
+      <h1 class="entry-title">Plugin and Addon Debug</h1>
     
     
       <p class="meta">
@@ -82,14 +83,36 @@
   
 
 
-<time datetime="2012-04-16T13:26:00+09:00" pubdate data-updated="true">Apr 16<span>th</span>, 2012</time>
+<time datetime="2012-10-02T10:52:00+09:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content">
+<div class="entry-content"><h3>gdbでpluginをdebug</h3>
+
+<ol>
+<li>chromeを立ち上げる時、/usr/bin/google-chrome &#8211;plugin-launcher=&#8217;xterm -e gdb &#8211;args&#8217;</li>
+<li>pluginをロードするページを開く</li>
+<li>GDB付きのxterm windowが出てきて、そのwindowで.soのファイルをロードし、直接Debugできる。</li>
+</ol>
+
+
+<p>例：
+* /usr/bin/google-chrome &#8211;plugin-launcher=&#8217;xterm -e gdb &#8211;args&#8217;
+* directory ~/path/to/npapi-sdk/samples/unix-basic/
+* breakpoint
+* start あるいは　run</p>
+
+<h3>chromebugでaddonをdebug</h3>
+
+<ol>
+<li>同じバージョンchromebug+firebugをインストール</li>
+<li>./firefox-bin –chromebugで実行すると、デバッグモードに入れる.(/Applications/Firefox 3.6.app/Contents/MacOS/firefox-bin)</li>
+<li>breakpointなどを設定できるし、マウスを変数名に指すと、値が出力してくれる。結構使いやすい</li>
+</ol>
+
 </div>
 
 
@@ -112,12 +135,12 @@
   
 
 
-<time datetime="2012-04-16T13:26:00+09:00" pubdate data-updated="true">Apr 16<span>th</span>, 2012</time>
+<time datetime="2012-10-02T10:52:00+09:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2012</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/master_report/blog/categories/blog/'>blog</a>
+    <a class='category' href='/master_report/blog/categories/debug/'>debug</a>
   
 </span>
 
@@ -126,7 +149,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://guofei.github.com/master_report/blog/2012/04/16/first-blog/" data-via="" data-counturl="http://guofei.github.com/master_report/blog/2012/04/16/first-blog/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://guofei.github.com/master_report/blog/2012/10/02/plugin-and-addon-debug/" data-via="" data-counturl="http://guofei.github.com/master_report/blog/2012/10/02/plugin-and-addon-debug/" >Tweet</a>
   
   
   
@@ -135,8 +158,8 @@
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/master_report/blog/2012/10/01/friendsocket-apifalsexiu-zheng/" title="Previous Post: Friendsocket APIの修正">&laquo; Friendsocket APIの修正</a>
       
-        <a class="basic-alignment right" href="/master_report/blog/2012/04/17/11-dot-4-20zemi/" title="Next Post: 12.4.20ゼミ">12.4.20ゼミ &raquo;</a>
       
     </p>
   </footer>

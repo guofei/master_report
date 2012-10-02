@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-01T16:30:17+09:00</updated>
+  <updated>2012-10-02T10:58:43+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -12,6 +12,37 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[plugin and addon debug]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/10/02/plugin-and-addon-debug/"/>
+    <updated>2012-10-02T10:52:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/10/02/plugin-and-addon-debug</id>
+    <content type="html"><![CDATA[<h3>gdbでpluginをdebug</h3>
+
+<ol>
+<li>chromeを立ち上げる時、/usr/bin/google-chrome &#8211;plugin-launcher=&#8217;xterm -e gdb &#8211;args&#8217;</li>
+<li>pluginをロードするページを開く</li>
+<li>GDB付きのxterm windowが出てきて、そのwindowで.soのファイルをロードし、直接Debugできる。</li>
+</ol>
+
+
+<p>例：
+* /usr/bin/google-chrome &#8211;plugin-launcher=&#8217;xterm -e gdb &#8211;args&#8217;
+* directory ~/path/to/npapi-sdk/samples/unix-basic/
+* breakpoint
+* start あるいは　run</p>
+
+<h3>chromebugでaddonをdebug</h3>
+
+<ol>
+<li>同じバージョンchromebug+firebugをインストール</li>
+<li>./firefox-bin –chromebugで実行すると、デバッグモードに入れる.(/Applications/Firefox 3.6.app/Contents/MacOS/firefox-bin)</li>
+<li>breakpointなどを設定できるし、マウスを変数名に指すと、値が出力してくれる。結構使いやすい</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Friendsocket APIの修正]]></title>
