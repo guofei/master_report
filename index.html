@@ -102,11 +102,18 @@ GDB付きのxterm &hellip;">
 </ol>
 
 
-<p>例：
-*   /usr/bin/google-chrome &#8211;plugin-launcher=&#8217;xterm -e gdb &#8211;args&#8217;
-*   directory ~/path/to/npapi-sdk/samples/unix-basic/
-*   breakpoint
-*   start あるいは　run</p>
+<p>例：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>/usr/bin/google-chrome --plugin-launcher<span class="o">=</span><span class="s1">&#39;xterm -e gdb --args&#39;</span>
+</span><span class='line'>directory ~/path/to/npapi-sdk/samples/unix-basic/
+</span><span class='line'>breakpoint
+</span><span class='line'>start あるいは　run
+</span></code></pre></td></tr></table></div></figure>
+
 
 <h3>chromebugでaddonをdebug</h3>
 
