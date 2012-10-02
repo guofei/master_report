@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-02T11:03:37+09:00</updated>
+  <updated>2012-10-02T11:05:03+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -28,10 +28,10 @@
 
 
 <p>例：
--  /usr/bin/google-chrome &#8211;plugin-launcher=&#8217;xterm -e gdb &#8211;args&#8217;
--  directory ~/path/to/npapi-sdk/samples/unix-basic/
--  breakpoint
--  start あるいは　run</p>
+*   /usr/bin/google-chrome &#8211;plugin-launcher=&#8217;xterm -e gdb &#8211;args&#8217;
+*   directory ~/path/to/npapi-sdk/samples/unix-basic/
+*   breakpoint
+*   start あるいは　run</p>
 
 <h3>chromebugでaddonをdebug</h3>
 

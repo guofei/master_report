@@ -4,7 +4,7 @@
   <title><![CDATA[Category: debug | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/debug/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-02T11:03:37+09:00</updated>
+  <updated>2012-10-02T11:05:03+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -28,10 +28,10 @@
 
 
 <p>例：
--  /usr/bin/google-chrome --plugin-launcher='xterm -e gdb --args'
--  directory ~/path/to/npapi-sdk/samples/unix-basic/
--  breakpoint
--  start あるいは　run</p>
+*   /usr/bin/google-chrome --plugin-launcher='xterm -e gdb --args'
+*   directory ~/path/to/npapi-sdk/samples/unix-basic/
+*   breakpoint
+*   start あるいは　run</p>
 
 <h3>chromebugでaddonをdebug</h3>
 
