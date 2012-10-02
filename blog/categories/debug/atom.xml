@@ -4,7 +4,7 @@
   <title><![CDATA[Category: debug | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/debug/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-03T01:42:29+09:00</updated>
+  <updated>2012-10-03T01:43:26+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -21,10 +21,11 @@
     <content type="html"><![CDATA[<h3>gdbでpluginをdebug</h3>
 
 <ol>
-<li><p>chromeを立ち上げる時、</p>
-
-<p>/usr/bin/google-chrome --plugin-launcher='xterm -e gdb --args'</p></li>
-<li><p>pluginをロードするページを開く</p></li>
+<li>chromeを立ち上げる時、
+<code>sh
+/usr/bin/google-chrome --plugin-launcher='xterm -e gdb --args'
+</code></li>
+<li>pluginをロードするページを開く</li>
 <li>GDB付きのxterm windowが出てきて、そのwindowで.soのファイルをロードし、直接Debugできる。</li>
 </ol>
 

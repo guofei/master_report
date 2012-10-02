@@ -9,9 +9,9 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="gdbでpluginをdebug chromeを立ち上げる時、 /usr/bin/google-chrome &#8211;plugin-launcher=&#8217;xterm -e gdb &#8211;args&#8217;
-pluginをロードするページを開く
-GDB付きのxterm &hellip;">
+  <meta name="description" content="gdbでpluginをdebug chromeを立ち上げる時、 1
+/usr/bin/google-chrome --plugin-launcher=&#39;xterm -e gdb --args&#39; pluginをロードするページを開く
+GDB付きのxterm windowが出てきて、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -96,10 +96,17 @@ GDB付きのxterm &hellip;">
   <div class="entry-content"><h3>gdbでpluginをdebug</h3>
 
 <ol>
-<li><p>chromeを立ち上げる時、</p>
+<li>chromeを立ち上げる時、</li>
+</ol>
 
-<p>/usr/bin/google-chrome &#8211;plugin-launcher=&#8217;xterm -e gdb &#8211;args&#8217;</p></li>
-<li><p>pluginをロードするページを開く</p></li>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>/usr/bin/google-chrome --plugin-launcher<span class="o">=</span><span class="s1">&#39;xterm -e gdb --args&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>pluginをロードするページを開く</li>
 <li>GDB付きのxterm windowが出てきて、そのwindowで.soのファイルをロードし、直接Debugできる。</li>
 </ol>
 
