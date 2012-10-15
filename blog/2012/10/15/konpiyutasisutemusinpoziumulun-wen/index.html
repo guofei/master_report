@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>コンピュータシステムシンポジウム論文 - Master Report</title>
+  <meta name="author" content="kaku">
+
+  
+  <meta name="description" content="論文 ７ページ書いた はじ
+現在の分散型ブラウザの通信機能と問題点
+複数の IMS や SNS の利用
+FriendSocket
+グループ通信を実現する通信ミドル
+協調動画視聴アプリケーション
+実 装
+関連研究
+おわりに Friendsocket API サーバ側にクリックすると、 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://guofei.github.com/master_report/blog/2012/10/15/konpiyutasisutemusinpoziumulun-wen/">
+  <link href="/master_report/favicon.png" rel="icon">
+  <link href="/master_report/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/master_report/javascripts/modernizr-2.0.js"></script>
+  <script src="/master_report/javascripts/ender.js"></script>
+  <script src="/master_report/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/master_report/atom.xml" rel="alternate" title="Master Report" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/master_report/">Master Report</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/master_report/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:guofei.github.com/master_report" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/master_report/">Blog</a></li>
+  <li><a href="/master_report/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">コンピュータシステムシンポジウム論文</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-15T02:08:00+09:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h3>論文</h3>
+
+<p>７ページ書いた</p>
+
+<ol>
+<li>はじ</li>
+<li>現在の分散型ブラウザの通信機能と問題点</li>
+<li>複数の IMS や SNS の利用</li>
+<li>FriendSocket</li>
+<li>グループ通信を実現する通信ミドル</li>
+<li>協調動画視聴アプリケーション</li>
+<li>実 装</li>
+<li>関連研究</li>
+<li>おわりに</li>
+</ol>
+
+
+<h3>Friendsocket API</h3>
+
+<p>サーバ側にクリックすると、クライアントに一括送信するプログラム</p>
+
+<p>クライアント</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">client</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">friend</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">friend</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="nx">peername</span><span class="p">,</span> <span class="nx">appname</span><span class="p">,</span> <span class="nx">host</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connect&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                  <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;clicked&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                                <span class="nx">do_something</span><span class="p">(</span><span class="nx">m</span><span class="p">);</span>
+</span><span class='line'>                            <span class="p">});</span>
+</span><span class='line'>              <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="nx">client</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>サーバ</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">friend_list</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">List</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">s</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">s</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="nx">appname</span><span class="p">,</span> <span class="nx">host</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">s</span><span class="p">.</span><span class="nx">friends</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connection&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">friend</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                          <span class="k">if</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">contactlist</span><span class="p">.</span><span class="nx">contains</span><span class="p">(</span><span class="nx">friend</span><span class="p">.</span><span class="nx">name</span><span class="p">))</span>
+</span><span class='line'>                              <span class="nx">friend_list</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">friend</span><span class="p">);</span>
+</span><span class='line'>                 <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">sendMsg</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">friend</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">friend_list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">friend</span> <span class="o">=</span> <span class="nx">friend_list</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</span><span class='line'>        <span class="nx">friend</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;clicked&quot;</span><span class="p">,</span> <span class="s2">&quot;clicked&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">el</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;Click&quot;</span><span class="p">,</span> <span class="nx">sendMsg</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+</span><span class='line'><span class="nx">server</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>ほかの人から聞かれた問題</h3>
+
+<p>XMPPの通信路を利用するらな、XMPPの中央サーバを利用しなければならない。前に話した中央を利用しないことと矛盾になる？</p>
+
+<h3>来週</h3>
+
+<p>22日面接がある。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">kaku</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-15T02:08:00+09:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/master_report/blog/categories/論文/'>論文</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://guofei.github.com/master_report/blog/2012/10/15/konpiyutasisutemusinpoziumulun-wen/" data-via="" data-counturl="http://guofei.github.com/master_report/blog/2012/10/15/konpiyutasisutemusinpoziumulun-wen/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/master_report/blog/2012/10/02/plugin-and-addon-debug/" title="Previous Post: plugin and addon debug">&laquo; plugin and addon debug</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/10/15/konpiyutasisutemusinpoziumulun-wen/">コンピュータシステムシンポジウム論文</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/10/02/plugin-and-addon-debug/">plugin and addon debug</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/10/01/friendsocket-apifalsexiu-zheng/">Friendsocket APIの修正</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/09/24/an-hao-hua/">暗号化</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/09/19/csseminafa-biao/">csセミナー発表</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - kaku -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

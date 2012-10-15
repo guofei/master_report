@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-03T01:43:26+09:00</updated>
+  <updated>2012-10-15T15:04:35+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -12,6 +12,110 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[コンピュータシステムシンポジウム論文]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/10/15/konpiyutasisutemusinpoziumulun-wen/"/>
+    <updated>2012-10-15T02:08:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/10/15/konpiyutasisutemusinpoziumulun-wen</id>
+    <content type="html"><![CDATA[<h3>論文</h3>
+
+<p>７ページ書いた</p>
+
+<ol>
+<li>はじ</li>
+<li>現在の分散型ブラウザの通信機能と問題点</li>
+<li>複数の IMS や SNS の利用</li>
+<li>FriendSocket</li>
+<li>グループ通信を実現する通信ミドル</li>
+<li>協調動画視聴アプリケーション</li>
+<li>実 装</li>
+<li>関連研究</li>
+<li>おわりに</li>
+</ol>
+
+
+<h3>Friendsocket API</h3>
+
+<p>サーバ側にクリックすると、クライアントに一括送信するプログラム</p>
+
+<p>クライアント</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">client</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">friend</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">friend</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="nx">peername</span><span class="p">,</span> <span class="nx">appname</span><span class="p">,</span> <span class="nx">host</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connect&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                  <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;clicked&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                                <span class="nx">do_something</span><span class="p">(</span><span class="nx">m</span><span class="p">);</span>
+</span><span class='line'>                            <span class="p">});</span>
+</span><span class='line'>              <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="nx">client</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>サーバ</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">friend_list</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">List</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">s</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">s</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="nx">appname</span><span class="p">,</span> <span class="nx">host</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">s</span><span class="p">.</span><span class="nx">friends</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connection&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">friend</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                          <span class="k">if</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">contactlist</span><span class="p">.</span><span class="nx">contains</span><span class="p">(</span><span class="nx">friend</span><span class="p">.</span><span class="nx">name</span><span class="p">))</span>
+</span><span class='line'>                              <span class="nx">friend_list</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">friend</span><span class="p">);</span>
+</span><span class='line'>                 <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">sendMsg</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">friend</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">friend_list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">friend</span> <span class="o">=</span> <span class="nx">friend_list</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</span><span class='line'>        <span class="nx">friend</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;clicked&quot;</span><span class="p">,</span> <span class="s2">&quot;clicked&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">el</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;Click&quot;</span><span class="p">,</span> <span class="nx">sendMsg</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+</span><span class='line'><span class="nx">server</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>ほかの人から聞かれた問題</h3>
+
+<p>XMPPの通信路を利用するらな、XMPPの中央サーバを利用しなければならない。前に話した中央を利用しないことと矛盾になる？</p>
+
+<h3>来週</h3>
+
+<p>22日面接がある。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[plugin and addon debug]]></title>

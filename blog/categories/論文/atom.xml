@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 論文 | Master Report]]></title>
+  <link href="http://guofei.github.com/master_report/blog/categories/論文/atom.xml" rel="self"/>
+  <link href="http://guofei.github.com/master_report/"/>
+  <updated>2012-10-15T15:04:35+09:00</updated>
+  <id>http://guofei.github.com/master_report/</id>
+  <author>
+    <name><![CDATA[kaku]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[コンピュータシステムシンポジウム論文]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/10/15/konpiyutasisutemusinpoziumulun-wen/"/>
+    <updated>2012-10-15T02:08:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/10/15/konpiyutasisutemusinpoziumulun-wen</id>
+    <content type="html"><![CDATA[<h3>論文</h3>
+
+<p>７ページ書いた</p>
+
+<ol>
+<li>はじ</li>
+<li>現在の分散型ブラウザの通信機能と問題点</li>
+<li>複数の IMS や SNS の利用</li>
+<li>FriendSocket</li>
+<li>グループ通信を実現する通信ミドル</li>
+<li>協調動画視聴アプリケーション</li>
+<li>実 装</li>
+<li>関連研究</li>
+<li>おわりに</li>
+</ol>
+
+
+<h3>Friendsocket API</h3>
+
+<p>サーバ側にクリックすると、クライアントに一括送信するプログラム</p>
+
+<p>クライアント
+```js
+var client = function() {</p>
+
+<pre><code>var friend;
+friend = friendsocketio.connect(name, password, peername, appname, host);
+friend.on("connect", function(m) {
+              friend.on("clicked", function(m) {
+                            do_something(m);
+                        });
+          });
+</code></pre>
+
+<p>};
+client();
+```</p>
+
+<p>サーバ
+```js
+var friend_list = new List();
+var server = function() {</p>
+
+<pre><code>var s;
+s = friendsocketio.listen(name, password, appname, host);
+s.friends.on("connection", function(friend) {
+                      if(s.contactlist.contains(friend.name))
+                          friend_list.push(friend);
+             });
+</code></pre>
+
+<p>};
+function sendMsg() {</p>
+
+<pre><code>var friend, i, len;
+for (i = 0, len = friend_list.length; i &lt; len; i++) {
+    friend = friend_list[i];
+    friend.emit("clicked", "clicked");
+}
+</code></pre>
+
+<p>}
+var el = document.getElementById("id");
+el.addEventListener("Click", sendMsg, false);
+server();
+```</p>
+
+<h3>ほかの人から聞かれた問題</h3>
+
+<p>XMPPの通信路を利用するらな、XMPPの中央サーバを利用しなければならない。前に話した中央を利用しないことと矛盾になる？</p>
+
+<h3>来週</h3>
+
+<p>22日面接がある。</p>
+]]></content>
+  </entry>
+  
+</feed>
