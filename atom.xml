@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-15T15:04:35+09:00</updated>
+  <updated>2012-10-15T16:16:08+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -23,11 +23,11 @@
 <p>７ページ書いた</p>
 
 <ol>
-<li>はじ</li>
+<li>はじめに</li>
 <li>現在の分散型ブラウザの通信機能と問題点</li>
 <li>複数の IMS や SNS の利用</li>
 <li>FriendSocket</li>
-<li>グループ通信を実現する通信ミドル</li>
+<li>グループ通信を実現するミドルウェア</li>
 <li>協調動画視聴アプリケーション</li>
 <li>実 装</li>
 <li>関連研究</li>
