@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 論文 | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/論文/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-15T18:40:49+09:00</updated>
+  <updated>2012-10-23T16:03:14+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -12,6 +12,82 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[OS研究会論文]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/10/23/osyan-jiu-hui-lun-wen/"/>
+    <updated>2012-10-23T13:32:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/10/23/osyan-jiu-hui-lun-wen</id>
+    <content type="html"><![CDATA[<h3>面接</h3>
+
+<p>難しかった</p>
+
+<p>日本でどのぐらい働きたいと聞かれて、５年ぐらいと答えると、５年間でせっかく人材として育ったのに、会社をやめるのはよくない</p>
+
+<p>分散OSの話もあって、自分は分散OSが難しいですと話したら、どこが難しいと聞かれた。</p>
+
+<h3>論文</h3>
+
+<p>９章＝＞７章</p>
+
+<p>元の画像は見づらいので、ソースコードを画像からテキストに変えた<br/>
+実装をそれぞれの章に入れた</p>
+
+<p>これからやるところ：<br/>
+関連研究のところにBrowser DBusを追加<br/>
+暗号化の部分を追加<br/>
+動画アプリケーションの話</p>
+
+<h3>暗号化</h3>
+
+<p>鍵を読み込む時、パスフレーズの取得方法がわからない
+```c
+int PEM_write_RSAPrivateKey(FILE <em>fp, RSA </em>x,</p>
+
+<pre><code>                        const EVP_CIPHER *enc, //暗号化アルゴリズム
+                        unsigned char *kstr, int klen, //パスフレーズと長さ
+                        pem_password_cb *cb, void *u); //callback
+</code></pre>
+
+<p>PEM_write_RSAPrivateKey(seckey, key, EVP_des_ede3_cbc(), "12345678", 8, NULL, NULL);
+PEM_write_RSAPrivateKey(seckey, key, EVP_des_ede3_cbc(), NULL, 0, pass_cb, "My Private Key");
+下のような鍵が生成される
+-----BEGIN RSA PRIVATE KEY-----
+Proc-Type: 4,ENCRYPTED
+DEK-Info: DES-EDE3-CBC,81CB5FEC487EB67F
+Ux3JFs0KSohF1GYs0rJ2VtQ+s5pjXJVsjPktIh9PzU+XLTAEOWdyWR/3fE5+hgZK
+......
+EUPfsZzEF2no/EMs6aCj5AdpJQu0PgHPU4oZmjTW0LU=
+-----END RSA PRIVATE KEY-----
+```</p>
+
+<p><code>c
+RSA *PEM_read_RSAPublicKey(FILE *fp, RSA **x, pem_password_cb *cb, void *u);
+</code></p>
+
+<p>```c
+int pass_cb(char <em>buf, int size, int rwflag, void </em>u);
+{</p>
+
+<pre><code>    int len;
+    char *tmp;
+    /* We'd probably do something else if 'rwflag' is 1 */
+    printf("Enter pass phrase for \"%s\"\n", u);
+    /* get pass phrase, length 'len' into 'tmp' */
+    tmp = "hello";
+    len = strlen(tmp);
+    if (len &lt;= 0) return 0;
+    /* if too long, truncate */
+    if (len &gt; size) len = size;
+    memcpy(buf, tmp, len);
+    return len;
+</code></pre>
+
+<p>}
+key = PEM_read_RSAPrivateKey(fp, NULL, pass_cb, "My Private Key");
+```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[コンピュータシステムシンポジウム論文]]></title>

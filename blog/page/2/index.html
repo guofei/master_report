@@ -9,10 +9,7 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="インターンシップ 東京のあるiOSゲーム開発の会社のインターンシップに参加した OpenSSL 1
-2
-char* public_encrypt(const unsigned char *pubkey, const unsigned char *from);
-char* &hellip;">
+  <meta name="description" content="SkypeKit xpcomをコンパイルするとき、色々なところで詰まったので、skypekitについて調べた SkypeKitは、Skypeデスクトップアプリケーションがなくても機能する。 SkypeKitは、ユーザに何も表示せず実行される、Skypeの「ヘッドレス」バージョンと考えられる。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +62,248 @@ char* &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/master_report/blog/2012/06/21/skypekit-to-xpcomdefalsean-hao-hua-kuo-zhang-ji-neng/">Skypekit と Xpcomでの暗号化拡張機能</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-21T22:35:00+09:00" pubdate data-updated="true">Jun 21<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>SkypeKit</h3>
+
+<p>xpcomをコンパイルするとき、色々なところで詰まったので、skypekitについて調べた</p>
+
+<p>SkypeKitは、Skypeデスクトップアプリケーションがなくても機能する。 SkypeKitは、ユーザに何も表示せず実行される、Skypeの「ヘッドレス」バージョンと考えられる。前のSkype Public APIは今後改善されることはないが、維持管理は行われている。</p>
+
+<p>現在ではC++,Java,.net,Pythonのライブラリを提供している。ライブラリをダウンロードするとき、お金の支払う要求が来たので、やめた。検索すると、C,Ruby版のものが公開している。</p>
+
+<p>ruby https://github.com/railsware/skypekit<br/>
+C https://github.com/railsware/libskypekit</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>require "skypekit"
+</span><span class='line'>$skype = Skypekit::Skype.new(:keyfile =&gt; ENV['SK_KEY'])
+</span><span class='line'>$skype.start
+</span><span class='line'>$skype.login(ENV['SK_USER'], ENV['SK_PASS'])
+</span><span class='line'>loop do
+</span><span class='line'>  event = $skype.get_event
+</span><span class='line'>  unless event
+</span><span class='line'>    sleep 5
+</span><span class='line'>    next
+</span><span class='line'>  end
+</span><span class='line'>  case event.type
+</span><span class='line'>  when :account_status
+</span><span class='line'>    if event.data.logged_in?
+</span><span class='line'>      puts "Congrats! We are Logged in!"
+</span><span class='line'>    end
+</span><span class='line'>    if event.data.logged_out?
+</span><span class='line'>      puts "Authentication failed: #{event.data.reason}"
+</span><span class='line'>    end
+</span><span class='line'>  when :chat_message
+</span><span class='line'>    message = event.data
+</span><span class='line'>    p message
+</span><span class='line'>    if message.body == "ping"
+</span><span class='line'>      $skype.send_chat_message(message.convo_id, "pong")
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>app2appなどの機能もあるが、ruby版は実装していない。C++のサンプルコードをネットで見つけた</p>
+
+<figure class='code'><figcaption><span>write</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="kt">bool</span>      <span class="n">cmdResult</span><span class="p">;</span>
+</span><span class='line'><span class="n">SEString</span>  <span class="n">appName</span> <span class="o">=</span> <span class="s">&quot;TestApp1&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="n">SEString</span>  <span class="n">streamName</span><span class="p">;</span>
+</span><span class='line'><span class="kt">char</span>      <span class="n">buffer</span><span class="p">[</span><span class="mi">32</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">];</span>
+</span><span class='line'><span class="n">uint</span>      <span class="n">bufSize</span> <span class="o">=</span> <span class="mi">32</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">;</span>
+</span><span class='line'><span class="n">SEBinary</span> <span class="n">writeBuffer</span><span class="p">;</span>
+</span><span class='line'><span class="n">writeBuffer</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">,</span> <span class="n">bufSize</span><span class="p">);</span>
+</span><span class='line'><span class="n">skype</span><span class="o">-&gt;</span><span class="n">App2AppWrite</span><span class="p">(</span><span class="n">appName</span><span class="p">,</span> <span class="n">streamName</span><span class="p">,</span> <span class="n">writeBuffer</span><span class="p">,</span> <span class="n">cmdResult</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>read</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="kt">void</span> <span class="n">MySkype</span><span class="o">::</span><span class="n">OnApp2AppStreamListChange</span> <span class="p">(</span>
+</span><span class='line'>        <span class="k">const</span> <span class="n">Sid</span><span class="o">::</span><span class="n">String</span> <span class="o">&amp;</span><span class="n">appname</span><span class="p">,</span>
+</span><span class='line'>        <span class="k">const</span> <span class="n">APP2APP_STREAMS</span> <span class="o">&amp;</span><span class="n">listType</span><span class="p">,</span>
+</span><span class='line'>        <span class="k">const</span> <span class="n">Sid</span><span class="o">::</span><span class="n">List_String</span> <span class="o">&amp;</span><span class="n">streams</span><span class="p">,</span>
+</span><span class='line'>        <span class="k">const</span> <span class="n">Sid</span><span class="o">::</span><span class="n">List_uint</span> <span class="o">&amp;</span><span class="n">receivedSizes</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">streams</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>                <span class="k">for</span> <span class="p">(</span><span class="n">uint</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">I</span> <span class="o">&lt;</span> <span class="n">streams</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">{</span>
+</span><span class='line'>                        <span class="k">if</span> <span class="p">(</span><span class="n">listType</span> <span class="o">==</span> <span class="n">Skype</span><span class="o">::</span><span class="n">RECEIVED_STREAMS</span><span class="p">)</span>
+</span><span class='line'>                        <span class="p">{</span>
+</span><span class='line'>                                <span class="kt">bool</span>      <span class="n">readOk</span><span class="p">;</span>
+</span><span class='line'>                                <span class="n">SEBinary</span>  <span class="n">buffer</span><span class="p">;</span>
+</span><span class='line'>                                <span class="n">App2AppRead</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span> <span class="n">streams</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">readOk</span><span class="p">,</span> <span class="n">buffer</span><span class="p">);</span>
+</span><span class='line'>                        <span class="p">};</span>
+</span><span class='line'>                <span class="p">};</span>
+</span><span class='line'>        <span class="p">};</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>XPCOM</h3>
+
+<p>前回はコンパイルするとき、ld: symbol(s) not found for architecture x86_64のところで詰まった。ar x libxpcomglue.aでやって、file *.oで.oファイルを調べた</p>
+
+<figure class='code'><figcaption><span>read</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="err">$</span> <span class="n">file</span> <span class="o">*</span><span class="p">.</span><span class="n">o</span>
+</span><span class='line'><span class="n">nsArrayEnumerator</span><span class="p">.</span><span class="nl">o:</span>            <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsArrayUtils</span><span class="p">.</span><span class="nl">o:</span>                 <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsCOMArray</span><span class="p">.</span><span class="nl">o:</span>                   <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsCOMPtr</span><span class="p">.</span><span class="nl">o:</span>                     <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsCRTGlue</span><span class="p">.</span><span class="nl">o:</span>                    <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsCategoryCache</span><span class="p">.</span><span class="nl">o:</span>              <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsClassInfoImpl</span><span class="p">.</span><span class="nl">o:</span>              <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsComponentManagerUtils</span><span class="p">.</span><span class="nl">o:</span>      <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsCycleCollectionParticipant</span><span class="p">.</span><span class="nl">o:</span> <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsCycleCollectorUtils</span><span class="p">.</span><span class="nl">o:</span>        <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsDeque</span><span class="p">.</span><span class="nl">o:</span>                      <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsEnumeratorUtils</span><span class="p">.</span><span class="nl">o:</span>            <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsGlueLinkingOSX</span><span class="p">.</span><span class="nl">o:</span>             <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsID</span><span class="p">.</span><span class="nl">o:</span>                         <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="n">nsIInterfaceRequestorUtils</span><span class="p">.</span><span class="nl">o:</span>   <span class="n">Mach</span><span class="o">-</span><span class="n">O</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">object</span> <span class="n">x86_64</span>
+</span><span class='line'><span class="err">。。。</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>全部x86_64のものである。色々調べたて、試したがうまく修正できない。BITTINESSを３２にしてコンパイルできる原因もわからないので、ずっとその辺で悩んでいた。</p>
+
+<p>sdkの中にはいたら、libxpcomglue_s.aというライブラリがあって、ar xで.oファイルをGenericModule.oなどのファイルが取得した。前の64bitたけでコンパイルする時のエラは</p>
+
+<figure class='code'><figcaption><span>read</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">Undefined</span> <span class="n">symbols</span> <span class="k">for</span> <span class="n">architecture</span> <span class="nl">x86_64:</span>
+</span><span class='line'> <span class="s">&quot;vtable for mozilla::GenericModule&quot;</span><span class="p">,</span> <span class="n">referenced</span> <span class="nl">from:</span>
+</span><span class='line'>   <span class="n">mozilla</span><span class="o">::</span><span class="n">GenericModule</span><span class="o">::</span><span class="n">GenericModule</span><span class="p">(</span><span class="n">mozilla</span><span class="o">::</span><span class="n">Module</span> <span class="k">const</span><span class="o">*</span><span class="p">)</span><span class="n">in</span> <span class="n">crypt_module</span><span class="p">.</span><span class="n">o</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Makefileを修正して、sがついているライブラリをつかうと、新しいエラが出た。</p>
+
+<figure class='code'><figcaption><span>read</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">Undefined</span> <span class="n">symbols</span> <span class="k">for</span> <span class="n">architecture</span> <span class="nl">x86_64:</span>
+</span><span class='line'>  <span class="s">&quot;_moz_xmalloc&quot;</span><span class="p">,</span> <span class="n">referenced</span> <span class="nl">from:</span>
+</span><span class='line'>    <span class="n">mozilla</span><span class="o">::</span><span class="n">GenericModule</span><span class="o">::</span><span class="n">GetClassObject</span><span class="p">(</span><span class="n">nsIComponentManager</span><span class="o">*</span><span class="p">,</span> <span class="n">nsID</span> <span class="k">const</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">nsID</span> <span class="k">const</span><span class="o">&amp;</span><span class="p">,</span> <span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="n">in</span> <span class="n">libxpcomglue_s</span><span class="p">.</span><span class="n">a</span><span class="p">(</span><span class="n">GenericModule</span><span class="p">.</span><span class="n">o</span><span class="p">)</span>
+</span><span class='line'>  <span class="s">&quot;_moz_free&quot;</span><span class="p">,</span> <span class="n">referenced</span> <span class="nl">from:</span>
+</span><span class='line'>    <span class="n">mozilla</span><span class="o">::</span><span class="n">GenericModule</span><span class="o">::</span><span class="n">Release</span><span class="p">()</span>     <span class="n">in</span> <span class="n">libxpcomglue_s</span><span class="p">.</span><span class="n">a</span><span class="p">(</span><span class="n">GenericModule</span><span class="p">.</span><span class="n">o</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">mozilla</span><span class="o">::</span><span class="n">GenericFactory</span><span class="o">::</span><span class="n">Release</span><span class="p">()</span>     <span class="n">in</span> <span class="n">libxpcomglue_s</span><span class="p">.</span><span class="n">a</span><span class="p">(</span><span class="n">GenericFactory</span><span class="p">.</span><span class="n">o</span><span class="p">)</span>
+</span><span class='line'><span class="nl">ld:</span> <span class="n">symbol</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">not</span> <span class="n">found</span> <span class="k">for</span> <span class="n">architecture</span> <span class="n">x86_64</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>sdkでlibmozalloc.dylibを見つけたので、Makefileで追加すると、うまくコンパイルができた</p>
+
+<h2>次回</h2>
+
+<p>javascript側使えるようにする。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1795,6 +2034,10 @@ xmppのend to endでsslの通信路を利用するのはどうすればいいか
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/master_report/blog/2012/10/23/osyan-jiu-hui-lun-wen/">OS研究会論文</a>
+      </li>
+    
+      <li class="post">
         <a href="/master_report/blog/2012/10/15/konpiyutasisutemusinpoziumulun-wen/">コンピュータシステムシンポジウム論文</a>
       </li>
     
@@ -1808,10 +2051,6 @@ xmppのend to endでsslの通信路を利用するのはどうすればいいか
     
       <li class="post">
         <a href="/master_report/blog/2012/09/24/an-hao-hua/">暗号化</a>
-      </li>
-    
-      <li class="post">
-        <a href="/master_report/blog/2012/09/19/csseminafa-biao/">csセミナー発表</a>
       </li>
     
   </ul>
