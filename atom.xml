@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-29T15:01:35+09:00</updated>
+  <updated>2012-10-29T16:00:34+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -20,9 +20,9 @@
     <id>http://guofei.github.com/master_report/blog/2012/10/29/osyan-jiu-hui-lun-wen</id>
     <content type="html"><![CDATA[<h3>論文</h3>
 
-<p>8ページ書いた。</p>
-
 <p>FriendSocketのAPIの説面を追加した。暗号化の部分を少し追加した。</p>
+
+<p>動画協調アプリケーションとミドルウェアの部分が青沼さんが追加している</p>
 
 <table border=1>
 <caption>FriendSocket API</caption>
@@ -80,11 +80,44 @@
 </table>
 
 
-<p>動画協調アプリケーションとミドルウェアの部分が青沼さんが追加している</p>
-
 <h3>FriendSocket APIのbugの修正</h3>
 
-<p>クライアント側から同じappnameでサーバに接続すると、</p>
+<p>クライアント側から同じuserとappnameでサーバに接続すると、サーバ側が１回送信したのに、クライアント側は何回も受信する。</p>
+
+<p>毎回クライアントを起動すると、</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">XMPP</span><span class="p">.</span><span class="nx">createChannel</span><span class="p">();</span>
+</span><span class='line'><span class="nx">channel</span><span class="p">.</span><span class="nx">on</span><span class="p">({</span><span class="nx">event</span><span class="o">:</span> <span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="nx">direction</span><span class="o">:</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="nx">stanza</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stanza</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="nx">stanza</span><span class="p">.</span><span class="err">@</span><span class="nx">appname</span> <span class="o">==</span> <span class="nx">appanme</span><span class="p">}},</span> <span class="nx">handleIncomingMessage</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>クライアント側でchannelをreleaseしないと、channelがずっとメッセージの受信を受けっている。closeの時、releaseしたら、bugを修正した</p>
+
+<h3>暗号化の部分</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">RSA</span> <span class="o">*</span><span class="n">PEM_read_RSAPublicKey</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">RSA</span> <span class="o">**</span><span class="n">x</span><span class="p">,</span> <span class="n">pem_password_cb</span> <span class="o">*</span><span class="n">cb</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">u</span><span class="p">);</span>
+</span><span class='line'><span class="n">RSA</span> <span class="o">*</span><span class="n">PEM_read_PublicKey</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">EVP_PKEY</span> <span class="o">**</span><span class="n">x</span><span class="p">,</span> <span class="n">pem_password_cb</span> <span class="o">*</span><span class="n">cb</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">u</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>cbをNULLとして渡し、パースワードを直接uに入れたら鍵を読めるようになった。</p>
+
+<p>opensslのソースコードを検索したらcallback引数のところ、(pem_password_cb *)でキャストしている。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="err">修正前</span>
+</span><span class='line'><span class="n">key</span> <span class="o">=</span> <span class="n">PEM_read_RSAPrivateKey</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">pass_cb</span><span class="p">,</span> <span class="s">&quot;My Private Key&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="err">修正後</span>
+</span><span class='line'><span class="n">key</span> <span class="o">=</span> <span class="n">PEM_read_RSAPrivateKey</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="p">(</span><span class="n">pem_password_cb</span> <span class="o">*</span><span class="p">)</span><span class="n">pass_cb</span><span class="p">,</span> <span class="s">&quot;My Private Key&quot;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
 ]]></content>
   </entry>
   

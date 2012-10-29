@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 論文 | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/論文/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-29T15:01:35+09:00</updated>
+  <updated>2012-10-29T16:00:34+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -20,9 +20,9 @@
     <id>http://guofei.github.com/master_report/blog/2012/10/29/osyan-jiu-hui-lun-wen</id>
     <content type="html"><![CDATA[<h3>論文</h3>
 
-<p>8ページ書いた。</p>
-
 <p>FriendSocketのAPIの説面を追加した。暗号化の部分を少し追加した。</p>
+
+<p>動画協調アプリケーションとミドルウェアの部分が青沼さんが追加している</p>
 
 <table border=1>
 <caption>FriendSocket API</caption>
@@ -80,11 +80,33 @@
 </table>
 
 
-<p>動画協調アプリケーションとミドルウェアの部分が青沼さんが追加している</p>
-
 <h3>FriendSocket APIのbugの修正</h3>
 
-<p>クライアント側から同じappnameでサーバに接続すると、</p>
+<p>クライアント側から同じuserとappnameでサーバに接続すると、サーバ側が１回送信したのに、クライアント側は何回も受信する。</p>
+
+<p>毎回クライアントを起動すると、
+<code>js
+var channel = XMPP.createChannel();
+channel.on({event: 'message', direction: 'in', stanza: function(stanza) {return stanza.@appname == appanme}}, handleIncomingMessage);
+</code></p>
+
+<p>クライアント側でchannelをreleaseしないと、channelがずっとメッセージの受信を受けっている。closeの時、releaseしたら、bugを修正した</p>
+
+<h3>暗号化の部分</h3>
+
+<p><code>c
+RSA *PEM_read_RSAPublicKey(FILE *fp, RSA **x, pem_password_cb *cb, void *u);
+RSA *PEM_read_PublicKey(FILE *fp, EVP_PKEY **x, pem_password_cb *cb, void *u);
+</code>
+cbをNULLとして渡し、パースワードを直接uに入れたら鍵を読めるようになった。</p>
+
+<p>opensslのソースコードを検索したらcallback引数のところ、(pem_password_cb *)でキャストしている。
+<code>c
+修正前
+key = PEM_read_RSAPrivateKey(fp, NULL, pass_cb, "My Private Key");
+修正後
+key = PEM_read_RSAPrivateKey(fp, NULL, (pem_password_cb *)pass_cb, "My Private Key");
+</code></p>
 ]]></content>
   </entry>
   
