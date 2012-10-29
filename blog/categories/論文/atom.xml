@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 論文 | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/論文/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-29T14:19:40+09:00</updated>
+  <updated>2012-10-29T14:44:27+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -24,29 +24,44 @@
 
 <p>FriendSocketのAPIの説面を追加した。暗号化の部分を少し追加した。</p>
 
-<p>FriendSocket API
-関数                    |説明
-------------------------|------
-frinedsocketio.connect()|サーバに接続する準備を行い、friendsocketclient オブジェクトを生成する
-frinedsocketio.listen() |クライアントからの接続を待ち、friendsocketserver オブジェクトを生成する。 frinedsocketio.listen().friends で friendsocketserver オブジェクトの取得する</p>
+<p>FriendSocket API</p>
 
-<p>friendsocketclientオブジェクトのメッソド
-関数  |説明
-------------------------|------</p>
+<table>
+<tr><td>関数</td><td>説明</td></tr>
+<tr><td>frinedsocketio.connect()</td><td>サーバに接続する準備を行い、friendsocketclientオブジェクトを生成する。</td></tr>
+<tr><td>frinedsocketio.listen()</td><td>クライアントからの接続を待ち、friendsocketserverオブジェクトを生成する。frinedsocketio.listen().friendsで friendsocketserverオブジェクトの取得する</td></tr>
+</table>
 
-<p>friendsocketserverオブジェク       トのメッソド
-+-------------------+------------+
-|メソッド           |説明        |
-+-------------------+------------+
-|on("connection", f)|サーバに接続|
-|                   |した時、    |
-|                   |callbackの関|
-|                   |数fを呼び出す|
-|                   |。引数は    |
-|                   |friendsocket|
-|                   |オブジェクト|
-|                   |である      |
-+-------------------+------------+</p>
+
+<p>friendsocketclientオブジェクトのメッソド</p>
+
+<table>
+<tr><td>メソッド</td><td>説明</td></tr>
+<tr><td>on(e, f)</td><td>イベントを追加する。eはイベント名、fはcallbackの関数である。callback関数の引数は受信したデータである。</td></tr>
+<tr>emit(e, d)<td></td><td>サーバに送信する、eはイベント名、dは送信したいデータの文字列である</td></tr>
+<tr>close()<td></td><td>クライアントをcloseする</td></tr>
+</table>
+
+
+<p>friendsocketserverオブジェクトのメッソド</p>
+
+<table>
+<tr><td>メソッド</td><td>説明</td></tr>
+<tr>on("connection", f)<td></td><td>サーバに接続した時、callbackの関数fを呼び出す。引数はfriendsocketオブジェクトである</td></tr>
+<tr>emit(e, d)<td></td><td>接続する全てのクライアントに送信する。</td></tr>
+<tr>close(friend)<td></td><td>クライアントからの接続を切る。引数はconnectionの時に取得したfriendsocketオブジェクトである</td></tr>
+</table>
+
+
+<p>friendsocketオブジェクトのメッソド</p>
+
+<table>
+<tr><td>メソッド</td><td>説明</td></tr>
+<tr>on("disconnect", f)<td></td><td>クライアントからの接続が切られた時、callback関数を呼び出す</td></tr>
+<tr>on(e, f)<td></td><td>イベントを追加する。eはイベント名、fはcallbackの関数である。callback関数の引数は受信したデータである</td></tr>
+<tr>emit(e, d)<td></td><td>クライアントに送信する。eはイベント名、dは送信したいデータの文字列である</td></tr>
+</table>
+
 
 <p>動画協調アプリケーションとミドルウェアの部分が青沼さんが追加している</p>
 
