@@ -109,8 +109,8 @@ frinedsocketio.connect()サーバに接続する準備を行い、friendsocketcl
 <table>
 <tr><td>メソッド</td><td>説明</td></tr>
 <tr><td>on(e, f)</td><td>イベントを追加する。eはイベント名、fはcallbackの関数である。callback関数の引数は受信したデータである。</td></tr>
-<tr>emit(e, d)<td></td><td>サーバに送信する、eはイベント名、dは送信したいデータの文字列である</td></tr>
-<tr>close()<td></td><td>クライアントをcloseする</td></tr>
+<tr><td>emit(e, d)</td><td>サーバに送信する、eはイベント名、dは送信したいデータの文字列である</td></tr>
+<tr><td>close()</td><td>クライアントをcloseする</td></tr>
 </table>
 
 
@@ -118,9 +118,9 @@ frinedsocketio.connect()サーバに接続する準備を行い、friendsocketcl
 
 <table>
 <tr><td>メソッド</td><td>説明</td></tr>
-<tr>on(&#8220;connection&#8221;, f)<td></td><td>サーバに接続した時、callbackの関数fを呼び出す。引数はfriendsocketオブジェクトである</td></tr>
-<tr>emit(e, d)<td></td><td>接続する全てのクライアントに送信する。</td></tr>
-<tr>close(friend)<td></td><td>クライアントからの接続を切る。引数はconnectionの時に取得したfriendsocketオブジェクトである</td></tr>
+<tr><td>on(&#8220;connection&#8221;, f)</td><td>サーバに接続した時、callbackの関数fを呼び出す。引数はfriendsocketオブジェクトである</td></tr>
+<tr><td>emit(e, d)</td><td>接続する全てのクライアントに送信する。</td></tr>
+<tr><td>close(friend)</td><td>クライアントからの接続を切る。引数はconnectionの時に取得したfriendsocketオブジェクトである</td></tr>
 </table>
 
 
@@ -128,9 +128,9 @@ frinedsocketio.connect()サーバに接続する準備を行い、friendsocketcl
 
 <table>
 <tr><td>メソッド</td><td>説明</td></tr>
-<tr>on(&#8220;disconnect&#8221;, f)<td></td><td>クライアントからの接続が切られた時、callback関数を呼び出す</td></tr>
-<tr>on(e, f)<td></td><td>イベントを追加する。eはイベント名、fはcallbackの関数である。callback関数の引数は受信したデータである</td></tr>
-<tr>emit(e, d)<td></td><td>クライアントに送信する。eはイベント名、dは送信したいデータの文字列である</td></tr>
+<tr><td>on(&#8220;disconnect&#8221;, f)</td><td>クライアントからの接続が切られた時、callback関数を呼び出す</td></tr>
+<tr><td>on(e, f)</td><td>イベントを追加する。eはイベント名、fはcallbackの関数である。callback関数の引数は受信したデータである</td></tr>
+<tr><td>emit(e, d)</td><td>クライアントに送信する。eはイベント名、dは送信したいデータの文字列である</td></tr>
 </table>
 
 
