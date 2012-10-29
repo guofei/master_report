@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-29T16:00:34+09:00</updated>
+  <updated>2012-10-29T16:09:18+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -107,6 +107,11 @@
 <p>cbをNULLとして渡し、パースワードを直接uに入れたら鍵を読めるようになった。</p>
 
 <p>opensslのソースコードを検索したらcallback引数のところ、(pem_password_cb *)でキャストしている。</p>
+
+<figure class='code'><figcaption><span>pem_password_cb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">typedef</span> <span class="kt">int</span> <span class="n">pem_password_cb</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">rwflag</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
