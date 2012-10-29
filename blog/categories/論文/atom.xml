@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 論文 | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/論文/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-29T14:53:39+09:00</updated>
+  <updated>2012-10-29T14:57:17+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -24,7 +24,7 @@
 
 <p>FriendSocketのAPIの説面を追加した。暗号化の部分を少し追加した。</p>
 
-<table>
+<table border=1>
 <caption>FriendSocket API</caption>
 <tr><td>関数</td><td>説明</td></tr>
 <tr><td>frinedsocketio.connect()</td><td>サーバに接続する準備を行い、friendsocketclientオブジェクトを生成する。</td></tr>
