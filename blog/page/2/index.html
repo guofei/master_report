@@ -9,7 +9,7 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="SkypeKit xpcomをコンパイルするとき、色々なところで詰まったので、skypekitについて調べた SkypeKitは、Skypeデスクトップアプリケーションがなくても機能する。 SkypeKitは、ユーザに何も表示せず実行される、Skypeの「ヘッドレス」バージョンと考えられる。 &hellip;">
+  <meta name="description" content="xpcom JavaScriptからXPCOMの関数を呼び出す時、obj = Components.classes[cid].createInstance()；で呼び出すことができるが、自分が書いた関数を呼び出すとTypeError: Components.classes[cid] &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -62,6 +62,84 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/master_report/blog/2012/06/28/javascriptkaraxpcomfalseguan-shu-wohu-bichu-su/">javascriptからXPCOMの関数を呼び出す</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-28T22:41:00+09:00" pubdate data-updated="true">Jun 28<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>xpcom</h3>
+
+<p>JavaScriptからXPCOMの関数を呼び出す時、obj = Components.classes[cid].createInstance()；で呼び出すことができるが、自分が書いた関数を呼び出すとTypeError: Components.classes[cid] isundefinedというエラが出た。</p>
+
+<p>/Users/kaku/Library/Application Support/Firefox/Profiles/7sbio35o.defaultディレクトリのcompreg.datの中で登録できるかどうかを調べられる。</p>
+
+<p>grep rsa compreg.datで調べたら、正しい時は以下のようになるはずだが</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>abs:/.../xpcom-sample@cozmixng.org/components/myCalc.so,1173322260000
+</span><span class='line'>{8931dfd3-edf3-4b7d-bd44-1da72064f0dc},,,,abs:/.../myCalc.so</span></code></pre></td></tr></table></div></figure>
+
+
+<p>何も出てこなかった。</p>
+
+<p>結構firefoxのバージョンとSDKのバージョンと自分の所のライブラリのバージョンと関わるらしいので、FireFox3.6 Firefox9などを色々試して、linux上も試したが、結局、ずっとエラのままだった。</p>
+
+<h3>Ctypes</h3>
+
+<p>調べた途中で、Ctypesというものを見つけて、複数のバージョンの Firefox で利用できるもの</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Components.utils.import('resource://gre/modules/ctypes.jsm');
+</span><span class='line'>var m = ctypes.open('/usr/lib/libc.dylib');
+</span><span class='line'>
+</span><span class='line'>var c = m.declare('cabs',
+</span><span class='line'>                ctypes.default_abi,
+</span><span class='line'>                ctypes.double,
+</span><span class='line'>                ctypes.double);
+</span><span class='line'>alert(c(-1));
+</span><span class='line'>m.close();</span></code></pre></td></tr></table></div></figure>
+
+
+<p>普通のhtmlで利用できないが、拡張機能でうまく実行できた</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -2034,6 +2112,10 @@ xmppのend to endでsslの通信路を利用するのはどうすればいいか
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/master_report/blog/2012/10/29/osyan-jiu-hui-lun-wen/">OS研究会論文</a>
+      </li>
+    
+      <li class="post">
         <a href="/master_report/blog/2012/10/23/osyan-jiu-hui-lun-wen/">OS研究会論文</a>
       </li>
     
@@ -2047,10 +2129,6 @@ xmppのend to endでsslの通信路を利用するのはどうすればいいか
     
       <li class="post">
         <a href="/master_report/blog/2012/10/01/friendsocket-apifalsexiu-zheng/">Friendsocket APIの修正</a>
-      </li>
-    
-      <li class="post">
-        <a href="/master_report/blog/2012/09/24/an-hao-hua/">暗号化</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 論文 | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/論文/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-23T16:03:14+09:00</updated>
+  <updated>2012-10-29T14:16:43+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -12,6 +12,50 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[OS研究会論文]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/10/29/osyan-jiu-hui-lun-wen/"/>
+    <updated>2012-10-29T13:37:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/10/29/osyan-jiu-hui-lun-wen</id>
+    <content type="html"><![CDATA[<h3>論文</h3>
+
+<p>8ページ書いた。</p>
+
+<p>FriendSocketのAPIの説面を追加した。暗号化の部分を少し追加した。</p>
+
+<p>FriendSocket API
+関数|説明
+------------------------|------
+frinedsocketio.connect()|サーバに接続する準備を行い、friendsocketclient オブジェクトを生成する
+frinedsocketio.listen()|クライアントからの接続を待ち、friendsocketserver オブジェクトを生成する。 frinedsocketio.listen().friends で friendsocketserver オブジェクトの取得する
+|</p>
+
+<p>friendsocketclientオブジェクトのメッソド
+関数  |説明
+------------------------|------</p>
+
+<p>friendsocketserverオブジェク       トのメッソド
++-------------------+------------+
+|メソッド           |説明        |
++-------------------+------------+
+|on("connection", f)|サーバに接続|
+|                   |した時、    |
+|                   |callbackの関|
+|                   |数fを呼び出す|
+|                   |。引数は    |
+|                   |friendsocket|
+|                   |オブジェクト|
+|                   |である      |
++-------------------+------------+</p>
+
+<p>動画協調アプリケーションとミドルウェアの部分が青沼さんが追加している</p>
+
+<h3>FriendSocket APIのbugの修正</h3>
+
+<p>クライアント側から同じappnameでサーバに接続すると、</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[OS研究会論文]]></title>
