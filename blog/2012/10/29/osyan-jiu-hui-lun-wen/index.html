@@ -195,6 +195,15 @@ frinedsocketio.connect()サーバに接続する準備を行い、 &hellip;">
 </span><span class='line'><span class="n">key</span> <span class="o">=</span> <span class="n">PEM_read_RSAPrivateKey</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="p">(</span><span class="n">pem_password_cb</span> <span class="o">*</span><span class="p">)</span><span class="n">pass_cb</span><span class="p">,</span> <span class="s">&quot;My Private Key&quot;</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<p>しかし、まだ</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">key</span> <span class="o">=</span> <span class="n">PEM_read_RSAPrivateKey</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">pass_cb</span><span class="p">,</span> <span class="s">&quot;My Private Key&quot;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>に戻したら、うまく実行できた</p>
 </div>
 
 

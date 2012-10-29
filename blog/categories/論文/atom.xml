@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 論文 | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/論文/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-29T16:09:18+09:00</updated>
+  <updated>2012-10-29T16:22:39+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -110,6 +110,12 @@ key = PEM_read_RSAPrivateKey(fp, NULL, pass_cb, "My Private Key");
 修正後
 key = PEM_read_RSAPrivateKey(fp, NULL, (pem_password_cb *)pass_cb, "My Private Key");
 </code></p>
+
+<p>しかし、まだ
+<code>c
+key = PEM_read_RSAPrivateKey(fp, NULL, pass_cb, "My Private Key");
+</code>
+に戻したら、うまく実行できた</p>
 ]]></content>
   </entry>
   
