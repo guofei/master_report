@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 論文 | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/論文/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-29T14:57:17+09:00</updated>
+  <updated>2012-10-29T15:01:35+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -34,6 +34,11 @@
 
 
 
+<br>
+
+
+
+
 <table>
 <caption>friendsocketclientオブジェクトのメッソド</caption>
 <tr><td>メソッド</td><td>説明</td></tr>
@@ -45,6 +50,11 @@
 
 
 
+<br>
+
+
+
+
 <table>
 <caption>friendsocketserverオブジェクトのメッソド</caption>
 <tr><td>メソッド</td><td>説明</td></tr>
@@ -52,6 +62,11 @@
 <tr><td>emit(e,d)</td><td>接続する全てのクライアントに送信する。</td></tr>
 <tr><td>close(friend)</td><td>クライアントからの接続を切る。引数はconnectionの時に取得したfriendsocketオブジェクトである</td></tr>
 </table>
+
+
+
+
+<br>
 
 
 
