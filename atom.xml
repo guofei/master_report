@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-29T16:22:39+09:00</updated>
+  <updated>2012-10-29T16:34:21+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -39,7 +39,7 @@
 
 
 
-<table>
+<table border=1>
 <caption>friendsocketclientオブジェクトのメッソド</caption>
 <tr><td>メソッド</td><td>説明</td></tr>
 <tr><td>on(e,f)</td><td>イベントを追加する。eはイベント名、fはcallbackの関数である。callback関数の引数は受信したデータである。</td></tr>
@@ -55,7 +55,7 @@
 
 
 
-<table>
+<table border=1>
 <caption>friendsocketserverオブジェクトのメッソド</caption>
 <tr><td>メソッド</td><td>説明</td></tr>
 <tr><td>on(&#8220;connection&#8221;,f)</td><td>サーバに接続した時、callbackの関数fを呼び出す。引数はfriendsocketオブジェクトである</td></tr>
@@ -71,7 +71,7 @@
 
 
 
-<table>
+<table border=1>
 <caption>friendsocketオブジェクトのメッソド</caption>
 <tr><td>メソッド</td><td>説明</td></tr>
 <tr><td>on(&#8220;disconnect&#8221;,f)</td><td>クライアントからの接続が切られた時、callback関数を呼び出す</td></tr>
