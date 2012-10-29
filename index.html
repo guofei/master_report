@@ -9,7 +9,8 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="論文 8ページ書いた。 FriendSocketのAPIの説面を追加した。暗号化の部分を少し追加した。 FriendSocket API 関数説明
+  <meta name="description" content="論文 8ページ書いた。 FriendSocketのAPIの説面を追加した。暗号化の部分を少し追加した。 FriendSocket API
+関数説明
 frinedsocketio.connect()サーバに接続する準備を行い、friendsocketclientオブジェクトを生成する。 &hellip;">
   
 
@@ -98,42 +99,44 @@ frinedsocketio.connect()サーバに接続する準備を行い、friendsocketcl
 
 <p>FriendSocketのAPIの説面を追加した。暗号化の部分を少し追加した。</p>
 
-<p>FriendSocket API</p>
-
 <table>
+<caption>FriendSocket API</caption>
 <tr><td>関数</td><td>説明</td></tr>
 <tr><td>frinedsocketio.connect()</td><td>サーバに接続する準備を行い、friendsocketclientオブジェクトを生成する。</td></tr>
 <tr><td>frinedsocketio.listen()</td><td>クライアントからの接続を待ち、friendsocketserverオブジェクトを生成する。frinedsocketio.listen().friendsで friendsocketserverオブジェクトの取得する</td></tr>
 </table>
 
 
-<p>friendsocketclientオブジェクトのメッソド</p>
+
 
 <table>
+<caption>friendsocketclientオブジェクトのメッソド</caption>
 <tr><td>メソッド</td><td>説明</td></tr>
-<tr><td>on(e, f)</td><td>イベントを追加する。eはイベント名、fはcallbackの関数である。callback関数の引数は受信したデータである。</td></tr>
-<tr><td>emit(e, d)</td><td>サーバに送信する、eはイベント名、dは送信したいデータの文字列である</td></tr>
+<tr><td>on(e,f)</td><td>イベントを追加する。eはイベント名、fはcallbackの関数である。callback関数の引数は受信したデータである。</td></tr>
+<tr><td>emit(e,d)</td><td>サーバに送信する、eはイベント名、dは送信したいデータの文字列である</td></tr>
 <tr><td>close()</td><td>クライアントをcloseする</td></tr>
 </table>
 
 
-<p>friendsocketserverオブジェクトのメッソド</p>
+
 
 <table>
+<caption>friendsocketserverオブジェクトのメッソド</caption>
 <tr><td>メソッド</td><td>説明</td></tr>
-<tr><td>on(&#8220;connection&#8221;, f)</td><td>サーバに接続した時、callbackの関数fを呼び出す。引数はfriendsocketオブジェクトである</td></tr>
-<tr><td>emit(e, d)</td><td>接続する全てのクライアントに送信する。</td></tr>
+<tr><td>on(&#8220;connection&#8221;,f)</td><td>サーバに接続した時、callbackの関数fを呼び出す。引数はfriendsocketオブジェクトである</td></tr>
+<tr><td>emit(e,d)</td><td>接続する全てのクライアントに送信する。</td></tr>
 <tr><td>close(friend)</td><td>クライアントからの接続を切る。引数はconnectionの時に取得したfriendsocketオブジェクトである</td></tr>
 </table>
 
 
-<p>friendsocketオブジェクトのメッソド</p>
+
 
 <table>
+<caption>friendsocketオブジェクトのメッソド</caption>
 <tr><td>メソッド</td><td>説明</td></tr>
-<tr><td>on(&#8220;disconnect&#8221;, f)</td><td>クライアントからの接続が切られた時、callback関数を呼び出す</td></tr>
-<tr><td>on(e, f)</td><td>イベントを追加する。eはイベント名、fはcallbackの関数である。callback関数の引数は受信したデータである</td></tr>
-<tr><td>emit(e, d)</td><td>クライアントに送信する。eはイベント名、dは送信したいデータの文字列である</td></tr>
+<tr><td>on(&#8220;disconnect&#8221;,f)</td><td>クライアントからの接続が切られた時、callback関数を呼び出す</td></tr>
+<tr><td>on(e,f)</td><td>イベントを追加する。eはイベント名、fはcallbackの関数である。callback関数の引数は受信したデータである</td></tr>
+<tr><td>emit(e,d)</td><td>クライアントに送信する。eはイベント名、dは送信したいデータの文字列である</td></tr>
 </table>
 
 
