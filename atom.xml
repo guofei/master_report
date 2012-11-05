@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-10-29T16:34:21+09:00</updated>
+  <updated>2012-11-05T16:37:01+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -12,6 +12,77 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[FriendSocketをweb pageからの利用]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/11/05/friendsocketwoweb-pagekarafalseli-yong/"/>
+    <updated>2012-11-05T15:04:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/11/05/friendsocketwoweb-pagekarafalseli-yong</id>
+    <content type="html"><![CDATA[<h3>webページから利用できるようになった</h3>
+
+<p>カスタム DOM イベントを利用する</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;path/to/callextension.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'><span class="nt">&lt;script&gt;</span>
+</span><span class='line'><span class="nx">client_test</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">friend</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">friend</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="s2">&quot;client@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;client&quot;</span><span class="p">,</span> <span class="s2">&quot;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;app2&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connect&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">friend</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;hello server 2&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;disconnect&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;disconnected by server&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="nx">CallExtension</span><span class="p">(</span><span class="nx">client_test</span><span class="p">);</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>callextension.js</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">CallExtension</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;MyExtensionDataElement&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">element</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&quot;attribute1&quot;</span><span class="p">,</span> <span class="nx">f</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">element</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&quot;attribute2&quot;</span><span class="p">,</span> <span class="s2">&quot;hello world&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">evt</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">&quot;Events&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">evt</span><span class="p">.</span><span class="nx">initEvent</span><span class="p">(</span><span class="s2">&quot;MyExtensionEvent&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">element</span><span class="p">.</span><span class="nx">dispatchEvent</span><span class="p">(</span><span class="nx">evt</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>問題</h4>
+
+<p>アドオン側でclienttest関数の文字列を取得し、eval()で実行している。普通のJavaScriptで実行できないもの（アドオンの機能など）をclienttest()で書いてアドオンに送ると実行出来るようになる。さらに、XPCOMのモジュールのコードをclienttest関数で書いて、アドオンに送ると、ファイルなどのアクセスも出来る。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[OS研究会論文]]></title>
@@ -3005,15 +3076,6 @@ TLS, GPG and End-To-End encryption support (with SSL legacy support)</p>
 
 <p>もし、暗号化するだけなら、公開鍵暗号化方式ですればいいと思うが、
 xmppのend to endでsslの通信路を利用するのはどうすればいいかまだわからない。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[First blog]]></title>
-    <link href="http://guofei.github.com/master_report/blog/2012/04/16/first-blog/"/>
-    <updated>2012-04-16T13:26:00+09:00</updated>
-    <id>http://guofei.github.com/master_report/blog/2012/04/16/first-blog</id>
-    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
