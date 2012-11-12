@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>FriendSocket - Master Report</title>
+  <meta name="author" content="kaku">
+
+  
+  <meta name="description" content="FriendSocketのコンタクトリスト問題の修正 前はeventでコンタクトリストを取得した 1
+s.on_get_friend = function(list){}; 少し不便だと思って、以下のようにした 1
+2
+3
+4
+s = friendsocketio.listen(host, &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://guofei.github.com/master_report/blog/2012/11/12/friendsocket/">
+  <link href="/master_report/favicon.png" rel="icon">
+  <link href="/master_report/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/master_report/javascripts/modernizr-2.0.js"></script>
+  <script src="/master_report/javascripts/ender.js"></script>
+  <script src="/master_report/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/master_report/atom.xml" rel="alternate" title="Master Report" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/master_report/">Master Report</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/master_report/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:guofei.github.com/master_report" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/master_report/">Blog</a></li>
+  <li><a href="/master_report/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">FriendSocket</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-12T14:03:00+09:00" pubdate data-updated="true">Nov 12<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h3>FriendSocketのコンタクトリスト問題の修正</h3>
+
+<p>前はeventでコンタクトリストを取得した</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">s</span><span class="p">.</span><span class="nx">on_get_friend</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">list</span><span class="p">){};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>少し不便だと思って、以下のようにした</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">s</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="nx">appname</span><span class="p">);</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">contactlist</span><span class="p">();</span>
+</span><span class='line'>    <span class="nx">s</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connection&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">friend</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>しかし、xmppからのデータがいつに来るかどうかわからないので、listがほとんど何にも取得できない</p>
+
+<pre><code>xmppのイベント             friendsocketのイベント
+　　　|                             |
+      |                             |
+   onlogined                        |
+      |                             |
+      |          list               |
+   ongetlist    ------&gt;             |
+      |                             |s.contactlist = list
+      |                             |
+   onconnectmessage       ---&gt;      |
+                                onconnect
+</code></pre>
+
+<p>以下のように書かなければならない</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">s</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="nx">appname</span><span class="p">);</span>
+</span><span class='line'><span class="nx">s</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connection&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">friend</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">contactlist</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>os研究会</h3>
+
+<p>プレゼンテーションを作っている。しかし、今回は２人分のものを発表するので、青沼さんの研究内容どういう風に発表すればいいかわからない。青沼さんのcsセミナーのものを使えるかどうか。発表内容のページごとに誰の研究かをきちんと区別する必要があるか。</p>
+
+<h3>来週</h3>
+
+<p>friendsocketの暗号化の部分と組み合わせる。<br/>
+発表内容を書く。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">kaku</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-12T14:03:00+09:00" pubdate data-updated="true">Nov 12<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/master_report/blog/categories/friendsocket/'>friendsocket</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://guofei.github.com/master_report/blog/2012/11/12/friendsocket/" data-via="" data-counturl="http://guofei.github.com/master_report/blog/2012/11/12/friendsocket/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/master_report/blog/2012/11/05/friendsocketwoweb-pagekarafalseli-yong/" title="Previous Post: FriendSocketをweb pageからの利用">&laquo; FriendSocketをweb pageからの利用</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/11/12/friendsocket/">FriendSocket</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/11/05/friendsocketwoweb-pagekarafalseli-yong/">FriendSocketをweb pageからの利用</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/10/29/osyan-jiu-hui-lun-wen/">OS研究会論文</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/10/23/osyan-jiu-hui-lun-wen/">OS研究会論文</a>
+      </li>
+    
+      <li class="post">
+        <a href="/master_report/blog/2012/10/15/konpiyutasisutemusinpoziumulun-wen/">コンピュータシステムシンポジウム論文</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - kaku -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
