@@ -4,7 +4,7 @@
   <title><![CDATA[Category: friendsocket | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/friendsocket/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-11-12T16:33:09+09:00</updated>
+  <updated>2012-11-12T16:34:44+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -38,8 +38,9 @@ s.on("connection", function(friend) {
 
 <p>しかし、xmppからのデータがいつに来るかどうかわからないので、listがほとんど何にも取得できない</p>
 
-<pre><code>    .
-     xmpp                       friendsocket
+<p>```</p>
+
+<pre><code>     xmpp                       friendsocket
       |                             |
       |                             |
    onlogined                        |
@@ -51,6 +52,8 @@ s.on("connection", function(friend) {
    onconnectmessage       ---&gt;      |
                                 onconnect
 </code></pre>
+
+<p>```</p>
 
 <p>以下のように書かなければならない
 ```js
