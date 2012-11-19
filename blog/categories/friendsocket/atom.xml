@@ -4,7 +4,7 @@
   <title><![CDATA[Category: friendsocket | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/friendsocket/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-11-12T16:36:17+09:00</updated>
+  <updated>2012-11-19T16:31:25+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -12,6 +12,53 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[FriendSocketの暗号化]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/11/19/friendsocketfalsean-hao-hua/"/>
+    <updated>2012-11-19T15:46:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/11/19/friendsocketfalsean-hao-hua</id>
+    <content type="html"><![CDATA[<h3>FriendSocketの暗号化</h3>
+
+<p>friendsocketはmac上のfirefox3.6で開発し、暗号化の部分はlinux上のfirefox(>10)開発した</p>
+
+<p>暗号化の部分はfirefoxが提供したjsctypeで開発したが、対応するバージョンが少ない。<br/>
+そして、鍵を一回読んで暗号化と復号化を行っている。鍵を使わない時、javascript側でメーモリを解放する必要がある
+<code>js
+var key = load_pub_key("path/public.pem");
+var data1 = encrypt(key, "hello1")
+var data2 = encrypt(key, "hello2")
+free_key(key);
+</code></p>
+
+<p>今はnpapiで書き直しした
+<code>js
+var pub = plugin.load_public_key("/path/public.pem");
+alert(pub);
+var pri = plugin.load_private_key("/path/private.pem", "12345678");
+alert(pri);
+var ciphertext = plugin.encrypt(pub, "abc");
+alert(ciphertext);
+var text = plugin.decrypt(pri, ciphertext);
+alert(text);
+</code></p>
+
+<p>プラグインのインスタンスを起動する時、鍵をロードする。プラグインのインスタンスが消える時、鍵を解放する。今はlinuxのchromeとfirefox（firefox9と16）の両方で動けるようになった。<br/>
+しかし、firefox3.6で動けない。</p>
+
+<p>mac版にしたら、firefox9で動けたが、firefox3.6でも動けない。</p>
+
+<p>以下の二つの条件の一つを満たさなければならない<br/>
+プラグインをfirefox3.6で動く<br/>
+xmppのアドオンをfirefox9以上で動く</p>
+
+<h3>OS研究会</h3>
+
+<p>OS研究会のスライド</p>
+
+<p>論文</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[FriendSocket]]></title>

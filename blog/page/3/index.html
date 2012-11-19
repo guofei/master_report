@@ -9,7 +9,9 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="Octopress ゼミ内容などをOctopressで書きはじまっている rubyでかかれた静的サイトジェネレーターで、gitで内容を管理する。emacsやvimなどで記事を書くことができる。内容を書くときはmarkdown記法で内容を書く。 XMPPクライアント間の暗号化 &hellip;">
+  <meta name="description" content="gajim ソースコードを読んでいる gajimのホームページで以下の紹介文がある
+FEATURES:
+TLS, GPG and End-To-End encryption support (with SSL legacy support) End-To- &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -62,6 +64,136 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/master_report/blog/2012/04/24/11-dot-4-27zemi/">12.4.27分散ゼミ　カク</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-24T17:21:00+09:00" pubdate data-updated="true">Apr 24<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>gajim</h2>
+
+<p>ソースコードを読んでいる</p>
+
+<p>gajimのホームページで以下の紹介文がある
+FEATURES:
+TLS, GPG and End-To-End encryption support (with SSL legacy support)</p>
+
+<p>End-To-Endの暗号化はsslで行っていると思ったが、xmppサーバと通信する部分しかsslを使ってないらしい。</p>
+
+<p>End-To-Endの暗号化はPGPで行っている</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">send_chat_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jid</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">keyID</span><span class="p">,</span> <span class="n">account</span><span class="p">):</span>
+</span><span class='line'>  <span class="sd">&quot;&quot;&quot;</span>
+</span><span class='line'><span class="sd">  Send chat &#39;message&#39; to &#39;jid&#39;, using account (optional) &#39;account&#39;. If keyID</span>
+</span><span class='line'><span class="sd">  is specified, encrypt the message with the pgp key</span>
+</span><span class='line'><span class="sd">  &quot;&quot;&quot;</span>
+</span><span class='line'>  <span class="n">jid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_real_jid</span><span class="p">(</span><span class="n">jid</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_message</span><span class="p">(</span><span class="n">jid</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">keyID</span><span class="p">,</span> <span class="n">account</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>pgp,gpg</h3>
+
+<p>pgpがあって、Pretty Good Privacyの略だとわかったが、gpgもソースコードで出てきた。
+調べたら、openpgp,gnupgも出てきて、混乱になった</p>
+
+<h3>gajimのxml出力</h3>
+
+<p>gajimを試したとき、コンソールでxmlの出力を取得できるので、gajimとichatの通信と、gajimとgajimの通信ときのxmlを取得した</p>
+
+<h4>ichatからgajimに送信したときの受信側のxml</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="c">&lt;!-- In --&gt;</span>
+</span><span class='line'><span class="nt">&lt;message</span> <span class="na">to=</span><span class="s">&quot;test0003@gmail.com&quot;</span> <span class="na">type=</span><span class="s">&quot;chat&quot;</span> <span class="na">id=</span><span class="s">&quot;iChat_6D205F70&quot;</span> <span class="na">from=</span><span class="s">&quot;test0001@gmail.com/kakuMacB434868F&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>hi<span class="nt">&lt;/body&gt;</span>
+</span><span class='line'>  ......
+</span><span class='line'><span class="nt">&lt;/message&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>gajimからgajimに送信したときの受信側のxml</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="c">&lt;!-- In --&gt;</span>
+</span><span class='line'><span class="nt">&lt;message</span> <span class="na">to=</span><span class="s">&quot;test0003@gmail.com/GajimCAF438C9&quot;</span> <span class="na">type=</span><span class="s">&quot;chat&quot;</span> <span class="na">id=</span><span class="s">&quot;63&quot;</span> <span class="na">from=</span><span class="s">&quot;test0001@gmail.com/GajimDFC2E294&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;thread&gt;</span>VVeMaVLvwtTWMfUtbrhWrpenrpZWsoAf<span class="nt">&lt;/thread&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;c</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.xmpp.org/extensions/xep-0200.html#ns&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;data&gt;</span>4D6X9xa/yGJc804JuZSIC+ZsyAPcaFmHFl91DxsZFU5kKHdb0ZTm2EMFeQ7td83btDk31beJ+tXmFK53z93
+</span><span class='line'>  OKrlkQFyZiJiuxn9u3yfIFWu6QyQGaQhFH/ndXrQu3OAwEvTZ+WD24nJ0+nLdXaWmzQ==<span class="nt">&lt;/data&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;mac&gt;</span>KfpslvfsS2Gy693AhPkj9jiCZ5IDTzyYajyKzI7+o8Y=<span class="nt">&lt;/mac&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/c&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>[This is part of an encrypted session. If you see this message, something went wrong.]
+</span><span class='line'>  ([This is part of an encrypted session. If you see this message, something went wrong.])<span class="nt">&lt;/body&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;nos:x</span> <span class="na">value=</span><span class="s">&quot;disabled&quot;</span> <span class="na">xmlns:nos=</span><span class="s">&quot;google:nosave&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;arc:record</span> <span class="na">otr=</span><span class="s">&quot;false&quot;</span> <span class="na">xmlns:arc=</span><span class="s">&quot;http://jabber.org/protocol/archive&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/message&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">&lt;!-- Out --&gt;</span>
+</span><span class='line'><span class="nt">&lt;message</span> <span class="na">xmlns=</span><span class="s">&quot;jabber:client&quot;</span> <span class="na">to=</span><span class="s">&quot;test0001@gmail.com/GajimDFC2E294&quot;</span> <span class="na">type=</span><span class="s">&quot;chat&quot;</span> <span class="na">id=</span><span class="s">&quot;63&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;received</span> <span class="na">xmlns=</span><span class="s">&quot;urn:xmpp:receipts&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;thread&gt;</span>VVeMaVLvwtTWMfUtbrhWrpenrpZWsoAf<span class="nt">&lt;/thread&gt;</span>
+</span><span class='line'><span class="nt">&lt;/message&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -339,6 +471,10 @@ xmppのend to endでsslの通信路を利用するのはどうすればいいか
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/master_report/blog/2012/11/19/friendsocketfalsean-hao-hua/">FriendSocketの暗号化</a>
+      </li>
+    
+      <li class="post">
         <a href="/master_report/blog/2012/11/12/friendsocket/">FriendSocket</a>
       </li>
     
@@ -352,10 +488,6 @@ xmppのend to endでsslの通信路を利用するのはどうすればいいか
     
       <li class="post">
         <a href="/master_report/blog/2012/10/23/osyan-jiu-hui-lun-wen/">OS研究会論文</a>
-      </li>
-    
-      <li class="post">
-        <a href="/master_report/blog/2012/10/15/konpiyutasisutemusinpoziumulun-wen/">コンピュータシステムシンポジウム論文</a>
       </li>
     
   </ul>

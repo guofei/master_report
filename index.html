@@ -9,12 +9,8 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="FriendSocketのコンタクトリスト問題の修正 前はeventでコンタクトリストを取得した 1
-s.on_get_friend = function(list){}; 少し不便だと思って、以下のようにした 1
-2
-3
-4
-s = friendsocketio.listen(host, &hellip;">
+  <meta name="description" content="FriendSocketの暗号化 friendsocketはmac上のfirefox3.6で開発し、暗号化の部分はlinux上のfirefox(>10)開発した 暗号化の部分はfirefoxが提供したjsctypeで開発したが、対応するバージョンが少ない。
+そして、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +63,94 @@ s = friendsocketio.listen(host, &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/master_report/blog/2012/11/19/friendsocketfalsean-hao-hua/">FriendSocketの暗号化</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-19T15:46:00+09:00" pubdate data-updated="true">Nov 19<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>FriendSocketの暗号化</h3>
+
+<p>friendsocketはmac上のfirefox3.6で開発し、暗号化の部分はlinux上のfirefox(>10)開発した</p>
+
+<p>暗号化の部分はfirefoxが提供したjsctypeで開発したが、対応するバージョンが少ない。<br/>
+そして、鍵を一回読んで暗号化と復号化を行っている。鍵を使わない時、javascript側でメーモリを解放する必要がある</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">load_pub_key</span><span class="p">(</span><span class="s2">&quot;path/public.pem&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">data1</span> <span class="o">=</span> <span class="nx">encrypt</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="s2">&quot;hello1&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">data2</span> <span class="o">=</span> <span class="nx">encrypt</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="s2">&quot;hello2&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nx">free_key</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>今はnpapiで書き直しした</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">pub</span> <span class="o">=</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">load_public_key</span><span class="p">(</span><span class="s2">&quot;/path/public.pem&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">pub</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">pri</span> <span class="o">=</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">load_private_key</span><span class="p">(</span><span class="s2">&quot;/path/private.pem&quot;</span><span class="p">,</span> <span class="s2">&quot;12345678&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">pri</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">ciphertext</span> <span class="o">=</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">encrypt</span><span class="p">(</span><span class="nx">pub</span><span class="p">,</span> <span class="s2">&quot;abc&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">ciphertext</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="nx">pri</span><span class="p">,</span> <span class="nx">ciphertext</span><span class="p">);</span>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>プラグインのインスタンスを起動する時、鍵をロードする。プラグインのインスタンスが消える時、鍵を解放する。今はlinuxのchromeとfirefox（firefox9と16）の両方で動けるようになった。<br/>
+しかし、firefox3.6で動けない。</p>
+
+<p>mac版にしたら、firefox9で動けたが、firefox3.6でも動けない。</p>
+
+<p>以下の二つの条件の一つを満たさなければならない<br/>
+プラグインをfirefox3.6で動く<br/>
+xmppのアドオンをfirefox9以上で動く</p>
+
+<h3>OS研究会</h3>
+
+<p>OS研究会のスライド</p>
+
+<p>論文</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1256,333 +1340,6 @@ https://github.com/masamitsu-murase/JsMruby</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/master_report/blog/2012/07/20/javascriptdefalsegong-kai-jian-an-hao-hua-tofu-hao-hua/">Javascriptでの公開鍵暗号化と復号化</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-20T02:57:00+09:00" pubdate data-updated="true">Jul 20<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>javascriptで暗号化ができて、復号化ができないバッグを修正した</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>エラー:malformed UTF-8 character sequence at offset</span></code></pre></td></tr></table></div></figure>
-
-
-<p>cとjavascriptでの型変換がうまくいかないと思ったが、cの関数の戻り値がutf-8の文字コード以外に別のものが入っている。</p>
-
-<h3>sourcecode</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Components</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="kr">import</span><span class="p">(</span><span class="s1">&#39;resource://gre/modules/ctypes.jsm&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">r</span> <span class="o">=</span> <span class="nx">ctypes</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;/Users/kaku/Programs/M2/ctypesrsa/components/libjsrsa.dylib&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">encrypt</span> <span class="o">=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">declare</span><span class="p">(</span><span class="s1">&#39;public_encrypt&#39;</span><span class="p">,</span> <span class="nx">ctypes</span><span class="p">.</span><span class="nx">default_abi</span><span class="p">,</span> <span class="nx">ctypes</span><span class="p">.</span><span class="kr">char</span><span class="p">.</span><span class="nx">ptr</span><span class="p">,</span> <span class="nx">ctypes</span><span class="p">.</span><span class="kr">char</span><span class="p">.</span><span class="nx">ptr</span><span class="p">,</span> <span class="nx">ctypes</span><span class="p">.</span><span class="nx">uint32_t</span><span class="p">,</span> <span class="nx">ctypes</span><span class="p">.</span><span class="kr">char</span><span class="p">.</span><span class="nx">ptr</span><span class="p">,</span> <span class="nx">ctypes</span><span class="p">.</span><span class="nx">uint32_t</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">ciphertext</span> <span class="o">=</span> <span class="nx">encrypt</span><span class="p">(</span><span class="nx">pubkey</span><span class="p">,</span> <span class="nx">pubkey</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">readString</span><span class="p">();</span>
-</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">ciphertext</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">decrypt</span> <span class="o">=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">declare</span><span class="p">(</span><span class="s1">&#39;private_decrypt&#39;</span><span class="p">,</span> <span class="nx">ctypes</span><span class="p">.</span><span class="nx">default_abi</span><span class="p">,</span> <span class="nx">ctypes</span><span class="p">.</span><span class="nx">unsigned_char</span><span class="p">.</span><span class="nx">ptr</span><span class="p">,</span> <span class="nx">ctypes</span><span class="p">.</span><span class="nx">unsigned_char</span><span class="p">.</span><span class="nx">ptr</span><span class="p">,</span> <span class="nx">ctypes</span><span class="p">.</span><span class="nx">uint32_t</span><span class="p">,</span> <span class="nx">ctypes</span><span class="p">.</span><span class="nx">unsigned_char</span><span class="p">.</span><span class="nx">ptr</span><span class="p">,</span> <span class="nx">ctypes</span><span class="p">.</span><span class="nx">uint32_t</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">decrypt</span><span class="p">(</span><span class="nx">pkey</span><span class="p">,</span> <span class="nx">pkey</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">ciphertext</span><span class="p">,</span> <span class="nx">ciphertext</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">readString</span><span class="p">();</span>
-</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-<span class='line-number'>98</span>
-<span class='line-number'>99</span>
-<span class='line-number'>100</span>
-<span class='line-number'>101</span>
-<span class='line-number'>102</span>
-<span class='line-number'>103</span>
-<span class='line-number'>104</span>
-<span class='line-number'>105</span>
-<span class='line-number'>106</span>
-<span class='line-number'>107</span>
-<span class='line-number'>108</span>
-<span class='line-number'>109</span>
-<span class='line-number'>110</span>
-<span class='line-number'>111</span>
-<span class='line-number'>112</span>
-<span class='line-number'>113</span>
-<span class='line-number'>114</span>
-<span class='line-number'>115</span>
-<span class='line-number'>116</span>
-<span class='line-number'>117</span>
-<span class='line-number'>118</span>
-<span class='line-number'>119</span>
-<span class='line-number'>120</span>
-<span class='line-number'>121</span>
-<span class='line-number'>122</span>
-<span class='line-number'>123</span>
-<span class='line-number'>124</span>
-<span class='line-number'>125</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="nf">str_join</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">b</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
-</span><span class='line'>                <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="kt">size_t</span> <span class="n">la</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-</span><span class='line'>                <span class="n">la</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="kt">size_t</span> <span class="n">lb</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-</span><span class='line'>                <span class="n">lb</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="kt">char</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">la</span> <span class="o">+</span> <span class="n">lb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">memcpy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">la</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">memcpy</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="n">la</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">lb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">p</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="nf">public_encrypt</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pubkey</span><span class="p">,</span> <span class="kt">int</span> <span class="n">key_len</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">from</span><span class="p">,</span> <span class="kt">int</span> <span class="n">from_len</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>        <span class="n">BIO</span> <span class="o">*</span><span class="n">key_mem</span> <span class="o">=</span> <span class="n">BIO_new_mem_buf</span><span class="p">(</span><span class="n">pubkey</span><span class="p">,</span> <span class="n">key_len</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">RSA</span> <span class="o">*</span><span class="n">key</span> <span class="o">=</span> <span class="n">PEM_read_bio_RSAPublicKey</span><span class="p">(</span><span class="n">key_mem</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">BIO_free</span><span class="p">(</span><span class="n">key_mem</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">BIO</span> <span class="o">*</span><span class="n">plaintext_mem</span> <span class="o">=</span> <span class="n">BIO_new_mem_buf</span><span class="p">(</span><span class="n">from</span><span class="p">,</span> <span class="n">from_len</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">BIO</span> <span class="o">*</span><span class="n">ciphertext_mem</span> <span class="o">=</span> <span class="n">BIO_new</span><span class="p">(</span><span class="n">BIO_s_mem</span><span class="p">());</span>
-</span><span class='line'>        <span class="n">BIO</span> <span class="o">*</span><span class="n">bio_base64</span> <span class="o">=</span> <span class="n">BIO_new</span><span class="p">(</span><span class="n">BIO_f_base64</span><span class="p">());</span>
-</span><span class='line'>        <span class="n">BIO_set_flags</span><span class="p">(</span><span class="n">bio_base64</span><span class="p">,</span> <span class="n">BIO_FLAGS_BASE64_NO_NL</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">BIO</span> <span class="o">*</span><span class="n">bio_chain</span> <span class="o">=</span> <span class="n">BIO_push</span><span class="p">(</span><span class="n">bio_base64</span><span class="p">,</span> <span class="n">ciphertext_mem</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="kt">int</span> <span class="n">rsa_size</span> <span class="o">=</span> <span class="n">RSA_size</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
-</span><span class='line'>        <span class="kt">char</span> <span class="o">*</span><span class="n">inbuf</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">rsa_size</span><span class="p">);</span>
-</span><span class='line'>        <span class="kt">char</span> <span class="o">*</span><span class="n">outbuf</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">rsa_size</span><span class="p">);</span>
-</span><span class='line'>        <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
-</span><span class='line'>                <span class="kt">int</span> <span class="n">read_size</span> <span class="o">=</span> <span class="n">rsa_size</span> <span class="o">-</span> <span class="mi">11</span><span class="p">;</span>
-</span><span class='line'>                <span class="kt">int</span> <span class="n">inlen</span> <span class="o">=</span> <span class="n">BIO_read</span><span class="p">(</span><span class="n">plaintext_mem</span><span class="p">,</span> <span class="n">inbuf</span><span class="p">,</span> <span class="n">read_size</span><span class="p">);</span>
-</span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="n">inlen</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>                        <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>                <span class="n">memset</span><span class="p">(</span><span class="n">outbuf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rsa_size</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>                <span class="kt">int</span> <span class="n">outlen</span><span class="p">;</span>
-</span><span class='line'>                <span class="k">if</span><span class="p">((</span><span class="n">outlen</span> <span class="o">=</span> <span class="n">RSA_public_encrypt</span><span class="p">(</span><span class="n">inlen</span><span class="p">,</span> <span class="n">inbuf</span><span class="p">,</span> <span class="n">outbuf</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">RSA_PKCS1_PADDING</span><span class="p">))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span>
-</span><span class='line'>                        <span class="n">print_error</span><span class="p">(</span><span class="s">&quot;failed to RSA_public_encrypt&quot;</span><span class="p">,</span> <span class="n">ERR_get_error</span><span class="p">());</span>
-</span><span class='line'>                        <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-</span><span class='line'>                <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>                <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">BIO_write</span><span class="p">(</span><span class="n">bio_chain</span><span class="p">,</span> <span class="n">outbuf</span><span class="p">,</span> <span class="n">outlen</span><span class="p">);</span>
-</span><span class='line'>                <span class="kt">int</span> <span class="n">abc</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="n">BIO_flush</span><span class="p">(</span><span class="n">bio_chain</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">free</span><span class="p">(</span><span class="n">inbuf</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">free</span><span class="p">(</span><span class="n">outbuf</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">BIO_free</span><span class="p">(</span><span class="n">plaintext_mem</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">RSA_free</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="kt">char</span> <span class="o">*</span><span class="n">ciphertext</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class='line'>        <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
-</span><span class='line'>                <span class="kt">int</span> <span class="n">read_size</span> <span class="o">=</span> <span class="mi">512</span><span class="p">;</span>
-</span><span class='line'>                <span class="kt">char</span> <span class="o">*</span><span class="n">buf</span> <span class="o">=</span> <span class="n">calloc</span><span class="p">(</span><span class="n">read_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">));</span>
-</span><span class='line'>                <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">BIO_read</span><span class="p">(</span><span class="n">ciphertext_mem</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">read_size</span><span class="p">);</span>
-</span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="n">len</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>                        <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>                <span class="n">ciphertext</span> <span class="o">=</span> <span class="n">str_join</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">,</span> <span class="n">buf</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="n">BIO_free_all</span><span class="p">(</span><span class="n">bio_chain</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">return</span> <span class="n">ciphertext</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="nf">private_decrypt</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">prikey</span><span class="p">,</span> <span class="kt">int</span> <span class="n">key_len</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">from</span><span class="p">,</span> <span class="kt">int</span> <span class="n">from_len</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>        <span class="n">BIO</span> <span class="o">*</span><span class="n">key_mem</span> <span class="o">=</span> <span class="n">BIO_new</span><span class="p">(</span><span class="n">BIO_s_mem</span><span class="p">());</span>
-</span><span class='line'>        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">BIO_write</span><span class="p">(</span><span class="n">key_mem</span><span class="p">,</span> <span class="n">prikey</span><span class="p">,</span> <span class="n">key_len</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">RSA</span> <span class="o">*</span><span class="n">key</span> <span class="o">=</span> <span class="n">PEM_read_bio_RSAPrivateKey</span><span class="p">(</span><span class="n">key_mem</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">BIO_free</span><span class="p">(</span><span class="n">key_mem</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">BIO</span> <span class="o">*</span><span class="n">bio_base64</span> <span class="o">=</span> <span class="n">BIO_new</span><span class="p">(</span><span class="n">BIO_f_base64</span><span class="p">());</span>
-</span><span class='line'>        <span class="n">BIO_set_flags</span><span class="p">(</span><span class="n">bio_base64</span><span class="p">,</span> <span class="n">BIO_FLAGS_BASE64_NO_NL</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">BIO</span> <span class="o">*</span><span class="n">mem_buf</span> <span class="o">=</span> <span class="n">BIO_new_mem_buf</span><span class="p">(</span><span class="n">from</span><span class="p">,</span> <span class="n">from_len</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">mem_buf</span> <span class="o">=</span> <span class="n">BIO_push</span><span class="p">(</span><span class="n">bio_base64</span><span class="p">,</span> <span class="n">mem_buf</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">BIO</span> <span class="o">*</span><span class="n">plaintext_mem</span> <span class="o">=</span> <span class="n">BIO_new</span><span class="p">(</span><span class="n">BIO_s_mem</span><span class="p">());</span>
-</span><span class='line'>        <span class="kt">int</span> <span class="n">plaintext_len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>        <span class="kt">int</span> <span class="n">rsa_size</span> <span class="o">=</span> <span class="n">RSA_size</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="kt">char</span> <span class="o">*</span><span class="n">inbuf</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">rsa_size</span><span class="p">);</span>
-</span><span class='line'>        <span class="kt">char</span> <span class="o">*</span><span class="n">outbuf</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">rsa_size</span><span class="p">);</span>
-</span><span class='line'>        <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
-</span><span class='line'>                <span class="kt">int</span> <span class="n">read_size</span> <span class="o">=</span> <span class="n">rsa_size</span><span class="p">;</span>
-</span><span class='line'>                <span class="kt">int</span> <span class="n">inlen</span> <span class="o">=</span> <span class="n">BIO_read</span><span class="p">(</span><span class="n">mem_buf</span><span class="p">,</span> <span class="n">inbuf</span><span class="p">,</span> <span class="n">read_size</span><span class="p">);</span>
-</span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="n">inlen</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>                        <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>                <span class="n">memset</span><span class="p">(</span><span class="n">outbuf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rsa_size</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>                <span class="kt">int</span> <span class="n">outlen</span><span class="p">;</span>
-</span><span class='line'>                <span class="k">if</span><span class="p">((</span><span class="n">outlen</span> <span class="o">=</span> <span class="n">RSA_private_decrypt</span><span class="p">(</span><span class="n">inlen</span><span class="p">,</span> <span class="n">inbuf</span><span class="p">,</span> <span class="n">outbuf</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">RSA_PKCS1_PADDING</span><span class="p">))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span>
-</span><span class='line'>                        <span class="n">print_error</span><span class="p">(</span><span class="s">&quot;failed to RSA_private_decrypt&quot;</span><span class="p">,</span> <span class="n">ERR_get_error</span><span class="p">());</span>
-</span><span class='line'>                        <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-</span><span class='line'>                <span class="p">}</span>
-</span><span class='line'>                <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">BIO_write</span><span class="p">(</span><span class="n">plaintext_mem</span><span class="p">,</span> <span class="n">outbuf</span><span class="p">,</span> <span class="n">outlen</span><span class="p">);</span>
-</span><span class='line'>                <span class="n">plaintext_len</span> <span class="o">+=</span> <span class="n">len</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="n">BIO_flush</span><span class="p">(</span><span class="n">plaintext_mem</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">free</span><span class="p">(</span><span class="n">inbuf</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">free</span><span class="p">(</span><span class="n">outbuf</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">BIO_free_all</span><span class="p">(</span><span class="n">mem_buf</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">RSA_free</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="kt">char</span> <span class="o">*</span><span class="n">plaintext</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class='line'>        <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
-</span><span class='line'>                <span class="kt">int</span> <span class="n">read_size</span> <span class="o">=</span> <span class="mi">512</span><span class="p">;</span>
-</span><span class='line'>                <span class="kt">char</span> <span class="o">*</span><span class="n">buf</span> <span class="o">=</span> <span class="n">calloc</span><span class="p">(</span><span class="n">read_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">));</span>
-</span><span class='line'>                <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">BIO_read</span><span class="p">(</span><span class="n">plaintext_mem</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">read_size</span><span class="p">);</span>
-</span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="n">len</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>                        <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>                <span class="n">plaintext</span> <span class="o">=</span> <span class="n">str_join</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">buf</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="n">BIO_free</span><span class="p">(</span><span class="n">plaintext_mem</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">return</span> <span class="n">plaintext</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>これから</h3>
-
-<p>署名などの機能を実現する。
-CSセミナの発表資料を準備する</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/master_report/blog/page/2/">&larr; Older</a>
@@ -1598,6 +1355,10 @@ CSセミナの発表資料を準備する</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/master_report/blog/2012/11/19/friendsocketfalsean-hao-hua/">FriendSocketの暗号化</a>
+      </li>
+    
+      <li class="post">
         <a href="/master_report/blog/2012/11/12/friendsocket/">FriendSocket</a>
       </li>
     
@@ -1611,10 +1372,6 @@ CSセミナの発表資料を準備する</p>
     
       <li class="post">
         <a href="/master_report/blog/2012/10/23/osyan-jiu-hui-lun-wen/">OS研究会論文</a>
-      </li>
-    
-      <li class="post">
-        <a href="/master_report/blog/2012/10/15/konpiyutasisutemusinpoziumulun-wen/">コンピュータシステムシンポジウム論文</a>
       </li>
     
   </ul>
