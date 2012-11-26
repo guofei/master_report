@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 卒業論文 | Master Report]]></title>
+  <link href="http://guofei.github.com/master_report/blog/categories/卒業論文/atom.xml" rel="self"/>
+  <link href="http://guofei.github.com/master_report/"/>
+  <updated>2012-11-26T15:30:46+09:00</updated>
+  <id>http://guofei.github.com/master_report/</id>
+  <author>
+    <name><![CDATA[kaku]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[卒業論文]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2012/11/26/zu-ye-lun-wen/"/>
+    <updated>2012-11-26T15:10:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2012/11/26/zu-ye-lun-wen</id>
+    <content type="html"><![CDATA[<h3>Friendsocket</h3>
+
+<p>Firefox9で動けるようになった</p>
+
+<p>最初自分で修正してみたが、なかなかうまく行かなかった。githubのpull requestsの所を見たら、既に他の人がfirefox9の対応するものを作った。２０００行以上修正した。これを使えば、うまく動けるようになった。</p>
+
+<p>https://github.com/sibrahim/xmpp4moz</p>
+
+<h4>通信速度</h4>
+
+<p>Google Talkの利用はまだできてない。XMPPの対応は少し違うので、その部分を修正する必要がある。</p>
+
+<h3>論文</h3>
+
+<p>書いている。前の金子さんの修士論文をちょっと参考したい。PDF版がほしい。</p>
+
+<h3>OS研究会</h3>
+
+<p>スライドを完成した。</p>
+]]></content>
+  </entry>
+  
+</feed>
