@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-12-17T14:54:35+09:00</updated>
+  <updated>2012-12-17T15:03:48+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -22,35 +22,143 @@
 
 <h4>暗号化なし</h4>
 
-<p>|LAN
-|byte    |ms
-|&#8212;&#8212;&#8211;|&#8212;&#8212;-
-|1       |12.1
-|64      |13.5
-|1024    |20.8</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>byte    </th>
+<th>ms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>1       </td>
+<td>12.1</td>
+</tr>
+<tr>
+<td></td>
+<td>64      </td>
+<td>13.5</td>
+</tr>
+<tr>
+<td></td>
+<td>1024    </td>
+<td>20.8</td>
+</tr>
+</tbody>
+</table>
 
-<p>|Google Talk
-|byte    |ms
-|&#8212;&#8212;&#8211;|&#8212;&#8212;-
-|1       |88.6
-|64      |89.8
-|1024    |94.1</p>
+
+<p>LAN</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>byte    </th>
+<th>ms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>1       </td>
+<td>88.6</td>
+</tr>
+<tr>
+<td></td>
+<td>64      </td>
+<td>89.8</td>
+</tr>
+<tr>
+<td></td>
+<td>1024    </td>
+<td>94.1</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Google Talk</p>
 
 <h4>暗号化あり</h4>
 
-<p>|LAN
-|byte    |ms
-|&#8212;&#8212;&#8211;|&#8212;&#8212;-
-|1       |17.1
-|64      |17.0
-|1024    |30.86</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>byte    </th>
+<th>ms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>1       </td>
+<td>17.1</td>
+</tr>
+<tr>
+<td></td>
+<td>64      </td>
+<td>17.0</td>
+</tr>
+<tr>
+<td></td>
+<td>1024    </td>
+<td>30.86</td>
+</tr>
+</tbody>
+</table>
 
-<p>|Google Talk
-|byte    |ms
-|&#8212;&#8212;&#8211;|&#8212;&#8212;-
-|1       |105.6
-|64      |104.4
-|1024    |118.8</p>
+
+<p>LAN</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>byte    </th>
+<th>ms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>1       </td>
+<td>105.6</td>
+</tr>
+<tr>
+<td></td>
+<td>64      </td>
+<td>104.4</td>
+</tr>
+<tr>
+<td></td>
+<td>1024    </td>
+<td>118.8</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Google Talk</p>
+
+<h3>協調アプリケーション</h3>
+
+<h4>chatアプリ</h4>
+
+<p>XMPPとSkypeを使えばできるので、意味がない</p>
+
+<h4>相手にURLを送るアプリ</h4>
+
+<h4>ブックマーク共有アプリ</h4>
+
+<p>相手にURLを送るアプリと大体似ているが、スートレージが必要になる。</p>
+
+<h4>スクリーンショットアプリ</h4>
+
+<p>実現するのは時間がかかる</p>
 ]]></content>
   </entry>
   
