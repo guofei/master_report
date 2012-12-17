@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 修士論文 | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/修士論文/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2012-12-17T15:03:48+09:00</updated>
+  <updated>2012-12-17T15:07:05+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -148,7 +148,7 @@
 
 <h4>chatアプリ</h4>
 
-<p>XMPPとSkypeを使えばできるので、意味がない</p>
+<p>XMPPのクライアントを使えばできるので、意味がない。クライアントをインストールしてない時、chatアプリが使える。</p>
 
 <h4>相手にURLを送るアプリ</h4>
 
