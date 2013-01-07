@@ -9,18 +9,9 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="Socket IOに似たようなAPIを書き換えた socket io 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-var socket = io.connect(&#39;http://localhost&#39;); socket.on(&#39;news&#39;, function ( &hellip;">
+  <meta name="description" content="gdbでpluginをdebug chromeを立ち上げる時、 1
+/usr/bin/google-chrome --plugin-launcher=&#39;xterm -e gdb --args&#39; pluginをロードするページを開く
+GDB付きのxterm windowが出てきて、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -73,6 +64,80 @@ var socket = io.connect(&#39;http://localhost&#39;); socket.on(&#39;news&#39;, f
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/master_report/blog/2012/10/02/plugin-and-addon-debug/">Plugin and Addon Debug</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-02T10:52:00+09:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>gdbでpluginをdebug</h3>
+
+<ol>
+<li>chromeを立ち上げる時、</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>/usr/bin/google-chrome --plugin-launcher<span class="o">=</span><span class="s1">&#39;xterm -e gdb --args&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>pluginをロードするページを開く</li>
+<li>GDB付きのxterm windowが出てきて、そのwindowで.soのファイルをロードし、直接Debugできる。</li>
+</ol>
+
+
+<p>例：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>/usr/bin/google-chrome --plugin-launcher<span class="o">=</span><span class="s1">&#39;xterm -e gdb --args&#39;</span>
+</span><span class='line'>directory ~/path/to/npapi-sdk/samples/unix-basic/
+</span><span class='line'>breakpoint
+</span><span class='line'>start あるいは　run
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>chromebugでaddonをdebug</h3>
+
+<ol>
+<li>同じバージョンchromebug+firebugをインストール</li>
+<li>./firefox-bin –chromebugで実行すると、デバッグモードに入れる.(/Applications/Firefox 3.6.app/Contents/MacOS/firefox-bin)</li>
+<li>breakpointなどを設定できるし、マウスを変数名に指すと、値が出力してくれる。結構使いやすい</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1666,191 +1731,6 @@ Makefileで</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/master_report/blog/2012/05/31/6-dot-1fen-san-zemi-kaku/">6.1分散ゼミ　カク</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-31T23:08:00+09:00" pubdate data-updated="true">May 31<span>st</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>xulrunnerインストール<br/>
-http://ftp.mozilla.org/pub/mozilla.org/xulrunner/releases/13.0b6/runtimes/<br/>
-macの場合/Library/Frameworks/XUL.Frameworkにインストールされる</p>
-
-<p>Gecko SDKをダウンロード<br/>
-https://developer.mozilla.org/en/Gecko_SDK<br/>
-Gecko 1.9.2 (Firefox 3.6)<br/>
-Gecko 12.0 (Firefox 12.0)<br/>
-xmppのプラグインは最新のfirefoxで動けない原因はここかもしれない</p>
-
-<p>idlファイル</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#include "nsISupports.idl"
-</span><span class='line'>[scriptable, uuid(c95498ae-16f5-4b46-8713-2cf79e30d4ef)]
-</span><span class='line'>interface myICalc : nsISupports
-</span><span class='line'>{
-</span><span class='line'>  long add(in long a, in long b);
-</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
-
-
-<p>$ ../../../xulrunner-sdk/sdk/bin/header.py -I ../../../xulrunner-sdk/idl -o myIcalc.h myICalc.idl<br/>
-$ ../../../xulrunner-sdk/sdk/bin/typelib.py -I ../../../xulrunner-sdk/idl -o myIcalc.xpt myICalc.idl</p>
-
-<p>headerファイル</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#ifndef __MYCALC_H__
-</span><span class='line'>#define __MYCALC_H__
-</span><span class='line'>#include "myICalc.h"
-</span><span class='line'>#define MY_CALC_CONTRACT_ID "@cozmixng.org/xpcom-sample/Calc;1"
-</span><span class='line'>#define MY_CALC_CLASS_NAME "Calculator"
-</span><span class='line'>#define MY_CALC_CID_STR "8931dfd3-edf3-4b7d-bd44-1da72064f0dc"
-</span><span class='line'>#define MY_CALC_CID {0x8931dfd3, 0xedf3, 0x4b7d, {0xbd, 0x44, 0x1d, 0xa7, 0x20, 0x64, 0xf0, 0xdc}}
-</span><span class='line'>class myCalc : public myICalc
-</span><span class='line'>{
-</span><span class='line'>public:
-</span><span class='line'>          NS_DECL_ISUPPORTS
-</span><span class='line'>          NS_DECL_MYICALC
-</span><span class='line'>          myCalc();
-</span><span class='line'>private:
-</span><span class='line'>          ~myCalc();
-</span><span class='line'>protected:
-</span><span class='line'>          /* additional members */
-</span><span class='line'>};
-</span><span class='line'>#endif</span></code></pre></td></tr></table></div></figure>
-
-
-<p>NS_DECL_ISUPPORTS: マクロ、nsISupportsクラスのメンバ<br/>
-NS_DECL_MYICALC: マクロ、myCalcクラスのメンバ<br/>
-この二つのマクロを利用し、コンストラクタ、デストラクタのみ書く</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#define NS_DECL_ISUPPORTS                                                     \
-</span><span class='line'>public:                                                                       \
-</span><span class='line'>  NS_IMETHOD QueryInterface(REFNSIID aIID,                                    \
-</span><span class='line'>                            void** aInstancePtr);                             \
-</span><span class='line'>  NS_IMETHOD_(nsrefcnt) AddRef(void);                                         \
-</span><span class='line'>  NS_IMETHOD_(nsrefcnt) Release(void);                                        \
-</span><span class='line'>protected:                                                                    \
-</span><span class='line'>  nsAutoRefCnt mRefCnt;                                                       \
-</span><span class='line'>  NS_DECL_OWNINGTHREAD                                                        \
-</span><span class='line'>public:</span></code></pre></td></tr></table></div></figure>
-
-
-<p>idlから生成したmyICalcクラスを継承する</p>
-
-<p>cppファイル</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#include "mozilla-config.h"
-</span><span class='line'>#include "myCalc.h"
-</span><span class='line'>NS_IMPL_ISUPPORTS1(myCalc, myICalc)
-</span><span class='line'>myCalc::myCalc()
-</span><span class='line'>{
-</span><span class='line'>        /* member initializers and constructor code */
-</span><span class='line'>}
-</span><span class='line'>myCalc::~myCalc()
-</span><span class='line'>{
-</span><span class='line'>        /* destructor code */
-</span><span class='line'>}
-</span><span class='line'>/* long add (in long a, in long b); */
-</span><span class='line'>NS_IMETHODIMP myCalc::Add(PRInt32 a, PRInt32 b, PRInt32 *_retval)
-</span><span class='line'>{
-</span><span class='line'>        *_retval = a + b;
-</span><span class='line'>        return NS_OK;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#define NS_IMPL_ISUPPORTS1(_class, _interface)                                \
-</span><span class='line'>  NS_IMPL_ADDREF(_class)                                                      \
-</span><span class='line'>  NS_IMPL_RELEASE(_class)                                                     \
-</span><span class='line'>  NS_IMPL_QUERY_INTERFACE1(_class, _interface)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>最後にこれらのファイルをコンパイルし、.soファイルが生成されたら完成</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/master_report/blog/page/3/">&larr; Older</a>
@@ -1868,6 +1748,10 @@ NS_DECL_MYICALC: マクロ、myCalcクラスのメンバ<br/>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/master_report/blog/2013/01/07/sukurinsiyotutoapuri/">スクリーンショットアプリ</a>
+      </li>
+    
+      <li class="post">
         <a href="/master_report/blog/2012/12/26/lun-wen-ping-jia/">論文:評価</a>
       </li>
     
@@ -1881,10 +1765,6 @@ NS_DECL_MYICALC: マクロ、myCalcクラスのメンバ<br/>
     
       <li class="post">
         <a href="/master_report/blog/2012/11/19/friendsocketfalsean-hao-hua/">FriendSocketの暗号化</a>
-      </li>
-    
-      <li class="post">
-        <a href="/master_report/blog/2012/11/12/friendsocket/">FriendSocket</a>
       </li>
     
   </ul>
@@ -1901,7 +1781,7 @@ NS_DECL_MYICALC: マクロ、myCalcクラスのメンバ<br/>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - kaku -
+  Copyright &copy; 2013 - kaku -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
