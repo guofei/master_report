@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2013-01-07T14:47:15+09:00</updated>
+  <updated>2013-01-16T15:16:44+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[修論提出しました]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2013/01/16/xiu-lun-ti-chu-simasita/"/>
+    <updated>2013-01-16T15:06:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2013/01/16/xiu-lun-ti-chu-simasita</id>
+    <content type="html"><![CDATA[<h3>発表の準備</h3>
+
+<h3>friendsocket</h3>
+
+<p>性能評価のGoogle Talkのおかしいところを判明する</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[スクリーンショットアプリ]]></title>
@@ -1947,230 +1960,6 @@ C https://github.com/railsware/libskypekit</p>
 <h2>次回</h2>
 
 <p>javascript側使えるようにする。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[6.15分散ゼミ 郭]]></title>
-    <link href="http://guofei.github.com/master_report/blog/2012/06/14/6-dot-15fen-san-zemi-guo/"/>
-    <updated>2012-06-14T14:15:00+09:00</updated>
-    <id>http://guofei.github.com/master_report/blog/2012/06/14/6-dot-15fen-san-zemi-guo</id>
-    <content type="html"><![CDATA[<h2>インターンシップ</h2>
-
-<p>東京のあるiOSゲーム開発の会社のインターンシップに参加した</p>
-
-<h2>OpenSSL</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="n">public_encrypt</span><span class="p">(</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pubkey</span><span class="p">,</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">from</span><span class="p">);</span>
-</span><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="n">private_decrypt</span><span class="p">(</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">prikey</span><span class="p">,</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">from</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>OpenSSLのライブラリを利用し、公開鍵で暗号化する関数と復号化する関数を書いた。一つはpublic keyと暗号化したい文字列を入れて、暗号化を行って、Base64の文字列を返す。もう一つはその逆である。</p>
-
-<p>テストしたら、1.3MBくらいのデータを暗号化して、復号化すると、25秒かかった。後から高速化できるので、とりあえずXPCOMで利用出来るようにした方がいいと思って、XPCOMのほうを先にやる。</p>
-
-<p>XPCOMのidlファイルに関数を追加し、xulrunner-sdk/sdk/bin/header.pyでheaderファイルを生成する時、</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">xpidl</span><span class="p">.</span><span class="n">IDLError</span><span class="o">:</span> <span class="n">error</span><span class="o">:</span> <span class="n">invalid</span> <span class="n">syntax</span><span class="p">,</span> <span class="n">jsIrsa</span><span class="p">.</span><span class="n">idl</span> <span class="n">line</span> <span class="mi">5</span><span class="o">:</span><span class="mi">6</span>
-</span><span class='line'>  <span class="kt">char</span><span class="o">*</span> <span class="n">public_encrypt</span><span class="p">(</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pubkey</span><span class="p">,</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">from</span><span class="p">);</span>
-</span><span class='line'>        <span class="o">^</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>というエラが出た。</p>
-
-<p>NPAPIの場合、NPStringがある、javascriptの引数を受け取りする時、NPVARIANT_TO_STRINGでjavascriptのオブジェクトをNSStringにして、NSStringをchar*にする必要がある。javascriptに値を返す時は逆にやらなければならない<br/>
-XPCOMも同じようにする必要がある。調べたら</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">IDL</span> <span class="n">type</span> <span class="o">|</span> <span class="n">C</span><span class="o">++</span> <span class="n">Type</span>
-</span><span class='line'><span class="o">---------|------------</span>
-</span><span class='line'><span class="n">string</span>   <span class="o">|</span> <span class="kt">char</span><span class="o">*</span>
-</span><span class='line'><span class="n">wstring</span>  <span class="o">|</span> <span class="n">PRUnichar</span><span class="o">*</span>
-</span><span class='line'><span class="n">AString</span>  <span class="o">|</span> <span class="n">nsAString</span>
-</span><span class='line'><span class="p">...</span>      <span class="o">|</span> <span class="p">...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>idlは以下のように書く</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">interface</span> <span class="n">jsIrsa</span> <span class="o">:</span> <span class="n">nsISupports</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="n">string</span> <span class="n">encrypt</span><span class="p">(</span><span class="n">in</span> <span class="n">string</span> <span class="n">pubkey</span><span class="p">,</span> <span class="n">in</span> <span class="n">string</span> <span class="n">from</span><span class="p">);</span>
-</span><span class='line'>  <span class="n">string</span> <span class="n">decrypt</span><span class="p">(</span><span class="n">in</span> <span class="n">string</span> <span class="n">prikey</span><span class="p">,</span> <span class="n">in</span> <span class="n">string</span> <span class="n">from</span><span class="p">);</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>constをinにする。inは読み込み専用</p>
-
-<p>こうすると、idlから、.hと.cppのファイルが生成された。</p>
-
-<p>前回と同じように.soファイルが生成された。</p>
-
-<p>共有ライブラリが読み込まれたときに、中に入っている XPCOMを登録する機能が必要になる。その機能を crypt_module.cppとして実装する必要がある。</p>
-
-<p>ウェブ上で以下のように書いているが、</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cp">#include &quot;nsIGenericFactory.h&quot;</span>
-</span><span class='line'><span class="cp">#include &quot;myCalc.h&quot;</span>
-</span><span class='line'><span class="n">NS_GENERIC_FACTORY_CONSTRUCTOR</span><span class="p">(</span><span class="n">myCalc</span><span class="p">)</span>
-</span><span class='line'><span class="k">static</span> <span class="n">nsModuleComponentInfo</span> <span class="n">components</span><span class="p">[]</span> <span class="o">=</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>         <span class="n">MY_CALC_CLASS_NAME</span><span class="p">,</span>
-</span><span class='line'>           <span class="n">MY_CALC_CID</span><span class="p">,</span>
-</span><span class='line'>           <span class="n">MY_CALC_CONTRACT_ID</span><span class="p">,</span>
-</span><span class='line'>           <span class="n">myCalcConstructor</span><span class="p">,</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'><span class="n">NS_IMPL_NSGETMODULE</span><span class="p">(</span><span class="s">&quot;myCalcModule&quot;</span><span class="p">,</span> <span class="n">components</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>nsIGenericFactory.hはもう使われてない。調べたら、#include &#8220;mozilla/ModuleUtils.h&#8221;にするべき</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &quot;mozilla/ModuleUtils.h&quot;</span>
-</span><span class='line'><span class="cp">#include &quot;crypt.h&quot;</span>
-</span><span class='line'><span class="n">NS_GENERIC_FACTORY_CONSTRUCTOR</span><span class="p">(</span><span class="n">Crypt</span><span class="p">)</span>
-</span><span class='line'><span class="n">NS_DEFINE_NAMED_CID</span><span class="p">(</span><span class="n">CRYPT_CID</span><span class="p">);</span>
-</span><span class='line'><span class="k">static</span> <span class="k">const</span> <span class="n">mozilla</span><span class="o">::</span><span class="n">Module</span><span class="o">::</span><span class="n">CIDEntry</span> <span class="n">kCryptCIDs</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>        <span class="p">{</span> <span class="o">&amp;</span><span class="n">kCRYPT_CID</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">CryptConstructor</span> <span class="p">},</span>
-</span><span class='line'>        <span class="p">{</span> <span class="nb">NULL</span> <span class="p">}</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'><span class="k">static</span> <span class="k">const</span> <span class="n">mozilla</span><span class="o">::</span><span class="n">Module</span><span class="o">::</span><span class="n">ContractIDEntry</span> <span class="n">kCryptContracts</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>        <span class="p">{</span> <span class="n">CRYPT_CONTRACT_ID</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">kCRYPT_CID</span> <span class="p">},</span>
-</span><span class='line'>        <span class="p">{</span> <span class="nb">NULL</span> <span class="p">}</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'><span class="k">static</span> <span class="k">const</span> <span class="n">mozilla</span><span class="o">::</span><span class="n">Module</span> <span class="n">kCryptModule</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">mozilla</span><span class="o">::</span><span class="n">Module</span><span class="o">::</span><span class="n">kVersion</span><span class="p">,</span>
-</span><span class='line'>        <span class="n">kCryptCIDs</span><span class="p">,</span>
-</span><span class='line'>        <span class="n">kCryptContracts</span><span class="p">,</span>
-</span><span class='line'>        <span class="nb">NULL</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'><span class="n">NSMODULE_DEFN</span><span class="p">(</span><span class="n">crypt_module</span><span class="p">)</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">kCryptModule</span><span class="p">;</span>
-</span><span class='line'><span class="n">NS_IMPL_MOZILLA192_NSGETMODULE</span><span class="p">(</span><span class="o">&amp;</span><span class="n">kCryptModule</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>コンパイルすると、以下のエラが出た。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">g</span><span class="o">++</span> <span class="o">-</span><span class="n">g</span> <span class="o">-</span><span class="n">Wall</span> <span class="o">-</span><span class="n">fno</span><span class="o">-</span><span class="n">rtti</span> <span class="o">-</span><span class="n">fno</span><span class="o">-</span><span class="n">exceptions</span> <span class="o">-</span><span class="n">shared</span> <span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">kaku</span><span class="o">/</span><span class="n">xulrunner</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="n">lib</span> <span class="o">-</span><span class="n">o</span> <span class="n">crypt</span><span class="p">.</span><span class="n">so</span>
-</span><span class='line'>    <span class="n">crypt</span><span class="p">.</span><span class="n">o</span> <span class="n">crypt_module</span><span class="p">.</span><span class="n">o</span> <span class="o">-</span><span class="n">lxpcomglue</span> <span class="o">-</span><span class="n">lnspr4</span> <span class="o">-</span><span class="n">lplds4</span>
-</span><span class='line'><span class="n">Undefined</span> <span class="n">symbols</span> <span class="k">for</span> <span class="n">architecture</span> <span class="nl">x86_64:</span>
-</span><span class='line'> <span class="s">&quot;vtable for mozilla::GenericModule&quot;</span><span class="p">,</span> <span class="n">referenced</span> <span class="nl">from:</span>
-</span><span class='line'>  <span class="n">mozilla</span><span class="o">::</span><span class="n">GenericModule</span><span class="o">::</span><span class="n">GenericModule</span><span class="p">(</span><span class="n">mozilla</span><span class="o">::</span><span class="n">Module</span> <span class="k">const</span><span class="o">*</span><span class="p">)</span><span class="n">in</span> <span class="n">crypt_module</span><span class="p">.</span><span class="n">o</span>
-</span><span class='line'><span class="nl">ld:</span> <span class="n">symbol</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">not</span> <span class="n">found</span> <span class="k">for</span> <span class="n">architecture</span> <span class="n">x86_64</span>
-</span><span class='line'><span class="nl">collect2:</span> <span class="n">ld</span> <span class="n">returned</span> <span class="mi">1</span> <span class="n">exit</span> <span class="n">status</span>
-</span><span class='line'><span class="nl">make:</span> <span class="o">***</span> <span class="p">[</span><span class="n">crypt</span><span class="p">.</span><span class="n">so</span><span class="p">]</span> <span class="n">Error</span> <span class="mi">1</span>
-</span><span class='line'><span class="nl">make:</span> <span class="n">Target</span> <span class="err">`</span><span class="n">all</span><span class="err">&#39;</span> <span class="n">not</span> <span class="n">remade</span> <span class="n">because</span> <span class="n">of</span> <span class="n">errors</span><span class="p">.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>一回コンパイルして、失敗した後、
-Makefileで</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">BITTINESS</span> <span class="o">=</span> <span class="o">-</span><span class="n">m32</span>
-</span><span class='line'><span class="n">CXX</span> <span class="o">=</span> <span class="n">c</span><span class="o">++</span> <span class="err">$</span><span class="p">{</span><span class="n">BITTINESS</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>を追加し、cleanしないでもう一回コンパイルすると、コンパイルが成功した</p>
-
-<p>make cleanしたら、以下のエラが出た</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">c</span><span class="o">++</span> <span class="o">-</span><span class="n">m32</span> <span class="o">-</span><span class="n">g</span> <span class="o">-</span><span class="n">Wall</span> <span class="o">-</span><span class="n">fno</span><span class="o">-</span><span class="n">rtti</span> <span class="o">-</span><span class="n">fno</span><span class="o">-</span><span class="n">exceptions</span> <span class="o">-</span><span class="n">shared</span> <span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">kaku</span><span class="o">/</span><span class="n">xulrunner</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="n">lib</span> <span class="o">-</span><span class="n">o</span>
-</span><span class='line'>    <span class="n">crypt</span><span class="p">.</span><span class="n">so</span> <span class="n">crypt</span><span class="p">.</span><span class="n">o</span> <span class="n">crypt_module</span><span class="p">.</span><span class="n">o</span> <span class="o">-</span><span class="n">lxpcomglue</span> <span class="o">-</span><span class="n">lnspr4</span> <span class="o">-</span><span class="n">lplds4</span>
-</span><span class='line'><span class="nl">ld:</span> <span class="nl">warning:</span> <span class="n">ignoring</span> <span class="n">file</span> <span class="n">xulrunner</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libxpcomglue</span><span class="p">.</span><span class="n">a</span><span class="p">,</span>
-</span><span class='line'>    <span class="n">file</span> <span class="n">was</span> <span class="n">built</span> <span class="k">for</span> <span class="n">archive</span> <span class="n">which</span> <span class="n">is</span> <span class="n">not</span> <span class="n">the</span> <span class="n">architecture</span> <span class="n">being</span> <span class="n">linked</span> <span class="p">(</span><span class="n">i386</span><span class="p">)</span>
-</span><span class='line'><span class="nl">ld:</span> <span class="nl">warning:</span> <span class="n">ignoring</span> <span class="n">file</span> <span class="n">xulrunner</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libnspr4</span><span class="p">.</span><span class="n">dylib</span><span class="p">,</span>
-</span><span class='line'>    <span class="n">file</span> <span class="n">was</span> <span class="n">built</span> <span class="k">for</span> <span class="n">unsupported</span> <span class="n">file</span> <span class="n">format</span> <span class="n">which</span> <span class="n">is</span> <span class="n">not</span> <span class="n">the</span> <span class="n">architecture</span> <span class="n">being</span> <span class="n">linked</span> <span class="p">(</span><span class="n">i386</span><span class="p">)</span>
-</span><span class='line'><span class="nl">ld:</span> <span class="nl">warning:</span> <span class="n">ignoring</span> <span class="n">file</span> <span class="n">xulrunner</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libplds4</span><span class="p">.</span><span class="n">dylib</span><span class="p">,</span>
-</span><span class='line'>    <span class="n">file</span> <span class="n">was</span> <span class="n">built</span> <span class="k">for</span> <span class="n">unsupported</span> <span class="n">file</span> <span class="n">format</span> <span class="n">which</span> <span class="n">is</span> <span class="n">not</span> <span class="n">the</span> <span class="n">architecture</span> <span class="n">being</span> <span class="n">linked</span> <span class="p">(</span><span class="n">i386</span><span class="p">)</span>
-</span><span class='line'><span class="n">Undefined</span> <span class="n">symbols</span> <span class="k">for</span> <span class="n">architecture</span> <span class="nl">i386:</span>
-</span><span class='line'>  <span class="s">&quot;NS_TableDrivenQI(void*, QITableEntry const*, nsID const&amp;, void**)&quot;</span><span class="p">,</span> <span class="n">referenced</span> <span class="nl">from:</span>
-</span><span class='line'>    <span class="n">Crypt</span><span class="o">::</span><span class="n">QueryInterface</span><span class="p">(</span><span class="n">nsID</span> <span class="k">const</span><span class="o">&amp;</span><span class="p">,</span> <span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="n">in</span> <span class="n">crypt</span><span class="p">.</span><span class="n">o</span>
-</span><span class='line'>  <span class="s">&quot;vtable for mozilla::GenericModule&quot;</span><span class="p">,</span> <span class="n">referenced</span> <span class="nl">from:</span>
-</span><span class='line'>    <span class="n">mozilla</span><span class="o">::</span><span class="n">GenericModule</span><span class="o">::</span><span class="n">GenericModule</span><span class="p">(</span><span class="n">mozilla</span><span class="o">::</span><span class="n">Module</span> <span class="k">const</span><span class="o">*</span><span class="p">)</span><span class="n">in</span> <span class="n">crypt_module</span><span class="p">.</span><span class="n">o</span>
-</span><span class='line'><span class="nl">ld:</span> <span class="n">symbol</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">not</span> <span class="n">found</span> <span class="k">for</span> <span class="n">architecture</span> <span class="n">i386</span>
-</span><span class='line'><span class="nl">collect2:</span> <span class="n">ld</span> <span class="n">returned</span> <span class="mi">1</span> <span class="n">exit</span> <span class="n">status</span>
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   

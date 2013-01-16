@@ -5,13 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>plugin and addon debug - Master Report</title>
+  <title>修論提出しました - Master Report</title>
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="gdbでpluginをdebug chromeを立ち上げる時、 1
-/usr/bin/google-chrome --plugin-launcher=&#39;xterm -e gdb --args&#39; pluginをロードするページを開く
-GDB付きのxterm windowが出てきて、 &hellip;">
+  <meta name="description" content="発表の準備 friendsocket 性能評価のGoogle Talkのおかしいところを判明する
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +19,7 @@ GDB付きのxterm windowが出てきて、 &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://guofei.github.com/master_report/blog/2012/10/02/plugin-and-addon-debug/">
+  <link rel="canonical" href="http://guofei.github.com/master_report/blog/2013/01/16/xiu-lun-ti-chu-simasita/">
   <link href="/master_report/favicon.png" rel="icon">
   <link href="/master_report/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/master_report/javascripts/modernizr-2.0.js"></script>
@@ -67,7 +66,7 @@ GDB付きのxterm windowが出てきて、 &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Plugin and Addon Debug</h1>
+      <h1 class="entry-title">修論提出しました</h1>
     
     
       <p class="meta">
@@ -83,52 +82,18 @@ GDB付きのxterm windowが出てきて、 &hellip;">
   
 
 
-<time datetime="2012-10-02T10:52:00+09:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2012</time>
+<time datetime="2013-01-16T15:06:00+09:00" pubdate data-updated="true">Jan 16<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h3>gdbでpluginをdebug</h3>
+<div class="entry-content"><h3>発表の準備</h3>
 
-<ol>
-<li>chromeを立ち上げる時、</li>
-</ol>
+<h3>friendsocket</h3>
 
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>/usr/bin/google-chrome --plugin-launcher<span class="o">=</span><span class="s1">&#39;xterm -e gdb --args&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>pluginをロードするページを開く</li>
-<li>GDB付きのxterm windowが出てきて、そのwindowで.soのファイルをロードし、直接Debugできる。</li>
-</ol>
-
-
-<p>例：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>/usr/bin/google-chrome --plugin-launcher<span class="o">=</span><span class="s1">&#39;xterm -e gdb --args&#39;</span>
-</span><span class='line'>directory ~/path/to/npapi-sdk/samples/unix-basic/
-</span><span class='line'>breakpoint
-</span><span class='line'>start あるいは　run
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>chromebugでaddonをdebug</h3>
-
-<ol>
-<li>同じバージョンchromebug+firebugをインストール</li>
-<li>./firefox-bin –chromebugで実行すると、デバッグモードに入れる.(/Applications/Firefox 3.6.app/Contents/MacOS/firefox-bin)</li>
-<li>breakpointなどを設定できるし、マウスを変数名に指すと、値が出力してくれる。結構使いやすい</li>
-</ol>
-
+<p>性能評価のGoogle Talkのおかしいところを判明する</p>
 </div>
 
 
@@ -151,21 +116,15 @@ GDB付きのxterm windowが出てきて、 &hellip;">
   
 
 
-<time datetime="2012-10-02T10:52:00+09:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2012</time>
+<time datetime="2013-01-16T15:06:00+09:00" pubdate data-updated="true">Jan 16<span>th</span>, 2013</time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/master_report/blog/categories/debug/'>debug</a>
-  
-</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://guofei.github.com/master_report/blog/2012/10/02/plugin-and-addon-debug/" data-via="" data-counturl="http://guofei.github.com/master_report/blog/2012/10/02/plugin-and-addon-debug/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://guofei.github.com/master_report/blog/2013/01/16/xiu-lun-ti-chu-simasita/" data-via="" data-counturl="http://guofei.github.com/master_report/blog/2013/01/16/xiu-lun-ti-chu-simasita/" >Tweet</a>
   
   
   
@@ -174,10 +133,8 @@ GDB付きのxterm windowが出てきて、 &hellip;">
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/master_report/blog/2012/10/01/friendsocket-apifalsexiu-zheng/" title="Previous Post: Friendsocket APIの修正">&laquo; Friendsocket APIの修正</a>
+        <a class="basic-alignment left" href="/master_report/blog/2013/01/07/sukurinsiyotutoapuri/" title="Previous Post: スクリーンショットアプリ">&laquo; スクリーンショットアプリ</a>
       
-      
-        <a class="basic-alignment right" href="/master_report/blog/2012/10/15/konpiyutasisutemusinpoziumulun-wen/" title="Next Post: コンピュータシステムシンポジウム論文">コンピュータシステムシンポジウム論文 &raquo;</a>
       
     </p>
   </footer>
