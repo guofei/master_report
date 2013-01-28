@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 修士論文 | Master Report]]></title>
   <link href="http://guofei.github.com/master_report/blog/categories/修士論文/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2013-01-16T15:16:44+09:00</updated>
+  <updated>2013-01-28T16:56:19+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[修論発表]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2013/01/28/xiu-lun-fa-biao/"/>
+    <updated>2013-01-28T16:31:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2013/01/28/xiu-lun-fa-biao</id>
+    <content type="html"><![CDATA[<h3>スクリーンショットアプリケーションの修正</h3>
+
+<p>元ではクライアントがスクリーンショットを受信すると、画像をファイルとして保存する</p>
+
+<p>現在はクライアントがスクリーンショットを受信すると、画像がブラウザで表示できるようになった。</p>
+
+<h3>修論発表</h3>
+
+<p>修論発表が終わったが、無地に終了とは言えない。</p>
+
+<p>３枚の画像が表示できなくなった。対策としてはパワーポイントを再起動すれば表示できることがわかったが、</p>
+
+<p>将来、似たような問題がおこると、一番良い対策は何でしょうか？</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[スクリーンショットアプリ]]></title>

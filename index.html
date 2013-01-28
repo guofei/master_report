@@ -9,8 +9,7 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="発表の準備 friendsocket 性能評価のGoogle Talkのおかしいところを判明する
-">
+  <meta name="description" content="スクリーンショットアプリケーションの修正 元ではクライアントがスクリーンショットを受信すると、画像をファイルとして保存する 現在はクライアントがスクリーンショットを受信すると、画像がブラウザで表示できるようになった。 修論発表 修論発表が終わったが、無地に終了とは言えない。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -63,6 +62,54 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/master_report/blog/2013/01/28/xiu-lun-fa-biao/">修論発表</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-28T16:31:00+09:00" pubdate data-updated="true">Jan 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>スクリーンショットアプリケーションの修正</h3>
+
+<p>元ではクライアントがスクリーンショットを受信すると、画像をファイルとして保存する</p>
+
+<p>現在はクライアントがスクリーンショットを受信すると、画像がブラウザで表示できるようになった。</p>
+
+<h3>修論発表</h3>
+
+<p>修論発表が終わったが、無地に終了とは言えない。</p>
+
+<p>３枚の画像が表示できなくなった。対策としてはパワーポイントを再起動すれば表示できることがわかったが、</p>
+
+<p>将来、似たような問題がおこると、一番良い対策は何でしょうか？</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -873,139 +920,6 @@ xmppのアドオンをfirefox9以上で動く</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/master_report/blog/2012/10/23/osyan-jiu-hui-lun-wen/">OS研究会論文</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-10-23T13:32:00+09:00" pubdate data-updated="true">Oct 23<span>rd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>面接</h3>
-
-<p>難しかった</p>
-
-<p>日本でどのぐらい働きたいと聞かれて、５年ぐらいと答えると、５年間でせっかく人材として育ったのに、会社をやめるのはよくない</p>
-
-<p>分散OSの話もあって、自分は分散OSが難しいですと話したら、どこが難しいと聞かれた。</p>
-
-<h3>論文</h3>
-
-<p>９章＝＞７章</p>
-
-<p>元の画像は見づらいので、ソースコードを画像からテキストに変えた<br/>
-実装をそれぞれの章に入れた</p>
-
-<p>これからやるところ：<br/>
-関連研究のところにBrowser DBusを追加<br/>
-暗号化の部分を追加<br/>
-動画アプリケーションの話</p>
-
-<h3>暗号化</h3>
-
-<p>鍵を読み込む時、パスフレーズの取得方法がわからない</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">int</span> <span class="n">PEM_write_RSAPrivateKey</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">RSA</span> <span class="o">*</span><span class="n">x</span><span class="p">,</span>
-</span><span class='line'>                            <span class="k">const</span> <span class="n">EVP_CIPHER</span> <span class="o">*</span><span class="n">enc</span><span class="p">,</span> <span class="c1">//暗号化アルゴリズム</span>
-</span><span class='line'>                          <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">kstr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">klen</span><span class="p">,</span> <span class="c1">//パスフレーズと長さ</span>
-</span><span class='line'>                          <span class="n">pem_password_cb</span> <span class="o">*</span><span class="n">cb</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">u</span><span class="p">);</span> <span class="c1">//callback</span>
-</span><span class='line'><span class="n">PEM_write_RSAPrivateKey</span><span class="p">(</span><span class="n">seckey</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">EVP_des_ede3_cbc</span><span class="p">(),</span> <span class="s">&quot;12345678&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
-</span><span class='line'><span class="n">PEM_write_RSAPrivateKey</span><span class="p">(</span><span class="n">seckey</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">EVP_des_ede3_cbc</span><span class="p">(),</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pass_cb</span><span class="p">,</span> <span class="s">&quot;My Private Key&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="err">下のような鍵が生成される</span>
-</span><span class='line'><span class="o">-----</span><span class="n">BEGIN</span> <span class="n">RSA</span> <span class="n">PRIVATE</span> <span class="n">KEY</span><span class="o">-----</span>
-</span><span class='line'><span class="n">Proc</span><span class="o">-</span><span class="n">Type</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span><span class="n">ENCRYPTED</span>
-</span><span class='line'><span class="n">DEK</span><span class="o">-</span><span class="n">Info</span><span class="o">:</span> <span class="n">DES</span><span class="o">-</span><span class="n">EDE3</span><span class="o">-</span><span class="n">CBC</span><span class="p">,</span><span class="mi">81</span><span class="n">CB5FEC487EB67F</span>
-</span><span class='line'><span class="n">Ux3JFs0KSohF1GYs0rJ2VtQ</span><span class="o">+</span><span class="n">s5pjXJVsjPktIh9PzU</span><span class="o">+</span><span class="n">XLTAEOWdyWR</span><span class="o">/</span><span class="mf">3f</span><span class="n">E5</span><span class="o">+</span><span class="n">hgZK</span>
-</span><span class='line'><span class="p">......</span>
-</span><span class='line'><span class="n">EUPfsZzEF2no</span><span class="o">/</span><span class="n">EMs6aCj5AdpJQu0PgHPU4oZmjTW0LU</span><span class="o">=</span>
-</span><span class='line'><span class="o">-----</span><span class="n">END</span> <span class="n">RSA</span> <span class="n">PRIVATE</span> <span class="n">KEY</span><span class="o">-----</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">RSA</span> <span class="o">*</span><span class="n">PEM_read_RSAPublicKey</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">RSA</span> <span class="o">**</span><span class="n">x</span><span class="p">,</span> <span class="n">pem_password_cb</span> <span class="o">*</span><span class="n">cb</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">u</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">int</span> <span class="n">pass_cb</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">rwflag</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">u</span><span class="p">);</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>        <span class="kt">int</span> <span class="n">len</span><span class="p">;</span>
-</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">tmp</span><span class="p">;</span>
-</span><span class='line'>      <span class="cm">/* We&#39;d probably do something else if &#39;rwflag&#39; is 1 */</span>
-</span><span class='line'>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Enter pass phrase for </span><span class="se">\&quot;</span><span class="s">%s</span><span class="se">\&quot;\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">u</span><span class="p">);</span>
-</span><span class='line'>      <span class="cm">/* get pass phrase, length &#39;len&#39; into &#39;tmp&#39; */</span>
-</span><span class='line'>      <span class="n">tmp</span> <span class="o">=</span> <span class="s">&quot;hello&quot;</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">len</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>      <span class="cm">/* if too long, truncate */</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="o">&gt;</span> <span class="n">size</span><span class="p">)</span> <span class="n">len</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">memcpy</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">tmp</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
-</span><span class='line'>      <span class="k">return</span> <span class="n">len</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="n">key</span> <span class="o">=</span> <span class="n">PEM_read_RSAPrivateKey</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">pass_cb</span><span class="p">,</span> <span class="s">&quot;My Private Key&quot;</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/master_report/blog/page/2/">&larr; Older</a>
@@ -1021,6 +935,10 @@ xmppのアドオンをfirefox9以上で動く</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/master_report/blog/2013/01/28/xiu-lun-fa-biao/">修論発表</a>
+      </li>
+    
+      <li class="post">
         <a href="/master_report/blog/2013/01/16/xiu-lun-ti-chu-simasita/">修論提出しました</a>
       </li>
     
@@ -1034,10 +952,6 @@ xmppのアドオンをfirefox9以上で動く</p>
     
       <li class="post">
         <a href="/master_report/blog/2012/12/17/xiu-shi-lun-wen/">修士論文</a>
-      </li>
-    
-      <li class="post">
-        <a href="/master_report/blog/2012/11/26/zu-ye-lun-wen/">卒業論文</a>
       </li>
     
   </ul>
