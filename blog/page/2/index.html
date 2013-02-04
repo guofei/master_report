@@ -9,7 +9,9 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="面接 難しかった 日本でどのぐらい働きたいと聞かれて、５年ぐらいと答えると、５年間でせっかく人材として育ったのに、会社をやめるのはよくない 分散OSの話もあって、自分は分散OSが難しいですと話したら、どこが難しいと聞かれた。 論文 ９章＝＞７章 元の画像は見づらいので、 &hellip;">
+  <meta name="description" content="論文 FriendSocketのAPIの説面を追加した。暗号化の部分を少し追加した。 動画協調アプリケーションとミドルウェアの部分が青沼さんが追加している FriendSocket API
+関数説明
+frinedsocketio.connect()サーバに接続する準備を行い、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -62,6 +64,155 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/master_report/blog/2012/10/29/osyan-jiu-hui-lun-wen/">OS研究会論文</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-29T13:37:00+09:00" pubdate data-updated="true">Oct 29<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>論文</h3>
+
+<p>FriendSocketのAPIの説面を追加した。暗号化の部分を少し追加した。</p>
+
+<p>動画協調アプリケーションとミドルウェアの部分が青沼さんが追加している</p>
+
+<table border=1>
+<caption>FriendSocket API</caption>
+<tr><td>関数</td><td>説明</td></tr>
+<tr><td>frinedsocketio.connect()</td><td>サーバに接続する準備を行い、friendsocketclientオブジェクトを生成する。</td></tr>
+<tr><td>frinedsocketio.listen()</td><td>クライアントからの接続を待ち、friendsocketserverオブジェクトを生成する。frinedsocketio.listen().friendsで friendsocketserverオブジェクトの取得する</td></tr>
+</table>
+
+
+
+
+<br>
+
+
+
+
+<table border=1>
+<caption>friendsocketclientオブジェクトのメッソド</caption>
+<tr><td>メソッド</td><td>説明</td></tr>
+<tr><td>on(e,f)</td><td>イベントを追加する。eはイベント名、fはcallbackの関数である。callback関数の引数は受信したデータである。</td></tr>
+<tr><td>emit(e,d)</td><td>サーバに送信する、eはイベント名、dは送信したいデータの文字列である</td></tr>
+<tr><td>close()</td><td>クライアントをcloseする</td></tr>
+</table>
+
+
+
+
+<br>
+
+
+
+
+<table border=1>
+<caption>friendsocketserverオブジェクトのメッソド</caption>
+<tr><td>メソッド</td><td>説明</td></tr>
+<tr><td>on(&#8220;connection&#8221;,f)</td><td>サーバに接続した時、callbackの関数fを呼び出す。引数はfriendsocketオブジェクトである</td></tr>
+<tr><td>emit(e,d)</td><td>接続する全てのクライアントに送信する。</td></tr>
+<tr><td>close(friend)</td><td>クライアントからの接続を切る。引数はconnectionの時に取得したfriendsocketオブジェクトである</td></tr>
+</table>
+
+
+
+
+<br>
+
+
+
+
+<table border=1>
+<caption>friendsocketオブジェクトのメッソド</caption>
+<tr><td>メソッド</td><td>説明</td></tr>
+<tr><td>on(&#8220;disconnect&#8221;,f)</td><td>クライアントからの接続が切られた時、callback関数を呼び出す</td></tr>
+<tr><td>on(e,f)</td><td>イベントを追加する。eはイベント名、fはcallbackの関数である。callback関数の引数は受信したデータである</td></tr>
+<tr><td>emit(e,d)</td><td>クライアントに送信する。eはイベント名、dは送信したいデータの文字列である</td></tr>
+</table>
+
+
+<h3>FriendSocket APIのbugの修正</h3>
+
+<p>クライアント側から同じuserとappnameでサーバに接続すると、サーバ側が１回送信したのに、クライアント側は何回も受信する。</p>
+
+<p>毎回クライアントを起動すると、</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">XMPP</span><span class="p">.</span><span class="nx">createChannel</span><span class="p">();</span>
+</span><span class='line'><span class="nx">channel</span><span class="p">.</span><span class="nx">on</span><span class="p">({</span><span class="nx">event</span><span class="o">:</span> <span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="nx">direction</span><span class="o">:</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="nx">stanza</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stanza</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="nx">stanza</span><span class="p">.</span><span class="err">@</span><span class="nx">appname</span> <span class="o">==</span> <span class="nx">appanme</span><span class="p">}},</span> <span class="nx">handleIncomingMessage</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>クライアント側でchannelをreleaseしないと、channelがずっとメッセージの受信を受けっている。closeの時、releaseしたら、bugを修正した</p>
+
+<h3>暗号化の部分</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">RSA</span> <span class="o">*</span><span class="n">PEM_read_RSAPublicKey</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">RSA</span> <span class="o">**</span><span class="n">x</span><span class="p">,</span> <span class="n">pem_password_cb</span> <span class="o">*</span><span class="n">cb</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">u</span><span class="p">);</span>
+</span><span class='line'><span class="n">RSA</span> <span class="o">*</span><span class="n">PEM_read_PublicKey</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">EVP_PKEY</span> <span class="o">**</span><span class="n">x</span><span class="p">,</span> <span class="n">pem_password_cb</span> <span class="o">*</span><span class="n">cb</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">u</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>cbをNULLとして渡し、パースワードを直接uに入れたら鍵を読めるようになった。</p>
+
+<p>opensslのソースコードを検索したらcallback引数のところ、(pem_password_cb *)でキャストしている。</p>
+
+<figure class='code'><figcaption><span>pem_password_cb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">typedef</span> <span class="kt">int</span> <span class="n">pem_password_cb</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">rwflag</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="err">修正前</span>
+</span><span class='line'><span class="n">key</span> <span class="o">=</span> <span class="n">PEM_read_RSAPrivateKey</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">pass_cb</span><span class="p">,</span> <span class="s">&quot;My Private Key&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="err">修正後</span>
+</span><span class='line'><span class="n">key</span> <span class="o">=</span> <span class="n">PEM_read_RSAPrivateKey</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="p">(</span><span class="n">pem_password_cb</span> <span class="o">*</span><span class="p">)</span><span class="n">pass_cb</span><span class="p">,</span> <span class="s">&quot;My Private Key&quot;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>しかし、まだ</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">key</span> <span class="o">=</span> <span class="n">PEM_read_RSAPrivateKey</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">pass_cb</span><span class="p">,</span> <span class="s">&quot;My Private Key&quot;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>に戻したら、うまく実行できた</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1424,84 +1575,6 @@ firefox３で動けない原因を探す。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/master_report/blog/2012/06/28/javascriptkaraxpcomfalseguan-shu-wohu-bichu-su/">javascriptからXPCOMの関数を呼び出す</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-28T22:41:00+09:00" pubdate data-updated="true">Jun 28<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>xpcom</h3>
-
-<p>JavaScriptからXPCOMの関数を呼び出す時、obj = Components.classes[cid].createInstance()；で呼び出すことができるが、自分が書いた関数を呼び出すとTypeError: Components.classes[cid] isundefinedというエラが出た。</p>
-
-<p>/Users/kaku/Library/Application Support/Firefox/Profiles/7sbio35o.defaultディレクトリのcompreg.datの中で登録できるかどうかを調べられる。</p>
-
-<p>grep rsa compreg.datで調べたら、正しい時は以下のようになるはずだが</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>abs:/.../xpcom-sample@cozmixng.org/components/myCalc.so,1173322260000
-</span><span class='line'>{8931dfd3-edf3-4b7d-bd44-1da72064f0dc},,,,abs:/.../myCalc.so</span></code></pre></td></tr></table></div></figure>
-
-
-<p>何も出てこなかった。</p>
-
-<p>結構firefoxのバージョンとSDKのバージョンと自分の所のライブラリのバージョンと関わるらしいので、FireFox3.6 Firefox9などを色々試して、linux上も試したが、結局、ずっとエラのままだった。</p>
-
-<h3>Ctypes</h3>
-
-<p>調べた途中で、Ctypesというものを見つけて、複数のバージョンの Firefox で利用できるもの</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Components.utils.import('resource://gre/modules/ctypes.jsm');
-</span><span class='line'>var m = ctypes.open('/usr/lib/libc.dylib');
-</span><span class='line'>
-</span><span class='line'>var c = m.declare('cabs',
-</span><span class='line'>                ctypes.default_abi,
-</span><span class='line'>                ctypes.double,
-</span><span class='line'>                ctypes.double);
-</span><span class='line'>alert(c(-1));
-</span><span class='line'>m.close();</span></code></pre></td></tr></table></div></figure>
-
-
-<p>普通のhtmlで利用できないが、拡張機能でうまく実行できた</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/master_report/blog/page/3/">&larr; Older</a>
@@ -1519,6 +1592,10 @@ firefox３で動けない原因を探す。</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/master_report/blog/2013/02/04/lun-wen-falsexiu-zheng/">論文の修正</a>
+      </li>
+    
+      <li class="post">
         <a href="/master_report/blog/2013/01/28/xiu-lun-fa-biao/">修論発表</a>
       </li>
     
@@ -1532,10 +1609,6 @@ firefox３で動けない原因を探す。</p>
     
       <li class="post">
         <a href="/master_report/blog/2012/12/26/lun-wen-ping-jia/">論文:評価</a>
-      </li>
-    
-      <li class="post">
-        <a href="/master_report/blog/2012/12/17/xiu-shi-lun-wen/">修士論文</a>
       </li>
     
   </ul>
