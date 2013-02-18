@@ -9,9 +9,21 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="論文 FriendSocketのAPIの説面を追加した。暗号化の部分を少し追加した。 動画協調アプリケーションとミドルウェアの部分が青沼さんが追加している FriendSocket API
-関数説明
-frinedsocketio.connect()サーバに接続する準備を行い、 &hellip;">
+  <meta name="description" content="webページから利用できるようになった カスタム DOM イベントを利用する 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+&lt;script type=&quot;text/javascript&quot; src=&quot;path/to/callextension. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +76,104 @@ frinedsocketio.connect()サーバに接続する準備を行い、 &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/master_report/blog/2012/11/05/friendsocketwoweb-pagekarafalseli-yong/">FriendSocketをweb Pageからの利用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-05T15:04:00+09:00" pubdate data-updated="true">Nov 5<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>webページから利用できるようになった</h3>
+
+<p>カスタム DOM イベントを利用する</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;path/to/callextension.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'><span class="nt">&lt;script&gt;</span>
+</span><span class='line'><span class="nx">client_test</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">friend</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">friend</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="s2">&quot;client@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;client&quot;</span><span class="p">,</span> <span class="s2">&quot;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;app2&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connect&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">friend</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;hello server 2&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;disconnect&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;disconnected by server&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="nx">CallExtension</span><span class="p">(</span><span class="nx">client_test</span><span class="p">);</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>callextension.js</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">CallExtension</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;MyExtensionDataElement&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">element</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&quot;attribute1&quot;</span><span class="p">,</span> <span class="nx">f</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">element</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&quot;attribute2&quot;</span><span class="p">,</span> <span class="s2">&quot;hello world&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">evt</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">&quot;Events&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">evt</span><span class="p">.</span><span class="nx">initEvent</span><span class="p">(</span><span class="s2">&quot;MyExtensionEvent&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">element</span><span class="p">.</span><span class="nx">dispatchEvent</span><span class="p">(</span><span class="nx">evt</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>問題</h4>
+
+<p>アドオン側でclienttest関数の文字列を取得し、eval()で実行している。普通のJavaScriptで実行できないもの（アドオンの機能など）をclienttest()で書いてアドオンに送ると実行出来るようになる。さらに、XPCOMのモジュールのコードをclienttest関数で書いて、アドオンに送ると、ファイルなどのアクセスも出来る。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1483,98 +1593,6 @@ var r = ctypes.open(&#8216;/Users/kaku/ctypesrsa/components/libjsrsa.dylib&#8217
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/master_report/blog/2012/07/06/ctypesderaiburariwohu-bichu-su/">Ctypesでライブラリを呼び出す</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-06T03:10:00+09:00" pubdate data-updated="true">Jul 6<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>OpenSSL暗号PKI SSL/TLSライブラリの詳細</h3>
-
-<p>読んでいる</p>
-
-<h3>ctypes</h3>
-
-<p>javascriptから.soファイルを読んでみたが、ずっと問題になっている</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Components.utils.import('resource://gre/modules/ctypes.jsm');
-</span><span class='line'>var m = ctypes.open('/usr/lib/libc.dylib');
-</span><span class='line'>alert(m);</span></code></pre></td></tr></table></div></figure>
-
-
-<p>で呼び出すと、[object Library]が出たが、</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Components.utils.import('resource://gre/modules/ctypes.jsm');
-</span><span class='line'>var r = ctypes.open('/Users/kaku/ctypesrsa/components/libjsrsa.so');
-</span><span class='line'>alert(r);</span></code></pre></td></tr></table></div></figure>
-
-
-<p>で何も出なかった。.soファイルを.dylibにしても同じ</p>
-
-<p>しかし、firefox９でやってみると、うまく出た。xmpp拡張のほうはfirefox4以下しか動けない。</p>
-
-<p>firefox9で暗号化と復号化をやったら、暗号化したものはうまく復号化できなかった。javascriptで出力した暗号文をCで復号化すると、うまく復号化できたので、自分が書いたライブラリの問題だと思う。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Components.utils.import('resource://gre/modules/ctypes.jsm');
-</span><span class='line'>var r = ctypes.open('/Users/kaku/ctypesrsa/components/libjsrsa.dylib');
-</span><span class='line'>var encrypt = r.declare('public_encrypt', ctypes.default_abi, ctypes.unsigned_char.ptr, ctypes.unsigned_char.ptr, ctypes.unsigned_char.ptr);
-</span><span class='line'>var ciphertext = encrypt('-----BEGIN RSA PUBLIC KEY----...-----END RSA PUBLIC KEY-----\n', 'abc').readString();
-</span><span class='line'>alert(ciphertext);
-</span><span class='line'>var decrypt = r.declare('private_decrypt', ctypes.default_abi, ctypes.unsigned_char.ptr, ctypes.unsigned_char.ptr, ctypes.unsigned_char.ptr);
-</span><span class='line'>var text = decrype('-----BEGIN RSA PRIVATE KEY-----...-----\n', ciphertext).readString();
-</span><span class='line'>alert(text);
-</span><span class='line'>r.close();</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>来週</h3>
-
-<p>OpenSSLの本を読み続く。
-問題になる部分を修正。
-firefox３で動けない原因を探す。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/master_report/blog/page/3/">&larr; Older</a>
@@ -1592,6 +1610,10 @@ firefox３で動けない原因を探す。</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/master_report/blog/2013/02/18/google-talkdefalseping-jia/">google talkでの評価</a>
+      </li>
+    
+      <li class="post">
         <a href="/master_report/blog/2013/02/04/lun-wen-falsexiu-zheng/">論文の修正</a>
       </li>
     
@@ -1605,10 +1627,6 @@ firefox３で動けない原因を探す。</p>
     
       <li class="post">
         <a href="/master_report/blog/2013/01/07/sukurinsiyotutoapuri/">スクリーンショットアプリ</a>
-      </li>
-    
-      <li class="post">
-        <a href="/master_report/blog/2012/12/26/lun-wen-ping-jia/">論文:評価</a>
       </li>
     
   </ul>

@@ -9,8 +9,7 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="修正 川島先生が指摘した日本語の部分を修正した。川島先生の名前を謝辞に入れた。 関連研究の部分を修正した。 スクリーンショットアプリケーションの部分を修正した。
-">
+  <meta name="description" content="google talkで50KBずつ計った ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -63,6 +62,44 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/master_report/blog/2013/02/18/google-talkdefalseping-jia/">Google Talkでの評価</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-18T14:51:00+09:00" pubdate data-updated="true">Feb 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>google talkで50KBずつ計った</h3>
+
+<p><img src="http://ww4.sinaimg.cn/large/a74ecc4cjw1e1xifltd3aj.jpg" alt="google talk" /></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -716,104 +753,6 @@ xmppのアドオンをfirefox9以上で動く</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/master_report/blog/2012/11/05/friendsocketwoweb-pagekarafalseli-yong/">FriendSocketをweb Pageからの利用</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-11-05T15:04:00+09:00" pubdate data-updated="true">Nov 5<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>webページから利用できるようになった</h3>
-
-<p>カスタム DOM イベントを利用する</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;path/to/callextension.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'><span class="nt">&lt;script&gt;</span>
-</span><span class='line'><span class="nx">client_test</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">friend</span><span class="p">;</span>
-</span><span class='line'>    <span class="nx">friend</span> <span class="o">=</span> <span class="nx">friendsocketio</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="s2">&quot;client@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;client&quot;</span><span class="p">,</span> <span class="s2">&quot;server@kaku-desktop.softlab.cs.tsukuba.ac.jp&quot;</span><span class="p">,</span> <span class="s2">&quot;app2&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;connect&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">friend</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;hello server 2&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>    <span class="nx">friend</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;disconnect&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;disconnected by server&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'><span class="nx">CallExtension</span><span class="p">(</span><span class="nx">client_test</span><span class="p">);</span>
-</span><span class='line'><span class="nt">&lt;/script&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>callextension.js</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">CallExtension</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;MyExtensionDataElement&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">element</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&quot;attribute1&quot;</span><span class="p">,</span> <span class="nx">f</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">element</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&quot;attribute2&quot;</span><span class="p">,</span> <span class="s2">&quot;hello world&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">evt</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">&quot;Events&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">evt</span><span class="p">.</span><span class="nx">initEvent</span><span class="p">(</span><span class="s2">&quot;MyExtensionEvent&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">element</span><span class="p">.</span><span class="nx">dispatchEvent</span><span class="p">(</span><span class="nx">evt</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>問題</h4>
-
-<p>アドオン側でclienttest関数の文字列を取得し、eval()で実行している。普通のJavaScriptで実行できないもの（アドオンの機能など）をclienttest()で書いてアドオンに送ると実行出来るようになる。さらに、XPCOMのモジュールのコードをclienttest関数で書いて、アドオンに送ると、ファイルなどのアクセスも出来る。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/master_report/blog/page/2/">&larr; Older</a>
@@ -829,6 +768,10 @@ xmppのアドオンをfirefox9以上で動く</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/master_report/blog/2013/02/18/google-talkdefalseping-jia/">google talkでの評価</a>
+      </li>
+    
+      <li class="post">
         <a href="/master_report/blog/2013/02/04/lun-wen-falsexiu-zheng/">論文の修正</a>
       </li>
     
@@ -842,10 +785,6 @@ xmppのアドオンをfirefox9以上で動く</p>
     
       <li class="post">
         <a href="/master_report/blog/2013/01/07/sukurinsiyotutoapuri/">スクリーンショットアプリ</a>
-      </li>
-    
-      <li class="post">
-        <a href="/master_report/blog/2012/12/26/lun-wen-ping-jia/">論文:評価</a>
       </li>
     
   </ul>
