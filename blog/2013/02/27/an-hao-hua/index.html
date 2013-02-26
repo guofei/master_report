@@ -5,12 +5,15 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>スクリーンショットアプリ - Master Report</title>
+  <title>暗号化 - Master Report</title>
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="スクリーンショットのアプリケーション こちらのものを利用し、実装した
-https://github.com/rowan-lewis/abduction friendsocketの一部をこのアドオンにコピーし修正した。 ツールでサーバとクライアントを起動する 右クリック &hellip;">
+  <meta name="description" content="Linuxへの対応 藩さんはMacを持ってないので、FriendsocketをLinuxへの対応をした Linuxのfirefox 10で動けるようになった。 NPAPIでの共通鍵への対応 JavaScriptからは以下の関数を追加した 元の関数 1
+2
+3
+4
+load_public_key( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +22,7 @@ https://github.com/rowan-lewis/abduction friendsocketの一部をこのアドオ
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://guofei.github.com/master_report/blog/2013/01/07/sukurinsiyotutoapuri/">
+  <link rel="canonical" href="http://guofei.github.com/master_report/blog/2013/02/27/an-hao-hua/">
   <link href="/master_report/favicon.png" rel="icon">
   <link href="/master_report/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/master_report/javascripts/modernizr-2.0.js"></script>
@@ -66,7 +69,7 @@ https://github.com/rowan-lewis/abduction friendsocketの一部をこのアドオ
   
   <header>
     
-      <h1 class="entry-title">スクリーンショットアプリ</h1>
+      <h1 class="entry-title">暗号化</h1>
     
     
       <p class="meta">
@@ -82,33 +85,48 @@ https://github.com/rowan-lewis/abduction friendsocketの一部をこのアドオ
   
 
 
-<time datetime="2013-01-07T13:43:00+09:00" pubdate data-updated="true">Jan 7<span>th</span>, 2013</time>
+<time datetime="2013-02-27T02:22:00+09:00" pubdate data-updated="true">Feb 27<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h3>スクリーンショットのアプリケーション</h3>
+<div class="entry-content"><h3>Linuxへの対応</h3>
 
-<p>こちらのものを利用し、実装した
-https://github.com/rowan-lewis/abduction</p>
+<p>藩さんはMacを持ってないので、FriendsocketをLinuxへの対応をした</p>
 
-<p>friendsocketの一部をこのアドオンにコピーし修正した。</p>
+<p>Linuxのfirefox 10で動けるようになった。</p>
 
-<p>ツールでサーバとクライアントを起動する
-<img src="http://ww2.sinaimg.cn/large/a74ecc4cjw1e0kwsihnthj.jpg" alt="ツールでサーバとクライアントを起動する" /></p>
+<h3>NPAPIでの共通鍵への対応</h3>
 
-<p>右クリック
-<img src="http://ww1.sinaimg.cn/large/a74eed94jw1e0kwsu3idtj.jpg" alt="右クリック" /></p>
+<p>JavaScriptからは以下の関数を追加した</p>
 
-<p>サーバでスクリーンショットの部分を選択する
-<img src="http://ww3.sinaimg.cn/large/a74e55b4jw1e0kwt4172yj.jpg" alt="サーバでスクリーンショットの部分を選択する" /></p>
+<p>元の関数</p>
 
-<p>クライアント側でreceived from server、保存
-<img src="http://ww4.sinaimg.cn/large/a74ecc4cjw1e0kwtdt8wbj.jpg" alt="クライアント側でreceived from server、保存" /></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>load_public_key(path)
+</span><span class='line'>load_private_key(path, password)
+</span><span class='line'>decrypt(key, text)
+</span><span class='line'>encrypt(key, base64text)</span></code></pre></td></tr></table></div></figure>
 
-<p>LANとGoogle Talk両方とも利用できるようになった。画像のサイズは１００〜１５０KB。</p>
+
+<p>新しく追加した関数</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>aes_decrypt(source, password)
+</span><span class='line'>aes_encrypt(crypted, password)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>まだ問題があるので、Debug中</p>
+
+<h3>カウンタモード</h3>
+
+<p>JavaScriptで送信できるのは文字列ので、最初の８文字はランダムの文字列にする</p>
 </div>
 
 
@@ -131,21 +149,15 @@ https://github.com/rowan-lewis/abduction</p>
   
 
 
-<time datetime="2013-01-07T13:43:00+09:00" pubdate data-updated="true">Jan 7<span>th</span>, 2013</time>
+<time datetime="2013-02-27T02:22:00+09:00" pubdate data-updated="true">Feb 27<span>th</span>, 2013</time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/master_report/blog/categories/修士論文/'>修士論文</a>
-  
-</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://guofei.github.com/master_report/blog/2013/01/07/sukurinsiyotutoapuri/" data-via="" data-counturl="http://guofei.github.com/master_report/blog/2013/01/07/sukurinsiyotutoapuri/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://guofei.github.com/master_report/blog/2013/02/27/an-hao-hua/" data-via="" data-counturl="http://guofei.github.com/master_report/blog/2013/02/27/an-hao-hua/" >Tweet</a>
   
   
   
@@ -154,10 +166,8 @@ https://github.com/rowan-lewis/abduction</p>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/master_report/blog/2012/12/26/lun-wen-ping-jia/" title="Previous Post: 論文:評価">&laquo; 論文:評価</a>
+        <a class="basic-alignment left" href="/master_report/blog/2013/02/18/google-talkdefalseping-jia/" title="Previous Post: google talkでの評価">&laquo; google talkでの評価</a>
       
-      
-        <a class="basic-alignment right" href="/master_report/blog/2013/01/16/xiu-lun-ti-chu-simasita/" title="Next Post: 修論提出しました">修論提出しました &raquo;</a>
       
     </p>
   </footer>

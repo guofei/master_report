@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2013-02-18T15:02:51+09:00</updated>
+  <updated>2013-02-27T03:02:10+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[暗号化]]></title>
+    <link href="http://guofei.github.com/master_report/blog/2013/02/27/an-hao-hua/"/>
+    <updated>2013-02-27T02:22:00+09:00</updated>
+    <id>http://guofei.github.com/master_report/blog/2013/02/27/an-hao-hua</id>
+    <content type="html"><![CDATA[<h3>Linuxへの対応</h3>
+
+<p>藩さんはMacを持ってないので、FriendsocketをLinuxへの対応をした</p>
+
+<p>Linuxのfirefox 10で動けるようになった。</p>
+
+<h3>NPAPIでの共通鍵への対応</h3>
+
+<p>JavaScriptからは以下の関数を追加した</p>
+
+<p>元の関数</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>load_public_key(path)
+</span><span class='line'>load_private_key(path, password)
+</span><span class='line'>decrypt(key, text)
+</span><span class='line'>encrypt(key, base64text)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>新しく追加した関数</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>aes_decrypt(source, password)
+</span><span class='line'>aes_encrypt(crypted, password)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>まだ問題があるので、Debug中</p>
+
+<h3>カウンタモード</h3>
+
+<p>JavaScriptで送信できるのは文字列ので、最初の８文字はランダムの文字列にする</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[google talkでの評価]]></title>
@@ -1721,85 +1764,6 @@ https://github.com/masamitsu-murase/JsMruby</p>
 
 <p>署名などの機能を実現する。
 CSセミナの発表資料を準備する</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[js ctypes]]></title>
-    <link href="http://guofei.github.com/master_report/blog/2012/07/12/js-ctypes/"/>
-    <updated>2012-07-12T20:50:00+09:00</updated>
-    <id>http://guofei.github.com/master_report/blog/2012/07/12/js-ctypes</id>
-    <content type="html"><![CDATA[<h3>OpenSSLの本</h3>
-
-<p>BIO部分：入出力の抽象化、暗号化や符号化,ファイルやネットワークといった入出力の詳細をアプリケーションから隠蔽する</p>
-
-<h3>Ctypes</h3>
-
-<p>firefoxのdebugツールでエラーを見た
-var r = ctypes.open(&#8216;/Users/kaku/ctypesrsa/components/libjsrsa.dylib&#8217;);
-エラー: couldn&#8217;t open library</p>
-
-<p>自分が書いたものが問題になるのかを確認するため、簡単なライブラリを書いた。</p>
-
-<p>mytest.h</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#ifndef _MYTEST_H_
-</span><span class='line'>#define _MYTEST_H_
-</span><span class='line'>
-</span><span class='line'>int my_add(int a, int b);
-</span><span class='line'>
-</span><span class='line'>#endif /* _MYTEST_H_ */</span></code></pre></td></tr></table></div></figure>
-
-
-<p>mytest.c</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#include "mytest.h"
-</span><span class='line'>
-</span><span class='line'>int my_add(int a, int b)
-</span><span class='line'>{
-</span><span class='line'>        return a+b;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cc -dynamiclib mytest.c -o libmytest.dylib</span></code></pre></td></tr></table></div></figure>
-
-
-<p>macのgccは　llvm-gcc　なので、gccを入れて、もう一回コンパイルしたが、同じエラーになる。Xcodeでコンパイルしても、同じ</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>gcc-4.2 -dynamiclib mytest.c -o libmytest.dylib</span></code></pre></td></tr></table></div></figure>
-
-
-<p>このURLで<a href="http://stackoverflow.com/questions/9348604/build-a-dll-to-be-used-by-mozilla-js-ctype">http://stackoverflow.com/questions/9348604/build-a-dll-to-be-used-by-mozilla-js-ctype</a>s同じような問題があった。windowsでライブラリを開く時、システムのライブラリだとうまく使えるが、自分が書いたライブラリは使えない。</p>
-
-<p>以下のコードを追加すると、うまく実行できたらしい。DLLMainはダイナミックリンクライブラリためのエントリーポイント。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
-</span><span class='line'>{
-</span><span class='line'>  return TRUE;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Mac OS XでDLLMain見たいなものがないらしいので、やめた。Linuxで試して、うまく利用できた。</p>
-
-<p>今はライブラリを書いている。javascriptとCの間の型の変換の部分は少し複雑</p>
 ]]></content>
   </entry>
   
