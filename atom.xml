@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2013-02-27T03:02:10+09:00</updated>
+  <updated>2013-02-27T12:12:08+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -52,7 +52,11 @@
 
 <h3>カウンタモード</h3>
 
-<p>JavaScriptで送信できるのは文字列ので、最初の８文字はランダムの文字列にする</p>
+<p>通信の時最初の一回目で公開鍵でパスワードと最初の番号を送る</p>
+
+<p>２回目からカウンタ（ランダムの文字列＋カウンタ番号）を暗号化し、送信したい文字列とXORを求める。その結果を相手に送る。JavaScriptで送信できるのは文字列ので、最初の８文字はランダムの文字列にする</p>
+
+<p>受信したカウンタを復号化し、文字列とXORし、元のものに戻す。</p>
 ]]></content>
   </entry>
   
