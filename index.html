@@ -9,11 +9,19 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="Linuxへの対応 藩さんはMacを持ってないので、FriendsocketをLinuxへの対応をした Linuxのfirefox 10で動けるようになった。 NPAPIでの共通鍵への対応 JavaScriptからは以下の関数を追加した 元の関数 1
+  <meta name="description" content="カウンタモード 1
 2
 3
 4
-load_public_key( &hellip;">
+5
+6
+7
+8
+9
+// カウンタ番号を指定しカウンタを生成する
+var counter1 = plugin.counter_create(1);
+// 暗号化
+var ciphertext1 = plugin.counter_encrypt("password &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +74,62 @@ load_public_key( &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/master_report/blog/2013/03/04/an-hao-hua/">暗号化</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-04T13:34:00+09:00" pubdate data-updated="true">Mar 4<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>カウンタモード</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// カウンタ番号を指定しカウンタを生成する
+</span><span class='line'>var counter1 = plugin.counter_create(1);
+</span><span class='line'>// 暗号化
+</span><span class='line'>var ciphertext1 = plugin.counter_encrypt("password", "text1", counter1);
+</span><span class='line'>var ciphertext2 = plugin.counter_encrypt("password", "text2", counter1);
+</span><span class='line'>// 復号化
+</span><span class='line'>var counter2 = plugin.counter_create(1);
+</span><span class='line'>var text1 = plugin.counter_decrypt("password", ciphertext1, counter2);
+</span><span class='line'>var text2 = plugin.counter_decrypt("password", ciphertext2, counter2);</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -762,94 +826,6 @@ https://github.com/rowan-lewis/abduction</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/master_report/blog/2012/11/19/friendsocketfalsean-hao-hua/">FriendSocketの暗号化</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-11-19T15:46:00+09:00" pubdate data-updated="true">Nov 19<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>FriendSocketの暗号化</h3>
-
-<p>friendsocketはmac上のfirefox3.6で開発し、暗号化の部分はlinux上のfirefox(>10)開発した</p>
-
-<p>暗号化の部分はfirefoxが提供したjsctypeで開発したが、対応するバージョンが少ない。<br/>
-そして、鍵を一回読んで暗号化と復号化を行っている。鍵を使わない時、javascript側でメーモリを解放する必要がある</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">load_pub_key</span><span class="p">(</span><span class="s2">&quot;path/public.pem&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">data1</span> <span class="o">=</span> <span class="nx">encrypt</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="s2">&quot;hello1&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">data2</span> <span class="o">=</span> <span class="nx">encrypt</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="s2">&quot;hello2&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="nx">free_key</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>今はnpapiで書き直しした</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">pub</span> <span class="o">=</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">load_public_key</span><span class="p">(</span><span class="s2">&quot;/path/public.pem&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">pub</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">pri</span> <span class="o">=</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">load_private_key</span><span class="p">(</span><span class="s2">&quot;/path/private.pem&quot;</span><span class="p">,</span> <span class="s2">&quot;12345678&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">pri</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">ciphertext</span> <span class="o">=</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">encrypt</span><span class="p">(</span><span class="nx">pub</span><span class="p">,</span> <span class="s2">&quot;abc&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">ciphertext</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="nx">pri</span><span class="p">,</span> <span class="nx">ciphertext</span><span class="p">);</span>
-</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>プラグインのインスタンスを起動する時、鍵をロードする。プラグインのインスタンスが消える時、鍵を解放する。今はlinuxのchromeとfirefox（firefox9と16）の両方で動けるようになった。<br/>
-しかし、firefox3.6で動けない。</p>
-
-<p>mac版にしたら、firefox9で動けたが、firefox3.6でも動けない。</p>
-
-<p>以下の二つの条件の一つを満たさなければならない<br/>
-プラグインをfirefox3.6で動く<br/>
-xmppのアドオンをfirefox9以上で動く</p>
-
-<h3>OS研究会</h3>
-
-<p>OS研究会のスライド</p>
-
-<p>論文</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/master_report/blog/page/2/">&larr; Older</a>
@@ -865,6 +841,10 @@ xmppのアドオンをfirefox9以上で動く</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/master_report/blog/2013/03/04/an-hao-hua/">暗号化</a>
+      </li>
+    
+      <li class="post">
         <a href="/master_report/blog/2013/02/27/an-hao-hua/">暗号化</a>
       </li>
     
@@ -878,10 +858,6 @@ xmppのアドオンをfirefox9以上で動く</p>
     
       <li class="post">
         <a href="/master_report/blog/2013/01/28/xiu-lun-fa-biao/">修論発表</a>
-      </li>
-    
-      <li class="post">
-        <a href="/master_report/blog/2013/01/16/xiu-lun-ti-chu-simasita/">修論提出しました</a>
       </li>
     
   </ul>
