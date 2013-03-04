@@ -9,7 +9,7 @@
   <meta name="author" content="kaku">
 
   
-  <meta name="description" content="カウンタモード 1
+  <meta name="description" content="カウンタモード NPAPIでJavaScriptのカウンタモードを作った 1
 2
 3
 4
@@ -19,9 +19,9 @@
 8
 9
 // カウンタ番号を指定しカウンタを生成する
-var counter1 = plugin.counter_create(1);
+var ctr_id1 = plugin.counter_create(1);
 // 暗号化
-var ciphertext1 = plugin.counter_encrypt("password &hellip;">
+var ciphertext1 = plugin &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -102,6 +102,8 @@ var ciphertext1 = plugin.counter_encrypt("password &hellip;">
 
 <div class="entry-content"><h3>カウンタモード</h3>
 
+<p>NPAPIでJavaScriptのカウンタモードを作った</p>
+
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -112,14 +114,14 @@ var ciphertext1 = plugin.counter_encrypt("password &hellip;">
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>// カウンタ番号を指定しカウンタを生成する
-</span><span class='line'>var counter1 = plugin.counter_create(1);
+</span><span class='line'>var ctr_id1 = plugin.counter_create(1);
 </span><span class='line'>// 暗号化
-</span><span class='line'>var ciphertext1 = plugin.counter_encrypt("password", "text1", counter1);
-</span><span class='line'>var ciphertext2 = plugin.counter_encrypt("password", "text2", counter1);
+</span><span class='line'>var ciphertext1 = plugin.counter_encrypt("password", "text1", ctr_id1);
+</span><span class='line'>var ciphertext2 = plugin.counter_encrypt("password", "text2", ctr_id1);
 </span><span class='line'>// 復号化
-</span><span class='line'>var counter2 = plugin.counter_create(1);
-</span><span class='line'>var text1 = plugin.counter_decrypt("password", ciphertext1, counter2);
-</span><span class='line'>var text2 = plugin.counter_decrypt("password", ciphertext2, counter2);</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>var ctr_id2 = plugin.counter_create(1);
+</span><span class='line'>var text1 = plugin.counter_decrypt("password", ciphertext1, ctr_id2);
+</span><span class='line'>var text2 = plugin.counter_decrypt("password", ciphertext2, ctr_id2);</span></code></pre></td></tr></table></div></figure>
 
 </div>
 
