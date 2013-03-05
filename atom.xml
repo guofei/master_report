@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2013-03-06T01:52:09+09:00</updated>
+  <updated>2013-03-06T01:59:55+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -48,8 +48,10 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
+<span class='line-number'>5</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>//client
-</span><span class='line'>friendsocketio.connect(host, name, pwd, s_name, appname, pri_key_path, key_pwd, pub_key_path, serverpub_key_path);
+</span><span class='line'>friendsocketio.connect(host, name, pwd, s_name, appname, pri_key_path,
+</span><span class='line'>                       key_pwd, pub_key_path, serverpub_key_path);
 </span><span class='line'>//server
 </span><span class='line'>friendsocketio.listen(host, name, pwd, appname, pri_key_path, key_pwd);</span></code></pre></td></tr></table></div></figure>
 
@@ -57,6 +59,11 @@
 <p><img src="http://ww3.sinaimg.cn/large/a74ecc4cjw1e2fd8yd47cj.jpg" alt="ctr-mode" /></p>
 
 <p>2512kbps</p>
+
+<p>前の暗号無しより速い原因：
+1. Macのfirefox3からlinuxのfirefox9に移行した
+2. utwlan-xから研究室のネットワークを利用した。pingで計ったら、研究室のネットワークの方が速い
+3. 前に計った時、時々大きな値が出た。今回は安定のように見える</p>
 ]]></content>
   </entry>
   
