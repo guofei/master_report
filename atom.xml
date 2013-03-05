@@ -4,7 +4,7 @@
   <title><![CDATA[Master Report]]></title>
   <link href="http://guofei.github.com/master_report/atom.xml" rel="self"/>
   <link href="http://guofei.github.com/master_report/"/>
-  <updated>2013-03-04T14:07:54+09:00</updated>
+  <updated>2013-03-06T01:52:09+09:00</updated>
   <id>http://guofei.github.com/master_report/</id>
   <author>
     <name><![CDATA[kaku]]></name>
@@ -41,6 +41,22 @@
 </span><span class='line'>var text1 = plugin.counter_decrypt("password", ciphertext1, ctr_id2);
 </span><span class='line'>var text2 = plugin.counter_decrypt("password", ciphertext2, ctr_id2);</span></code></pre></td></tr></table></div></figure>
 
+
+<h3>friendsocketとの統合</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//client
+</span><span class='line'>friendsocketio.connect(host, name, pwd, s_name, appname, pri_key_path, key_pwd, pub_key_path, serverpub_key_path);
+</span><span class='line'>//server
+</span><span class='line'>friendsocketio.listen(host, name, pwd, appname, pri_key_path, key_pwd);</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://ww3.sinaimg.cn/large/a74ecc4cjw1e2fd8yd47cj.jpg" alt="ctr-mode" /></p>
+
+<p>2512kbps</p>
 ]]></content>
   </entry>
   
