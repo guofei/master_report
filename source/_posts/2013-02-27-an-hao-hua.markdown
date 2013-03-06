@@ -1,0 +1,35 @@
+---
+layout: post
+title: "暗号化"
+date: 2013-02-27 02:22
+comments: true
+categories: 
+---
+### Linuxへの対応
+藩さんはMacを持ってないので、FriendsocketをLinuxへの対応をした
+
+Linuxのfirefox 10で動けるようになった。
+
+### NPAPIでの共通鍵への対応
+JavaScriptからは以下の関数を追加した
+
+元の関数
+```
+load_public_key(path)
+load_private_key(path, password)
+decrypt(key, text)
+encrypt(key, base64text)
+```
+新しく追加した関数
+```
+aes_decrypt(source, password)
+aes_encrypt(crypted, password)
+```
+まだ問題があるので、Debug中
+
+### カウンタモード
+通信の時最初の一回目で公開鍵でパスワードと最初の番号を送る
+
+２回目からカウンタ（ランダムの文字列＋カウンタ番号）を暗号化し、送信したい文字列とXORを求める。その結果を相手に送る。JavaScriptで送信できるのは文字列ので、最初の８文字はランダムの文字列にする
+
+受信したカウンタを復号化し、文字列とXORし、元のものに戻す。

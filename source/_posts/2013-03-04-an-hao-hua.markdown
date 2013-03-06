@@ -1,0 +1,38 @@
+---
+layout: post
+title: "Friendsocketでカウンタモード"
+date: 2013-03-04 13:34
+comments: true
+categories: 
+---
+### カウンタモード
+NPAPIでJavaScriptのカウンタモードを作った
+```
+// カウンタ番号を指定しカウンタを生成する
+var ctr_id1 = plugin.counter_create(1);
+// 暗号化
+var ciphertext1 = plugin.counter_encrypt("password", "text1", ctr_id1);
+var ciphertext2 = plugin.counter_encrypt("password", "text2", ctr_id1);
+// 復号化
+var ctr_id2 = plugin.counter_create(1);
+var text1 = plugin.counter_decrypt("password", ciphertext1, ctr_id2);
+var text2 = plugin.counter_decrypt("password", ciphertext2, ctr_id2);
+```
+
+### friendsocketとの統合
+```
+//client
+friendsocketio.connect(host, name, pwd, s_name, appname, pri_key_path,
+                       key_pwd, pub_key_path, serverpub_key_path);
+//server
+friendsocketio.listen(host, name, pwd, appname, pri_key_path, key_pwd);
+```
+
+![ctr-mode](http://ww3.sinaimg.cn/large/a74ecc4cjw1e2fd8yd47cj.jpg)
+
+2512kbps
+
+前の暗号無しより速い原因：
+1. Macのfirefox3からlinuxのfirefox9に移行した
+2. utwlan-xから研究室のネットワークを利用した。pingで計ったら、研究室のネットワークの方が速い
+3. 前に計った時、時々大きな値が出た。今回は安定のように見える
